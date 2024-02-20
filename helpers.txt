@@ -1,0 +1,1 @@
+/C/Dev/bin/apache-maven-3.9.2/bin/mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true clean install -DskipTests -Dgpg.skip -P Spark350
