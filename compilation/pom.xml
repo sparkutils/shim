@@ -61,6 +61,42 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${mavenJarPluginVersion}</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                        </manifestEntries>
+                        <manifestSections>
+                            <manifestSection>
+                                <name>Versions</name>
+                                <manifestEntries>
+                                    <Project-Version>${project.version}</Project-Version>
+                                    <Project-Git-Hash>${GITHUB_SHA}</Project-Git-Hash>
+                                    <Project-CI-Branch>${GITHUB_BASE_REF}</Project-CI-Branch>
+                                    <Project-CI-Run-ID>${GITHUB_RUN_ID}</Project-CI-Run-ID>
+                                    <Project-URL>${GITHUB_REPOSITORY}</Project-URL>
+                                </manifestEntries>
+                            </manifestSection>
+                        </manifestSections>
+                    </archive>
+                    <excludes>
+                        <!-- shouldn't be there, really bad for multi-module projects -->
+                        <exclude>log4j2.xml</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>
