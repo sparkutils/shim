@@ -1,0 +1,157 @@
+package org.apache.spark.sql
+
+import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
+import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
+import org.apache.spark.sql.catalyst.encoders.RowEncoder
+import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
+import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
+import org.apache.spark.sql.catalyst.expressions.{Add, Cast, DecimalAddNoOverflowCheck, Expression, ExpressionInfo}
+import org.apache.spark.sql.catalyst.parser.ParseException
+import org.apache.spark.sql.catalyst.types.PhysicalDataType
+import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
+import org.apache.spark.sql.execution.SparkSqlParser
+import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
+import org.apache.spark.sql.types._
+import org.apache.spark.unsafe.types.CalendarInterval
+
+/**
+ * Set of utilities to reach in to private functions
+ */
+object ShimUtils {
+
+  implicit class UnresolvedFunctionOps(unresolvedFunction: UnresolvedFunction) {
+
+    def theArguments: Seq[Expression] =
+      unresolvedFunction.arguments
+
+    def withArguments(children: Seq[Expression]): UnresolvedFunction =
+      unresolvedFunction.copy(arguments = children)
+  }
+
+  def isPrimitive(dataType: DataType) = CatalystTypeConverters.isPrimitive(dataType)
+
+  /**
+   * Arguments for everything above 2.4
+   */
+  def arguments(unresolvedFunction: UnresolvedFunction): Seq[Expression] =
+    unresolvedFunction.arguments
+
+  /**
+   * Optimise add's for decimal / DBR 11.2 add interface change.  Per Sum/Avg Decimals have their own add without overflow checks for performance gains
+   * @param left
+   * @param right
+   * @return
+   */
+  def add(left: Expression, right: Expression, dataType: DataType): Expression =
+    if ((dataType ne null) && dataType.isInstanceOf[DecimalType])
+      DecimalAddNoOverflowCheck(left, right, dataType)
+    else
+      Add(left, right)
+
+  /**
+   * Dbr 11.2 broke the contract for add and cast
+   * @param child
+   * @param dataType
+   * @return
+   */
+  def cast(child: Expression, dataType: DataType): Expression =
+    Cast(child, dataType)
+
+  /**
+   * Provides Spark 3 specific version of hashing CalendarInterval
+   *
+   * @param c
+   * @param hashlongs
+   * @param digest
+   * @return
+   */
+  def hashCalendarInterval(c: CalendarInterval, hashlongs: InterpretedHashLongsFunction, digest: Digest): Digest = {
+    import hashlongs._
+    hashInt(c.months, hashInt(
+      c.days
+      , hashLong(c.microseconds, digest)))
+  }
+
+  /**
+   * Creates a new parser, introduced in 0.4 - 3.2.0 due to SparkSqlParser having no params
+   *
+   * @return
+   */
+  def newParser() = {
+    new SparkSqlParser()
+  }
+
+  /**
+   * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
+   *
+   * @param funcReg
+   * @param name
+   * @param builder
+   */
+  def registerFunction(funcReg: FunctionRegistry)(name: String, builder: Seq[Expression] => Expression) =
+    funcReg.createOrReplaceTempFunction(name, builder, "built-in")
+
+  /**
+   * Used by the SparkSessionExtensions mechanism registered via injection - functions are classed as temporary functions only, not fully integrated
+   * @param extensions
+   * @param name
+   * @param builder
+   */
+  def registerFunctionViaExtension(extensions: SparkSessionExtensions)(name: String, builder: Seq[Expression] => Expression) =
+    extensions.injectFunction( (FunctionIdentifier(name), new ExpressionInfo(name, name) , builder) )
+
+  /**
+   * Used by the SparkSessionExtensions mechanism but registered via builtin registry
+   * @param name
+   * @param builder
+   */
+  def registerFunctionViaBuiltin(name: String, builder: Seq[Expression] => Expression) =
+    FunctionRegistry.builtin.registerFunction( FunctionIdentifier(name), new ExpressionInfo(name, name) , builder)
+
+  /**
+   * Type signature changed for 3.4 to more detailed setup, 12.2 already uses it
+   * @param errorSubClass
+   * @param messageParameters
+   * @return
+   */
+  def mismatch(errorSubClass: String, messageParameters: Map[String, String]): TypeCheckResult =
+    DataTypeMismatch(
+      errorSubClass = errorSubClass,
+      messageParameters = messageParameters
+    )
+
+  def toSQLType(dataType: DataType): String = stoSQLType(dataType)
+  def toSQLExpr(value: Expression): String = stoSQLExpr(value)
+  def toSQLValue(value: Any, dataType: DataType): String = stoSQLValue(value, dataType)
+
+  // https://issues.apache.org/jira/browse/SPARK-43019 in 3.5, backported to 13.1 dbr
+  def sparkOrdering(dataType: DataType): Ordering[_] = PhysicalDataType.ordering(dataType)
+
+  def tableOrViewNotFound(e: Exception): Option[Either[Exception, Set[String]]] =
+    e match {
+      case p: ParseException => Some(Left(p))
+      case ae: ExtendedAnalysisException =>
+        Some(ae.plan.fold[Either[Exception, Set[String]]]{
+          // spark 2.4 just has exception: Table or view not found: names
+          if (ae.message.contains("Table or view not found"))
+            Right(Set(ae.message.split(":")(1).trim))
+          else
+            Left(ae)
+        } {
+          plan =>
+            val c =
+              plan.collect {
+                case ur: UnresolvedRelation =>
+                  ur.tableName
+              }
+
+            if (c.isEmpty)
+              Left(ae) // not what we expected
+            else
+              Right(c.toSet)
+        })
+      case _ => None
+    }
+
+  def rowEncoder(structType: StructType) = RowEncoder.encoderFor(structType)
+}

@@ -31,13 +31,15 @@ It doesn't paper over differences in public apis.
 
 The naming scheme is as follows:
 
-    shim_${runtimeCompatVersion}_${sparkCompatVersion}_${scalaCompatVersion}
+    shim_[runtime|compilation]_${runtimeCompatVersion}_${sparkCompatVersion}_${scalaCompatVersion}
 
 The sparkCompatVersion represents the base OSS Spark version and runtimeCompatVersion the actual binary runtime.  As such:
 
-    shim_14.2.dbr_3.5_2.12
+    shim_runtime_14.2.dbr_3.5_2.12
 
 is built using a 3.5 base but specifically targeting a 14.2 Databricks runtime (e.g. for the StaticInvoke change).  Developers therefore use an appropriate OSS runtime and sparkCompatVersion to build against but users may choose other runtime versions.
+
+Non OSS users should use the "compilation" artefacts to build against as provided scope and "runtime" as compile, with the "compilation" artefact higher on the classpath (see below compilation section)
 
 Versions use the following convention:
 
@@ -51,13 +53,20 @@ Introduction of a new runtime compat _should_ not force a major.minor increment 
 
 Where it is not possible to backport/support newer functionality this will necessarily force a minor version at least.
 
-### Why are there BUILD runtimeCompatVersions?
+### Why are there "compilation" runtimeCompatVersions?
 
-In order to build against a number of Databricks runtimes the actual base source version must be used.  These 'BUILD' versions like:
+In order to build against a number of Databricks runtimes the actual base source version must be used.  These 'compilation' versions like:
 
-    shim_14.2.dbr_BUILD_3.5_2.12
+    shim_compilation_14.2.dbr_3.5_2.12
 
-should not be used for runtime as they include code providing a different Spark internal API than that of the OSS base (in this case 3.5).  The Databricks BUILD versions include custom UnaryNode implementations for 10.4 or 9.1s nodePattern usage etc. and are not compatible with OSS runtimes.     
+should be provided scope and not used for runtime as they include code providing a different Spark internal API than that of the OSS base (in this case 3.5).  The Databricks compilation versions include custom UnaryNode implementations for 10.4 or 9.1s nodePattern usage etc. and are not compatible with OSS runtimes.
+
+OSS compilation jars are provided for easier configuration.
+
+!!! NOTE "Separate Compilation is required for non-OSS only when using changed APIs"
+    In practical terms this means Frameless can build against OSS versions and use Databricks runtimes as it does not use classes known to be changed by Databricks (e.g. UnaryNode) (as of 14.2 - this is of course subject to change).
+
+    As only the interfaces for compilation are provided it means, typically, that test suites are not likely to run and that you cannot mix runtimeCompatVersion artefacts.  This does not need to apply to users of the library however.
 
 ## How is it achieved
 

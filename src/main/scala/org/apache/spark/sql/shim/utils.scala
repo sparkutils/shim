@@ -1,6 +1,6 @@
 package org.apache.spark.sql.shim
 
-import com.sparkutils.shim.ShowParams
+import com.sparkutils.shim.EmptyCompilationHelper
 import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.catalyst.expressions.{LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
 
@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 object utils {
 
-  def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
+  def toString(dataFrame: DataFrame, showParams: EmptyCompilationHelper = EmptyCompilationHelper()) =
     dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
 
   def named(col: Column): NamedExpression = col.named
