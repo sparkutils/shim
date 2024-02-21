@@ -6,7 +6,7 @@ Quality and a library it depends on - Frameless - make use of internal "private"
 
 Moreover, it's not just OSS Spark, vendors are free to backport changes from newer OSS branches, in most cases providing performance or safety features to their users.
 
-Shim aims to alleviate the risk of such changes and provide a faster solution to such changes.
+Shim aims to alleviate the risk of such changes and provide a faster solution to such changes.  You should still understand the risks of using either this library or Spark internal apis, this can and will change both in API and behaviour. 
 
 !!! Warn "Avoid 2.4 support"
     This will be removed ASAP and is only introduced during the conversion of Quality to use Shim
@@ -66,7 +66,7 @@ OSS compilation jars are provided for easier configuration.
 !!! NOTE "Separate Compilation is required for non-OSS only when using changed APIs"
     In practical terms this means Frameless can build against OSS versions and use Databricks runtimes as it does not use classes known to be changed by Databricks (e.g. UnaryNode) (as of 14.2 - this is of course subject to change).
 
-    As only the interfaces for compilation are provided it means, typically, that test suites are not likely to run and that you cannot mix runtimeCompatVersion artefacts.  This does not need to apply to users of the library however.
+    As only the interfaces for compilation are provided it means, typically, that test suites are not likely to run and that you cannot mix runtimeCompatVersion artefacts.  This does not need to apply to users of the library however, unless they too use non-oss interfaces.
 
 ## How is it achieved
 
