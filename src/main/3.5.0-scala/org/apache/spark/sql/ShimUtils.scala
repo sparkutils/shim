@@ -5,7 +5,7 @@ import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, TypeCheckResult
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
-import org.apache.spark.sql.catalyst.expressions.{Add, Cast, Expression, ExpressionInfo}
+import org.apache.spark.sql.catalyst.expressions.{Add, Cast, DecimalAddNoOverflowCheck, Expression, ExpressionInfo}
 import org.apache.spark.sql.catalyst.parser.ParseException
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
@@ -37,13 +37,16 @@ object ShimUtils {
     unresolvedFunction.arguments
 
   /**
-   * Dbr 11.2 broke the contract for add and cast
+   * Optimise add's for decimal / DBR 11.2 add interface change.  Per Sum/Avg Decimals have their own add without overflow checks for performance gains
    * @param left
    * @param right
    * @return
    */
   def add(left: Expression, right: Expression, dataType: DataType): Expression =
-    Add(left, right)
+    if ((dataType ne null) && dataType.isInstanceOf[DecimalType])
+      DecimalAddNoOverflowCheck(left, right, dataType)
+    else
+      Add(left, right)
 
   /**
    * Dbr 11.2 broke the contract for add and cast

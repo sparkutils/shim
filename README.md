@@ -13,7 +13,7 @@ Shim aims to alleviate the risk of such changes and provide a faster solution to
 
 ## What it is
 
-Shim provides a stable interface over Spark internals used by Quality and Frameless, libraries can use the public interface shim over the Spark Internal APIs to build against and users can choose which runtime shim to use.
+Shim provides a stable interface over Spark internals used by Quality and Frameless, libraries can use an appropriate public interface shim over the Spark Internal APIs to build against and users can choose which runtime shim to use.
 
 This allows you to focus on your logic and not on variations between runtimes.  At such as stage as the Spark private interface changes radically the public shim interface will get an upgrade to support it.
 
@@ -50,6 +50,14 @@ Build versions _will_ increment across all runtimes.  This means an initial 14.2
 Introduction of a new runtime compat _should_ not force a major.minor increment unless there is a fundamental source incompatibility introduced (e.g. moving of package, demand for a new default param etc.).
 
 Where it is not possible to backport/support newer functionality this will necessarily force a minor version at least.
+
+### Why are there BUILD runtimeCompatVersions?
+
+In order to build against a number of Databricks runtimes the actual base source version must be used.  These 'BUILD' versions like:
+
+    shim_14.2.dbr_BUILD_3.5_2.12
+
+should not be used for runtime as they include code providing a different Spark internal API than that of the OSS base (in this case 3.5).  The Databricks BUILD versions include custom UnaryNode implementations for 10.4 or 9.1s nodePattern usage etc. and are not compatible with OSS runtimes.     
 
 ## How is it achieved
 
