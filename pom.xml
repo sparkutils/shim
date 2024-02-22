@@ -347,13 +347,6 @@
     </distributionManagement>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_${scalaCompatVersion}</artifactId>
-            <version>${sparkVersion}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
@@ -497,6 +490,7 @@
                     </executions>
                     <configuration>
                         <args>
+                            <arg>-target:jvm-1.8</arg>
                             <arg>-feature</arg>
                             <arg>-deprecation</arg>
                             <arg>-Xelide-below</arg>

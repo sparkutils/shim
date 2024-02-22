@@ -20,6 +20,12 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scalaCompatVersion}</artifactId>
+            <version>${sparkVersion}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -70,7 +76,7 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
+    </plugins>
 
     </build>
 </project>

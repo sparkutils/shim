@@ -68,6 +68,11 @@ OSS compilation jars are provided for easier configuration.
 
     As only the interfaces for compilation are provided it means, typically, that test suites are not likely to run and that you cannot mix runtimeCompatVersion artefacts.  This does not need to apply to users of the library however, unless they too use non-oss interfaces.
 
+!!! WARN "Scala Maven Plugin ignores classpath order"
+    The compiler classpath used does not reflect that from dependency:build-classpath, instead it loads it as a set.  This means you cannot use maven to build using the compilation artefact as a direct dependency - it will non-deterministically order your jars and likely lead to a variety of linkage errors.
+
+    In order to fix this for Maven you should compile the compilation artefact sources directly via the dependency plugin and additional source directory via the helper plugin.  See [Quality's build file](todo) for example usage (tested on various DBR versions). 
+
 ## How is it achieved
 
 * Forwarding functions for all function usage with differing apis (e.g. UnresolvedFunction names, base Encoder derivation)

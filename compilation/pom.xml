@@ -13,6 +13,17 @@
     <description>Compile Shims to ease developing multi version Spark libraries, these should only be used in provided scope</description>
     <packaging>jar</packaging>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scalaCompatVersion}</artifactId>
+            <version>${sparkVersion}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -96,7 +107,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
 
     </build>
