@@ -16,7 +16,7 @@ object Cast2 {
   def apply(child: Expression, dataType: DataType): Expression =
     Cast(child, dataType)
 
-  def unapply(cast: Expression): Option[(Expression, DataType)] =
+  def unapply(cast: Cast): Option[(Expression, DataType)] =
     cast match {
       case Cast(ch, dt, _) =>
         Some((ch, dt))
@@ -36,7 +36,7 @@ object Cast3 {
   def apply(child: Expression, dataType: DataType, timeZoneId: Option[String] = None): Expression =
     Cast(child, dataType, timeZoneId)
 
-  def unapply(cast: Expression): Option[(Expression, DataType, Option[String])] =
+  def unapply(cast: Cast): Option[(Expression, DataType, Option[String])] =
     cast match {
       case Cast(ch, dt, tz) =>
         Some((ch, dt, tz))
@@ -56,7 +56,7 @@ object Cast4 {
   def apply(child: Expression, dataType: DataType, timeZoneId: Option[String] = None, evalMode: EvalMode.Value = EvalMode.fromSQLConf(SQLConf.get)): Expression =
     Cast(child, dataType, timeZoneId)
 
-  def unapply(cast: Expression): Option[(Expression, DataType, Option[String], EvalMode.Value)] =
+  def unapply(cast: Cast): Option[(Expression, DataType, Option[String], EvalMode.Value)] =
     cast match {
       case Cast(ch, dt, tz) =>
         Some((ch, dt, tz, EvalMode.LEGACY))

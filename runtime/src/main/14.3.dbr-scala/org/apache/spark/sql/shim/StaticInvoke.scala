@@ -27,7 +27,7 @@ object StaticInvoke4 {
              isDeterministic: Boolean = true
              ) = StaticInvoke(staticObject, dataType, functionName, arguments)
 
-  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression])] =
+  def unapply(exp: StaticInvoke): Option[(Class[_], DataType, String, Seq[Expression])] =
     exp match {
       case StaticInvoke(staticObject,
         dataType,
@@ -54,7 +54,7 @@ object StaticInvoke5 {
              isDeterministic: Boolean = true
            ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes)
 
-  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType])] =
+  def unapply(exp: StaticInvoke): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType])] =
     exp match {
       case StaticInvoke(staticObject,
       dataType,
@@ -81,7 +81,7 @@ object StaticInvoke6 {
              isDeterministic: Boolean = true
            ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull)
 
-  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean)] =
+  def unapply(exp: StaticInvoke): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean)] =
     exp match {
       case StaticInvoke(staticObject,
       dataType,
@@ -108,7 +108,7 @@ object StaticInvoke7 {
              isDeterministic: Boolean = true
            ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable)
 
-  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean, Boolean)] =
+  def unapply(exp: StaticInvoke): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean, Boolean)] =
     exp match {
       case StaticInvoke(staticObject,
       dataType,
@@ -135,7 +135,7 @@ object StaticInvoke8 {
              isDeterministic: Boolean
            ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic)
 
-  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean, Boolean, Boolean)] =
+  def unapply(exp: StaticInvoke): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean, Boolean, Boolean)] =
     exp match {
       case StaticInvoke(staticObject,
       dataType,
