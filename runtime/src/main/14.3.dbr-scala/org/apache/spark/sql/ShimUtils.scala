@@ -3,24 +3,56 @@ package org.apache.spark.sql
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
-import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
-import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
-import org.apache.spark.sql.catalyst.expressions.{Add, Cast, DecimalAddNoOverflowCheck, Expression, ExpressionInfo}
-import org.apache.spark.sql.catalyst.parser.ParseException
-import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.catalyst.rules.Rule
+import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
+import org.apache.spark.sql.catalyst.expressions.{Add, BinaryOperator, Cast, Expression, ExpressionInfo}
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
+import org.apache.spark.sql.catalyst.util.TypeUtils
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
 import org.apache.spark.sql.execution.SparkSqlParser
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
+import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
+import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
+import org.apache.spark.sql.catalyst.parser.ParseException
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+import org.apache.spark.sql.catalyst.rules.Rule
+
+/**
+ * 3.4 backport present on databricks 11.3 lts
+ * An add expression for decimal values which is only used internally by Sum/Avg.
+ *
+ * Nota that, this expression does not check overflow which is different with `Add`. When
+ * aggregating values, Spark writes the aggregation buffer values to `UnsafeRow` via
+ * `UnsafeRowWriter`, which already checks decimal overflow, so we don't need to do it again in the
+ * add expression used by Sum/Avg.
+ */
+case class QDecimalAddNoOverflowCheck(
+                                       left: Expression,
+                                       right: Expression,
+                                       override val dataType: DataType) extends BinaryOperator {
+  require(dataType.isInstanceOf[DecimalType])
+
+  override def inputType: AbstractDataType = DecimalType
+  override def symbol: String = "+"
+  private def decimalMethod: String = "$plus"
+
+  private lazy val numeric = TypeUtils.getNumeric(dataType)
+
+  override protected def nullSafeEval(input1: Any, input2: Any): Any =
+    numeric.plus(input1, input2)
+
+  override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode =
+    defineCodeGen(ctx, ev, (eval1, eval2) => s"$eval1.$decimalMethod($eval2)")
+
+  override protected def withNewChildrenInternal(newLeft: Expression, newRight: Expression): QDecimalAddNoOverflowCheck =
+    copy(left = newLeft, right = newRight)
+}
 
 /**
  * Set of utilities to reach in to private functions
  */
 object ShimUtils {
-
   implicit class UnresolvedFunctionOps(unresolvedFunction: UnresolvedFunction) {
 
     def theArguments: Seq[Expression] =
@@ -39,16 +71,16 @@ object ShimUtils {
     unresolvedFunction.arguments
 
   /**
-   * Optimise add's for decimal / DBR 11.2 add interface change.  Per Sum/Avg Decimals have their own add without overflow checks for performance gains
+   * Dbr 11.2 broke the contract for add and cast, OSS 3.4 39316 changes Add's behaviour adding silent overflows
    * @param left
    * @param right
    * @return
    */
   def add(left: Expression, right: Expression, dataType: DataType): Expression =
     if ((dataType ne null) && dataType.isInstanceOf[DecimalType])
-      DecimalAddNoOverflowCheck(left, right, dataType)
+      QDecimalAddNoOverflowCheck(left, right, dataType)
     else
-      Add(left, right)
+      new Add(left, right)
 
   /**
    * Dbr 11.2 broke the contract for add and cast
@@ -57,7 +89,7 @@ object ShimUtils {
    * @return
    */
   def cast(child: Expression, dataType: DataType): Expression =
-    Cast(child, dataType)
+    new Cast(child, dataType, None)
 
   /**
    * Provides Spark 3 specific version of hashing CalendarInterval
@@ -76,7 +108,6 @@ object ShimUtils {
 
   /**
    * Creates a new parser, introduced in 0.4 - 3.2.0 due to SparkSqlParser having no params
-   *
    * @return
    */
   def newParser() = {
@@ -94,7 +125,7 @@ object ShimUtils {
     funcReg.createOrReplaceTempFunction(name, builder, "built-in")
 
   /**
-   * Used by the SparkSessionExtensions mechanism registered via injection - functions are classed as temporary functions only, not fully integrated
+   * Used by the SparkSessionExtensions mechanism
    * @param extensions
    * @param name
    * @param builder

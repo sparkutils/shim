@@ -3,6 +3,8 @@ package org.apache.spark.sql
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.RowEncoder
 import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, Cast, Expression, GetArrayStructFields, GetStructField, Literal, PrettyAttribute}
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+import org.apache.spark.sql.catalyst.rules.Rule
 import org.apache.spark.sql.execution.SparkSqlParser
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
@@ -199,4 +201,20 @@ object ShimUtils {
     }
 
   def rowEncoder(structType: StructType) = RowEncoder(structType)
+
+  /**
+   * Registers a session only plan via experimental methods when isPresentFilter is not true
+   * @param logicalPlan
+   * @param isPresentFilter a filter that should return true when the plan is identical and it should not be added
+   * @return true if the plan has been added
+   */
+  def registerSessionPlan(logicalPlan: Rule[LogicalPlan])(isPresentFilter: Rule[LogicalPlan] => Boolean): Boolean = {
+    val methods = SparkSession.active.sessionState.experimentalMethods
+    if (methods.extraOptimizations.forall(!isPresentFilter(_))) {
+      methods.extraOptimizations = methods.extraOptimizations :+ logicalPlan
+      true
+    } else
+      false
+  }
+
 }
