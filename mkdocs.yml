@@ -15,8 +15,8 @@ edit_uri: !ENV [MKDOCS_EDIT_URL, ''] # empty disables shows with value enabled -
 
 theme:
   name: material
-  logo: img/shim.jpg
-  favicon: img/shim.jpg
+  logo: img/shim.png
+  favicon: img/shim.png
   include_search_page: false
   search_index_only: true
   features:
