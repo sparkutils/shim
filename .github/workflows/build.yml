@@ -31,7 +31,6 @@ jobs:
           title: Build ${{ matrix.profile }} with tests
           script: |
             mvn $MAVEN_CLI_OPTS clean test install -P ${{ matrix.profile }}
-            mvn $MAVEN_CLI_TESTSHADES_OPTS clean install -P ${{ matrix.profile }}
           gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
@@ -53,7 +52,6 @@ jobs:
           title: Build ${{ matrix.profile }} without tests
           script: |
             mvn $MAVEN_CLI_OPTS -DskipTests clean install -P ${{ matrix.profile }}
-            mvn $MAVEN_CLI_TESTSHADES_OPTS clean install -P ${{ matrix.profile }}
           gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
@@ -143,7 +141,6 @@ jobs:
           title: Publishing ${{ matrix.profile }}
           script: |
             mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }}
-            mvn $MAVEN_CLI_TESTSHADES_OPTS clean deploy -P ${{ matrix.profile }}
           gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
