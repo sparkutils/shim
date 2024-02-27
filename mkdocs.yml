@@ -34,7 +34,7 @@ nav:
   - Home: index.md
   - Getting Started:
     - Building and Setting Up: getting_started/index.md
-    - Running Quality on Databricks: getting_started/running_on_databricks.md
+    - Running Shim on Databricks: getting_started/running_on_databricks.md
   - About:
     - History: background/about.md
     - Changelog: background/changelog.md
