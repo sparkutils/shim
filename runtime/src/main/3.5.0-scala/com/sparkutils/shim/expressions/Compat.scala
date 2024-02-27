@@ -12,9 +12,8 @@ trait StatefulLike extends Nondeterministic {
 
 trait HigherOrderFunctionLike extends HigherOrderFunction {}
 
-
 /**
- * 2.4 till some 3 version doesn't have foldable as false so the optimiser tries to fold, we need Unevaluable for 14.4
+ * 2.4 and 3.0 version doesn't have foldable as false so the optimiser tries to fold, we need Unevaluable for 14.4
  */
 trait FoldableUnevaluable extends Unevaluable {
 }

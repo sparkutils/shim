@@ -15,8 +15,6 @@ import org.apache.spark.unsafe.types.CalendarInterval
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.parser.ParseException
-import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.catalyst.rules.Rule
 
 /**
  * 3.4 backport present on databricks 11.3 lts
@@ -187,19 +185,4 @@ object ShimUtils {
     }
 
   def rowEncoder(structType: StructType) = RowEncoder.encoderFor(structType)
-
-  /**
-   * Registers a session only plan via experimental methods when isPresentFilter is not true
-   * @param logicalPlan
-   * @param isPresentFilter a filter that should return true when the plan is identical and it should not be added
-   * @return true if the plan has been added
-   */
-  def registerSessionPlan(logicalPlan: Rule[LogicalPlan])(isPresentFilter: Rule[LogicalPlan] => Boolean): Boolean = {
-    val methods = SparkSession.active.sessionState.experimentalMethods
-    if (methods.extraOptimizations.forall(!isPresentFilter(_))) {
-      methods.extraOptimizations = methods.extraOptimizations :+ logicalPlan
-      true
-    } else
-      false
-  }
 }

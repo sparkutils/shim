@@ -1,8 +1,8 @@
 package org.apache.spark.sql.shim
 
 import com.sparkutils.shim.ShowParams
-import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.catalyst.expressions.{LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
+import org.apache.spark.sql.{Column, DataFrame}
 
 import java.util.concurrent.atomic.AtomicInteger
 
