@@ -38,8 +38,11 @@ nav:
   - About:
     - History: background/about.md
     - Changelog: background/changelog.md
-  - Maven Site: site/index.html
-  - Scala Docs: site/scaladocs/com/sparkutils/quality/index.html
+  - Reference Material:
+    - Landing: reference_material.md
+    - Maven Site: site/index.html
+    - Runtime Scala Docs: site/shim_runtime_3.4.1.oss_3.4_2.12/scaladocs/index.html
+    - Compilation Scala Docs: site/shim_compilation_3.4.1.oss_3.4_2.12/scaladocs/index.html
 
 plugins:
   - search:

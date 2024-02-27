@@ -114,6 +114,9 @@ jobs:
             target/site
             target/coverage.txt
             target/version.txt
+            compilation/target/site
+            runtime/target/site
+
     outputs:
       version: ${{ steps.version.outputs.version }}
 
@@ -160,7 +163,9 @@ jobs:
       - uses: ./.github/workflows/mkdocs
         with:
           prepScript: |
-            cp -rf target/site docs/
-            cp target/coverage.txt docs/
-            cp target/version.txt .
-            cp target/coverage.txt .
+            cp -rf target/target/site docs/
+            cp target/target/coverage.txt docs/
+            cp -rf target/runtime/target/site docs/site/shim_runtime_3.4.1.oss_3.4_2.12
+            cp -rf target/compilation/target/site docs/site/shim_compilation_3.4.1.oss_3.4_2.12            
+            cp target/target/version.txt .
+            cp target/target/coverage.txt .
