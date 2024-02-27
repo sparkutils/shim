@@ -84,12 +84,12 @@ jobs:
             mvn $MAVEN_CLI_OPTS clean scoverage:test -P Spark332
 
             mkdir tmpSCoverage
-            rm ./target/scoverage-data/scoverage.coverage
-            cp ./target/scoverage-data/* tmpSCoverage
+            rm -f ./target/scoverage-data/scoverage.coverage
+            cp -f ./target/scoverage-data/* tmpSCoverage
 
             mvn $MAVEN_CLI_OPTS clean scoverage:test -P Spark341
             
-            cp tmpSCoverage/* ./target/scoverage-data
+            cp -f tmpSCoverage/* ./target/scoverage-data
             
             mvn $MAVEN_CLI_OPTS site -P Spark341
 
