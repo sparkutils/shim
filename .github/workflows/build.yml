@@ -15,7 +15,7 @@ env:
 
 jobs:
 
-  # all versions that can be built with tests - typically oss only.  Fail fast so we can see all compilation or test errors at once 
+  # all versions that can be built with tests - typically oss only.  Fail fast so we can see all compilation or test errors at once
   testBuilds:
     strategy:
       fail-fast: false
@@ -163,9 +163,9 @@ jobs:
       - uses: ./.github/workflows/mkdocs
         with:
           prepScript: |
-            cp -rf target/site docs/
-            cp target/coverage.txt docs/
+            cp -rf target/target/site docs/
+            cp target/target/coverage.txt docs/
             cp -rf target/runtime/target/site docs/site/shim_runtime_3.4.1.oss_3.4_2.12
             cp -rf target/compilation/target/site docs/site/shim_compilation_3.4.1.oss_3.4_2.12            
-            cp target/version.txt .
-            cp target/coverage.txt .
+            cp target/target/version.txt .
+            cp target/target/coverage.txt .
