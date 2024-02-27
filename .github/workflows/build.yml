@@ -85,11 +85,11 @@ jobs:
 
             mkdir tmpSCoverage
             rm -f ./target/scoverage-data/scoverage.coverage
-            cp -f ./target/scoverage-data/* tmpSCoverage
+            cp ./target/scoverage-data/* tmpSCoverage 2>/dev/null || :
 
             mvn $MAVEN_CLI_OPTS clean scoverage:test -P Spark341
             
-            cp -f tmpSCoverage/* ./target/scoverage-data
+            cp tmpSCoverage/* ./target/scoverage-data 2>/dev/null || :
             
             mvn $MAVEN_CLI_OPTS site -P Spark341
 
