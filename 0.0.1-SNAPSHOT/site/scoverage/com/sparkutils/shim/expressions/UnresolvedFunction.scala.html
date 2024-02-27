@@ -1,0 +1,487 @@
+<html>
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title id="title">
+          com/sparkutils/shim/expressions/UnresolvedFunction.scala.html
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/css/theme.default.min.css" type="text/css"/><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/js/jquery.tablesorter.min.js"></script><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/><script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script><script type="text/javascript">
+        $(document).ready(function() {$(".tablesorter").tablesorter();});
+      </script>
+        <style>
+          table.codegrid { font-family: monospace; font-size: 12px; width: auto!important; }table.statementlist { width: auto!important; font-size: 13px; } table.codegrid td { padding: 0!important; border: 0!important } table td.linenumber { width: 40px!important; } 
+        </style>
+      </head>
+      <body style="font-family: monospace;">
+        <ul class="nav nav-tabs">
+          <li>
+            <a href="#codegrid" data-toggle="tab">Codegrid</a>
+          </li>
+          <li>
+            <a href="#statementlist" data-toggle="tab">Statement List</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="codegrid">
+            <pre style='font-size: 12pt; font-family: courier, monospace;'>1 <span style=''>package com.sparkutils.shim.expressions
+</span>2 <span style=''>
+</span>3 <span style=''>import org.apache.spark.sql.catalyst.FunctionIdentifier
+</span>4 <span style=''>import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
+</span>5 <span style=''>import org.apache.spark.sql.catalyst.expressions.Expression
+</span>6 <span style=''>
+</span>7 <span style=''>/**
+</span>8 <span style=''> * Identifier is always a String (2.4 and 3 have a type)
+</span>9 <span style=''> */
+</span>10 <span style=''>object UnresolvedFunction5 {
+</span>11 <span style=''>
+</span>12 <span style=''>  /**
+</span>13 <span style=''>   * Creates nameParts based on splitting &quot;.&quot;
+</span>14 <span style=''>   * @param nameParts
+</span>15 <span style=''>   * @param arguments
+</span>16 <span style=''>   * @param isDistinct
+</span>17 <span style=''>   * @param filter
+</span>18 <span style=''>   * @param ignoreNulls
+</span>19 <span style=''>   * @return
+</span>20 <span style=''>   */
+</span>21 <span style=''>  def apply(
+</span>22 <span style=''>    nameParts: String,
+</span>23 <span style=''>    arguments: Seq[Expression],
+</span>24 <span style=''>    isDistinct: Boolean,
+</span>25 <span style=''>    filter: Option[Expression] = None,
+</span>26 <span style=''>    ignoreNulls: Boolean = false) = </span><span style='background: #F0ADAD'>UnresolvedFunction(nameParts.split(&quot;.&quot;), arguments, isDistinct, filter)</span><span style=''>
+</span>27 <span style=''>
+</span>28 <span style=''>  def unapply(unresolvedFunction: UnresolvedFunction): Option[(String, Seq[Expression], Boolean, Option[Expression], Boolean)] =
+</span>29 <span style=''>    unresolvedFunction match {
+</span>30 <span style=''>      case UnresolvedFunction(_, argumentExpressions, is, filter, ignoreNulls) =&gt;
+</span>31 <span style=''>        </span><span style='background: #F0ADAD'>Some((Names.toName(unresolvedFunction), argumentExpressions, is, filter, ignoreNulls))</span><span style=''>
+</span>32 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>33 <span style=''>    }
+</span>34 <span style=''>
+</span>35 <span style=''>}
+</span>36 <span style=''>
+</span>37 <span style=''>object UnresolvedFunction4 {
+</span>38 <span style=''>
+</span>39 <span style=''>  /**
+</span>40 <span style=''>   * Creates nameParts based on splitting &quot;.&quot;
+</span>41 <span style=''>   * @param nameParts
+</span>42 <span style=''>   * @param arguments
+</span>43 <span style=''>   * @param isDistinct
+</span>44 <span style=''>   * @param filter
+</span>45 <span style=''>   * @param ignoreNulls
+</span>46 <span style=''>   * @return
+</span>47 <span style=''>   */
+</span>48 <span style=''>  def apply(
+</span>49 <span style=''>             nameParts: String,
+</span>50 <span style=''>             arguments: Seq[Expression],
+</span>51 <span style=''>             isDistinct: Boolean,
+</span>52 <span style=''>             filter: Option[Expression] = None) = </span><span style='background: #F0ADAD'>UnresolvedFunction(nameParts.split(&quot;.&quot;), arguments, isDistinct, filter)</span><span style=''>
+</span>53 <span style=''>
+</span>54 <span style=''>  def unapply(unresolvedFunction: UnresolvedFunction): Option[(String, Seq[Expression], Boolean, Option[Expression])] =
+</span>55 <span style=''>    unresolvedFunction match {
+</span>56 <span style=''>      case UnresolvedFunction(_, argumentExpressions, is, filter, _) =&gt;
+</span>57 <span style=''>        </span><span style='background: #F0ADAD'>Some((Names.toName(unresolvedFunction), argumentExpressions, is, filter))</span><span style=''>
+</span>58 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>59 <span style=''>    }
+</span>60 <span style=''>
+</span>61 <span style=''>}
+</span></pre>
+          </div>
+          <div class="tab-pane" id="statementlist">
+            <table cellspacing="0" cellpadding="0" class="table statementlist">
+      <tr>
+        <th>Line</th>
+        <th>Stmt Id</th>
+        <th>Pos</th>
+        <th>Tree</th>
+        <th>Symbol</th>
+        <th>Tests</th>
+        <th>Code</th>
+      </tr><tr>
+        <td>
+          26
+        </td>
+        <td>
+          415
+        </td>
+        <td>
+          667
+          -
+          667
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply$default$5
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply$default$5
+        </td>
+      </tr><tr>
+        <td>
+          26
+        </td>
+        <td>
+          216
+        </td>
+        <td>
+          667
+          -
+          738
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply(scala.Predef.wrapRefArray[String](nameParts.split(&quot;.&quot;)), arguments, isDistinct, filter, org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply$default$5)
+        </td>
+      </tr><tr>
+        <td>
+          26
+        </td>
+        <td>
+          108
+        </td>
+        <td>
+          686
+          -
+          706
+        </td>
+        <td>
+          ApplyImplicitView
+        </td>
+        <td>
+          scala.LowPriorityImplicits.wrapRefArray
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Predef.wrapRefArray[String](nameParts.split(&quot;.&quot;))
+        </td>
+      </tr><tr>
+        <td>
+          26
+        </td>
+        <td>
+          278
+        </td>
+        <td>
+          686
+          -
+          706
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          java.lang.String.split
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          nameParts.split(&quot;.&quot;)
+        </td>
+      </tr><tr>
+        <td>
+          31
+        </td>
+        <td>
+          53
+        </td>
+        <td>
+          996
+          -
+          1028
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.expressions.Names.toName
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          Names.toName(unresolvedFunction)
+        </td>
+      </tr><tr>
+        <td>
+          31
+        </td>
+        <td>
+          259
+        </td>
+        <td>
+          990
+          -
+          1076
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Boolean, Option[org.apache.spark.sql.catalyst.expressions.Expression], Boolean)](scala.Tuple5.apply[String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Boolean, Option[org.apache.spark.sql.catalyst.expressions.Expression], Boolean](Names.toName(unresolvedFunction), argumentExpressions, is, filter, ignoreNulls))
+        </td>
+      </tr><tr>
+        <td>
+          31
+        </td>
+        <td>
+          423
+        </td>
+        <td>
+          995
+          -
+          1075
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple5.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple5.apply[String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Boolean, Option[org.apache.spark.sql.catalyst.expressions.Expression], Boolean](Names.toName(unresolvedFunction), argumentExpressions, is, filter, ignoreNulls)
+        </td>
+      </tr><tr>
+        <td>
+          32
+        </td>
+        <td>
+          72
+        </td>
+        <td>
+          1093
+          -
+          1097
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr><tr>
+        <td>
+          52
+        </td>
+        <td>
+          388
+        </td>
+        <td>
+          1489
+          -
+          1560
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply(scala.Predef.wrapRefArray[String](nameParts.split(&quot;.&quot;)), arguments, isDistinct, filter, org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply$default$5)
+        </td>
+      </tr><tr>
+        <td>
+          52
+        </td>
+        <td>
+          180
+        </td>
+        <td>
+          1508
+          -
+          1528
+        </td>
+        <td>
+          ApplyImplicitView
+        </td>
+        <td>
+          scala.LowPriorityImplicits.wrapRefArray
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Predef.wrapRefArray[String](nameParts.split(&quot;.&quot;))
+        </td>
+      </tr><tr>
+        <td>
+          52
+        </td>
+        <td>
+          359
+        </td>
+        <td>
+          1508
+          -
+          1528
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          java.lang.String.split
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          nameParts.split(&quot;.&quot;)
+        </td>
+      </tr><tr>
+        <td>
+          52
+        </td>
+        <td>
+          111
+        </td>
+        <td>
+          1489
+          -
+          1489
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply$default$5
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.apply$default$5
+        </td>
+      </tr><tr>
+        <td>
+          57
+        </td>
+        <td>
+          424
+        </td>
+        <td>
+          1793
+          -
+          1866
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Boolean, Option[org.apache.spark.sql.catalyst.expressions.Expression])](scala.Tuple4.apply[String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Boolean, Option[org.apache.spark.sql.catalyst.expressions.Expression]](Names.toName(unresolvedFunction), argumentExpressions, is, filter))
+        </td>
+      </tr><tr>
+        <td>
+          57
+        </td>
+        <td>
+          47
+        </td>
+        <td>
+          1798
+          -
+          1865
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple4.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple4.apply[String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Boolean, Option[org.apache.spark.sql.catalyst.expressions.Expression]](Names.toName(unresolvedFunction), argumentExpressions, is, filter)
+        </td>
+      </tr><tr>
+        <td>
+          57
+        </td>
+        <td>
+          219
+        </td>
+        <td>
+          1799
+          -
+          1831
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.expressions.Names.toName
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          Names.toName(unresolvedFunction)
+        </td>
+      </tr><tr>
+        <td>
+          58
+        </td>
+        <td>
+          260
+        </td>
+        <td>
+          1883
+          -
+          1887
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr>
+    </table>
+          </div>
+        </div>
+      </body>
+    </html>
