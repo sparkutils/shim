@@ -41,8 +41,8 @@ nav:
   - Reference Material:
     - Landing: reference_material.md
     - Maven Site: site/index.html
-    - Runtime Scala Docs: site/shim_runtime_3.4.1.oss_3.4_2.12/index.html
-    - Compilation Scala Docs: site/shim_compilation_3.4.1.oss_3.4_2.12/index.html
+    - Runtime Scala Docs: site/shim_runtime_3.4.1.oss_3.4_2.12/scaladocs/index.html
+    - Compilation Scala Docs: site/shim_compilation_3.4.1.oss_3.4_2.12/scaladocs/index.html
 
 plugins:
   - search:
