@@ -51,7 +51,9 @@ Build versions _will_ increment across all runtimes.  This means an initial 14.2
 
 Introduction of a new runtime compat _should_ not force a major.minor increment unless there is a fundamental source incompatibility introduced (e.g. moving of package, demand for a new default param etc.).
 
-Where it is not possible to backport/support newer functionality this will necessarily force a minor version at least.
+Additional, binary compatible, functionality will represent a minor build change - this necessitates that default parameters are not back-filled in the arity shims, these will only be added in major versions to ease predictability.
+
+Where it is not possible to backport/support newer functionality this will necessarily force a major version.
 
 ### Why are there "compilation" runtimeCompatVersions?
 
@@ -71,7 +73,7 @@ OSS compilation jars are provided for easier configuration.
 !!! WARN "Scala Maven Plugin ignores classpath order"
     The compiler classpath used does not reflect that from dependency:build-classpath, instead it loads it as a set.  This means you cannot use maven to build using the compilation artefact as a direct dependency - it will non-deterministically order your jars and likely lead to a variety of linkage errors.
 
-    In order to fix this for Maven you should compile the compilation artefact sources directly via the dependency plugin and additional source directory via the helper plugin.  See [Quality's build file](todo) for example usage (tested on various DBR versions). 
+    In order to fix this for Maven you should compile the compilation artefact sources directly via the dependency plugin and additional source directory via the helper plugin.  See [here](https://sparkutils.github.io/shim/latest/getting_started/#developing-a-library-against-internal-apis-changed-by-databricks) for example usage (tested on various DBR versions). 
 
 ## How is it achieved
 

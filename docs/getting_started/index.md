@@ -5,21 +5,6 @@ tags:
    - beginner
 ---
 
-## Migrating from 0.0.3 to 0.1.0
-
-The quality package has been trimmed down to common functionality only.  DSL / Column based functions and types have moved to specific packages similar to implicits:
-
-```scala
-import com.sparkutils.shim._
-import functions._
-import types._
-import implicits._
-```  
-
-The functions package aims to have an equivalent column dsl function for each bit of sql based functionality.  The notable exception to this is the lambda, callFun and _() functions, for which you are better off using your languages normal support for abstraction.  A number of the functions have been, due to naming choice, deprecated they will be removed in 0.2.0.   
-
-Spark 2.4 support is, as of this release, deprecated but not removed, future 0.1.x versions will continue to support but 0.2.0 will remove it entirely. 
-
 ## Building The Library
 
 * fork, 
@@ -40,34 +25,18 @@ but dbr versions will not be able to run tests from the command line (typically 
 mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true -DskipTests clean install -P 10.4.dbr
 ```
 
-You may also build the shaded uber test jar for easy testing in Spark clusters for each profile:
-
-```bash
-mvn -f testShades/pom.xml --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true -Dmaven.test.skip=true clean install -P 10.4.dbr
-```
-
-The uber test jar artefact starts with 'quality_testshade_' instead of just 'quality_' and is located in the testShades/target/ directory of a given build.  This is also true for the artefacts of a runtime build job within a full build gitlab pipeline.  All of the required jar's are shaded so you can quickly jump into using Quality in [notebooks for example](running_on_databricks/#testing-out-quality-via-notebooks).
-
-## Running the tests
-
-In order to run the tests you must follow [these instructions](https://github.com/globalmentor/hadoop-bare-naked-local-fs/issues/2#issuecomment-1444453024) to create a fake winutils.
-
-Also ensure only the correct target Maven profile and source directories are enabled in your IDE of choice. 
-
-The performance tests are not automated and must be manually run when needed.
-
 ## Build tool dependencies
 
-Quality is cross compiled for different versions of Spark, Scala _and_ runtimes such as Databricks.  The format for artifact's is:
+Shim is cross compiled for different versions of Spark, Scala _and_ runtimes such as Databricks.  The format for artifact's is:
 
 ```
-quality_RUNTIME_SPARKCOMPATVERSION_SCALACOMPATVERSION-VERSION.jar
+shim_[compilation|runtime]_RUNTIME_SPARKCOMPATVERSION_SCALACOMPATVERSION-VERSION.jar
 ```
 
 e.g.
 
 ```
-quality_3.4.1.oss_3.4_2.12-0.1.3.jar
+shim_runtime_3.4.1.oss_3.4_2.12-0.1.3.jar
 ```
 
 The build poms generate those variables via maven profiles, but you are advised to use properties to configure e.g. for Maven:
@@ -75,10 +44,12 @@ The build poms generate those variables via maven profiles, but you are advised 
 ```xml
 <dependency>
     <groupId>com.sparkutils</groupId>
-    <artifactId>quality_${qualityRuntime}${sparkShortVersion}_${scalaCompatVersion}</artifactId>
-    <version>${qualityVersion}</version>
+    <artifactId>shim_runtime_${qualityRuntime}${sparkShortVersion}_${scalaCompatVersion}</artifactId>
+    <version>${shimRuntimeVersion}</version>
 </dependency>
 ```
+
+The "compilation" artefacts are only needed if you rely on the internal apis used in them (e.g. Frameless doesn't, Quality does), you should attempt the use of runtime only first.
 
 The full list of supported runtimes is below:
 
@@ -97,34 +68,33 @@ The full list of supported runtimes is below:
 | 3.3.2         | 3.3 | 13.1.dbr_      | 2.12 |
 | 3.4.1         | 3.4 | 3.4.1.oss_     | 2.12 |
 | 3.4.1         | 3.4 | 13.1.dbr_      | 2.12 |
+| 3.4.1         | 3.4 | 13.3.dbr_      | 2.12 |
 | 3.5.0         | 3.5 | 3.5.0.oss_     | 2.12 |
 | 3.5.0         | 3.5 | 14.0.dbr_      | 2.12 |
+| 3.5.0         | 3.5 | 14.3.dbr_      | 2.12 |
 
 2.4 support is deprecated and will be removed in a future version.  3.1.2 support is replaced by 3.1.3 due to interpreted encoder issues. 
 
 !!! note "Databricks 13.x support"
     13.0 also works on the 12.2.dbr_ build as of 10th May 2023, despite the Spark version difference.
-    13.1 requires its own version as it backports 3.5 functionality.  The 13.1.dbr quality runtime build also works on 13.2 DBR. 
+    13.1 requires its own version as it backports 3.5 functionality.  The 13.1.dbr quality runtime build also works on 13.2 DBR.
+    13.3 has backports of 4.0 functionality which requires it's own runtime.
 
 !!! warning "Databricks 14.x support"
     Due to back-porting of SPARK-44913 frameless 0.16.0 (the 3.5.0 release) is not binary compatible with 14.2 and above which has back-ported this 4.0 interface change.
-    Similarly, 4.0 / 14.2 introduces a change in resolution so a new runtime version is required upon a potential fix for 44913 in frameless. 
-
-## Sql functions vs column dsl
-
-Similar to normal Spark functions there Quality's functions have sql variants to use with select / sql or expr() and the dsl variants built around Column.
-
-You can use both the sql and dsl functions often without any other Quality runner usage, including lambdas.  To use the dsl functions, import quality.functions._, to use the sql functions you can either use the SparkExtension or the regsterXX functions available from the quality package.    
+    Similarly, 4.0 / 14.2 introduces a change in resolution so a new runtime version is required upon a potential fix for 44913 in frameless.
+    14.2 is not directly supported but has been tested and works with the 14.3 LTS release.
+    Use the 14.3 version on 14.3, 14.0.dbr will not work
 
 ### Developing for a Databricks Runtime
 
-As there are many compatibility issues that Quality works around between the various Spark runtimes and their Databricks equivalents you will need to use two different runtimes when you do local testing (and of course you _should_ do that):
+As there are many compatibility issues that Shim works around between the various Spark runtimes and their Databricks equivalents you will need to use two different runtimes when you do local testing (and of course you _should_ do that):
 
 ```xml
 <properties>
-    <qualityVersion>0.1.3</qualityVersion>
-    <qualityTestPrefix>3.4.1.oss_</qualityTestPrefix>
-    <qualityDatabricksPrefix>13.1.dbr_</qualityDatabricksPrefix>
+    <shimRuntimeVersion>0.1.3</shimRuntimeVersion>
+    <shimRuntimeTest>3.4.1.oss_</shimRuntimeTest>
+    <shimRuntimeDatabricks>13.1.dbr_</shimRuntimeDatabricks>
     <sparkShortVersion>3.4</sparkShortVersion>
     <scalaCompatVersion>2.12</scalaCompatVersion>    
 </properties>
@@ -132,14 +102,14 @@ As there are many compatibility issues that Quality works around between the var
 <dependencies>
     <dependency>
         <groupId>com.sparkutils.</groupId>
-        <artifactId>quality_${qualityTestPrefix}${sparkShortVersion}_${scalaCompatVersion}</artifactId>
-        <version>${qualityVersion}</version>
+        <artifactId>shim_runtime_${shimRuntimeTest}${sparkShortVersion}_${scalaCompatVersion}</artifactId>
+        <version>${shimRuntimeVersion}</version>
         <scope>test</scope>
     </dependency>
     <dependency>
         <groupId>com.sparkutils</groupId>
-        <artifactId>quality_${qualityDatabricksPrefix}${sparkShortVersion}_${scalaCompatVersion}</artifactId>
-        <version>${qualityVersion}</version>
+        <artifactId>shim_runtime_${shimRuntimeDatabricks}${sparkShortVersion}_${scalaCompatVersion}</artifactId>
+        <version>${shimRuntimeVersion}</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -157,60 +127,101 @@ The known combinations requiring this approach is below:
 | 3.3.0         | 3.3               | 3.3.0.oss_        | 11.3.dbr_               | 2.12 | 
 | 3.3.2         | 3.3               | 3.3.2.oss_        | 12.2.dbr_               | 2.12 | 
 | 3.4.1         | 3.4               | 3.4.1.oss_        | 13.1.dbr_               | 2.12 | 
+| 3.4.1         | 3.4               | 3.4.1.oss_        | 13.3.dbr_               | 2.12 | 
 | 3.5.0         | 3.5               | 3.5.0.oss_        | 14.0.dbr_               | 2.12 | 
+| 3.5.0         | 3.5               | 3.5.0.oss_        | 14.3.dbr_               | 2.12 | 
 
-## Using the SQL functions on Spark Thrift (Hive) servers
+### Developing a library against internal APIs changed by Databricks
 
-Using the configuration option:
+In this scenario, similar to Quality, it is assumed you want to use internal apis covered in the version specific "compilation" source.  The approach taken is to force Databricks runtime compatible interfaces higher up in the classpath than the OSS equivalents (or indeed provide them where the OSS version doesn't have them - like backported code from as yet unreleased OSS versions).
 
+This approach requires your build tool environment to support runtime ordering in the build, if it does then you may simply depend on the shim_compilation artefact as provided scope.  The scala maven plugin does not maintain order from maven, which is fine for most usages, just not this one....
+
+In order to support maven some config is needed - for a working complete build see Quality's - namely to use the sources classifier with the dependency and build helper plugins:
+
+```xml
+<project>
+...
+    
+<dependencies>
+    <dependency>
+        <groupId>com.sparkutils</groupId>
+        <artifactId>shim_compilation_${shimCompilationRuntime}_${sparkCompatVersion}_${scalaCompatVersion}</artifactId>
+        <version>${shimCompilationVersion}</version>
+        <scope>provided</scope>
+        <classifier>sources</classifier>
+        <exclusions>
+            <exclusion>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-sql_${scalaCompatVersion}</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId>com.sparkutils</groupId>
+        <artifactId>shim_runtime_${shimRuntime}_${sparkCompatVersion}_${scalaCompatVersion}</artifactId>
+        <version>${shimRuntimeVersion}</version>
+    </dependency>
+</dependencies>
+
+<plugins>
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>build-helper-maven-plugin</artifactId>
+    <version>${buildHelperPluginVersion}</version>
+    <executions>
+        <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+                <goal>add-source</goal>
+            </goals>
+            <configuration>
+                <sources>
+                    <source>src/main/scala</source>
+                    <source>src/main/${profileDir}-scala</source>
+                    <source>${project.build.directory}/shim_compilation_${shimCompilationRuntime}_${sparkCompatVersion}_${scalaCompatVersion}</source>
+                </sources>
+            </configuration>
+        </execution>
+...
+    </executions>
+</plugin>
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>${dependencyPluginVersion}</version>
+    <executions> <!-- maven scala plugin uses a set to store classpath, it doesn't follow maven's so we need to use the source -->
+        <execution>
+            <id>unpack</id>
+            <phase>initialize</phase>
+            <goals>
+                <goal>unpack</goal>
+            </goals>
+            <configuration>
+                <artifactItems>
+                    <artifactItem>
+                        <groupId>com.sparkutils</groupId>
+                        <artifactId>shim_compilation_${shimCompilationRuntime}_${sparkCompatVersion}_${scalaCompatVersion}</artifactId>
+                        <version>${shimCompilationVersion}</version>
+
+                        <classifier>sources</classifier>
+                        <type>jar</type>
+
+                        <overWrite>true</overWrite>
+                        <outputDirectory>${project.build.directory}/shim_compilation_${shimCompilationRuntime}_${sparkCompatVersion}_${scalaCompatVersion}</outputDirectory>
+                    </artifactItem>
+                </artifactItems>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+</plugins>
+</project>
 ```
-spark.sql.extensions=com.sparkutils.quality.impl.extension.QualitySparkExtension
-```
 
-when starting your cluster, with the appropriate compatible Quality runtime jars - the test Shade jar can also be used -, will automatically register the additional SQL functions from Quality.
+This, at project initialization phase, downloads and unpacks the shim_compilation correct version to the target directory (the dependency plugin configuration) and then, at source generation phase, adds the directory as source with the build-helper plugin.  
 
-!!! note "Spark 2.4 runtimes are not supported"
-    2.4 is not supported as Spark doesn't provide for SQL extensions in this version.
-      
-!!! note "Pure SQL only"    
-    Lambdas, blooms and map's cannot be constructed via pure sql, so the functionality of these on Thrift/Hive servers is limited. 
-
-### Query Optimisations
-
-The Quality SparkExtension also provides query plan optimisers that re-write as_uuid and id_base64 usage when compared to strings.  This allows BI tools to use the results of view containing as_uuid or id_base64 strings in dashboards.  When the BI tool filters or selects on these strings passed down to the **same view**, the string is converted back into its underlying parts.  This allows for predicate pushdowns and other optimisations against the underlying parts instead of forcing conversions to string.
-
-These two currently existing optimisations are applied to joins and filters against =, <=>, >, >=, <, <= and "in".
-
-In order to use the query optimisations within normal job / calculator writing you must still register via spark.sql.extensions but you'll also be able to continue using the rest of the Quality functionality.  
-
-### Configuring on Databricks runtimes
-
-In order to register the extensions on Databricks runtimes you need to additionally create a cluster init script much like:
-
-```bash
-#!/bin/bash
-
-cp /dbfs/FileStore/XXXX-quality_testshade_12_2_ver.jar /databricks/jars/quality_testshade_12_2_ver.jar
-```
-
-where the first path is your uploaded jar location.  You can create this script via a notebook on running cluster in the same workspace with throwaway code much like this:
-
-```scala
-val scriptName = "/dbfs/add_quality_plugin.sh"
-val script = s"""
-#!/bin/bash
-
-cp /dbfs/FileStore/XXXX-quality_testshade_12_2_ver.jar /databricks/jars/quality_testshade_12_2_ver.jar
-"""
-import java.io._
-
-new File(scriptName).createNewFile
-new PrintWriter(scriptName) {write(script); close}
-```
-
-You must still register the Spark config extension attribute, but also make sure the Init script has the same path as the file you created in the above snippet.
-
-## 2.4 Support requires 2.4.6 or Janino 3.0.16
-
-Due to [Janino #90](https://github.com/janino-compiler/janino/issues/90) using 2.4.5 directly will bring in 3.0.9 janino which can cause VerifyErrors, use 2.4.6 if you can't use a 3.x Spark.
-
+!!! info "how will I know if I need this?"
+    You'll get strange errors, incompatible implementations or linkages, missing methods etc.  Hopefully they are already covered by the current code, if not raise an issue and we'll see if there is a solution to it.  
