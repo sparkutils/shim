@@ -2,6 +2,7 @@ package org.apache.spark.sql.shim
 
 import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke
+import org.apache.spark.sql.connector.catalog.functions.ScalarFunction
 import org.apache.spark.sql.types.{AbstractDataType, DataType}
 
 object StaticInvoke4 {
@@ -147,4 +148,6 @@ object StaticInvoke8 {
       isDeterministic) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic))
       case _ => None
     }
+
+  val scalarFunction: Option[ScalarFunction[_]] = None
 }

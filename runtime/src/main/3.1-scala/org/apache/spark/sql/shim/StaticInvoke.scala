@@ -33,10 +33,8 @@ object StaticInvoke4 {
         dataType,
         functionName,
         arguments,
-        inputTypes,
         propagateNull,
-        returnNullable,
-        isDeterministic) => Some((staticObject, dataType, functionName, arguments))
+        returnNullable) => Some((staticObject, dataType, functionName, arguments))
       case _ => None
     }
 }
@@ -52,7 +50,7 @@ object StaticInvoke5 {
              propagateNull: Boolean = true,
              returnNullable: Boolean = true,
              isDeterministic: Boolean = true
-           ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes)
+           ) = StaticInvoke(staticObject, dataType, functionName, arguments)
 
   def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType])] =
     exp match {
@@ -60,10 +58,8 @@ object StaticInvoke5 {
       dataType,
       functionName,
       arguments,
-      inputTypes,
       propagateNull,
-      returnNullable,
-      isDeterministic) => Some((staticObject, dataType, functionName, arguments, inputTypes))
+      returnNullable) => Some((staticObject, dataType, functionName, arguments, Seq()))
       case _ => None
     }
 }
@@ -79,7 +75,7 @@ object StaticInvoke6 {
              propagateNull: Boolean,
              returnNullable: Boolean = true,
              isDeterministic: Boolean = true
-           ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull)
+           ) = StaticInvoke(staticObject, dataType, functionName, arguments, propagateNull)
 
   def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean)] =
     exp match {
@@ -87,10 +83,8 @@ object StaticInvoke6 {
       dataType,
       functionName,
       arguments,
-      inputTypes,
       propagateNull,
-      returnNullable,
-      isDeterministic) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull))
+      returnNullable) => Some((staticObject, dataType, functionName, arguments, Seq(), propagateNull))
       case _ => None
     }
 }
@@ -106,7 +100,7 @@ object StaticInvoke7 {
              propagateNull: Boolean,
              returnNullable: Boolean,
              isDeterministic: Boolean = true
-           ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable)
+           ) = StaticInvoke(staticObject, dataType, functionName, arguments, propagateNull, returnNullable)
 
   def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean, Boolean)] =
     exp match {
@@ -114,10 +108,8 @@ object StaticInvoke7 {
       dataType,
       functionName,
       arguments,
-      inputTypes,
       propagateNull,
-      returnNullable,
-      isDeterministic) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable))
+      returnNullable) => Some((staticObject, dataType, functionName, arguments, Seq(), propagateNull, returnNullable))
       case _ => None
     }
 }
@@ -133,7 +125,7 @@ object StaticInvoke8 {
              propagateNull: Boolean,
              returnNullable: Boolean,
              isDeterministic: Boolean
-           ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic)
+           ) = StaticInvoke(staticObject, dataType, functionName, arguments, propagateNull, returnNullable)
 
   def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean, Boolean, Boolean)] =
     exp match {
@@ -141,10 +133,9 @@ object StaticInvoke8 {
       dataType,
       functionName,
       arguments,
-      inputTypes,
       propagateNull,
-      returnNullable,
-      isDeterministic) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic))
+      returnNullable) => Some((staticObject, dataType, functionName, arguments, Seq(), propagateNull, returnNullable, false))
       case _ => None
     }
+
 }

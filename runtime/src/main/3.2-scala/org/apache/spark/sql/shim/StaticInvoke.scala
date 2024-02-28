@@ -35,8 +35,7 @@ object StaticInvoke4 {
         arguments,
         inputTypes,
         propagateNull,
-        returnNullable,
-        isDeterministic) => Some((staticObject, dataType, functionName, arguments))
+        returnNullable) => Some((staticObject, dataType, functionName, arguments))
       case _ => None
     }
 }
@@ -62,8 +61,7 @@ object StaticInvoke5 {
       arguments,
       inputTypes,
       propagateNull,
-      returnNullable,
-      isDeterministic) => Some((staticObject, dataType, functionName, arguments, inputTypes))
+      returnNullable) => Some((staticObject, dataType, functionName, arguments, inputTypes))
       case _ => None
     }
 }
@@ -89,8 +87,7 @@ object StaticInvoke6 {
       arguments,
       inputTypes,
       propagateNull,
-      returnNullable,
-      isDeterministic) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull))
+      returnNullable) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull))
       case _ => None
     }
 }
@@ -116,8 +113,7 @@ object StaticInvoke7 {
       arguments,
       inputTypes,
       propagateNull,
-      returnNullable,
-      isDeterministic) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable))
+      returnNullable) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable))
       case _ => None
     }
 }
@@ -143,8 +139,8 @@ object StaticInvoke8 {
       arguments,
       inputTypes,
       propagateNull,
-      returnNullable,
-      isDeterministic) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic))
+      returnNullable) => Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, false))
       case _ => None
     }
+
 }
