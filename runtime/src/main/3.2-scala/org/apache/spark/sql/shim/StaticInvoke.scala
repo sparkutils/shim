@@ -129,7 +129,7 @@ object StaticInvoke8 {
              propagateNull: Boolean,
              returnNullable: Boolean,
              isDeterministic: Boolean
-           ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic)
+           ) = StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable)
 
   def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean, Boolean, Boolean)] =
     exp match {
