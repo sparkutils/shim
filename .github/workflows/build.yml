@@ -148,19 +148,19 @@ jobs:
             chmod u+x dott
 
             export QUALITY_SPARK_HOSTS=1
-            mvn $MAVEN_CLI_OPTS clean scoverage:test -P Spark332
+            mvn $MAVEN_CLI_OPTS clean scoverage:test -P Spark332,scala_2.12.15
 
             mkdir tmpSCoverage
             rm -f ./target/scoverage-data/scoverage.coverage
             cp ./target/scoverage-data/* tmpSCoverage 2>/dev/null || :
 
-            mvn $MAVEN_CLI_OPTS clean scoverage:test -P Spark341
+            mvn $MAVEN_CLI_OPTS clean scoverage:test -P Spark341,scala_2.12.15
             
             cp tmpSCoverage/* ./target/scoverage-data 2>/dev/null || :
             
-            mvn $MAVEN_CLI_OPTS site -P Spark341
+            mvn $MAVEN_CLI_OPTS site -P Spark341,scala_2.12.15
 
-            echo $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -P Spark341) > target/version.txt
+            echo $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -P Spark341,scala_2.12.15) > target/version.txt
 
             grep -A 3 'Statement coverage:' target/site/scoverage/overview.html | tail -1 | sed 's/[[:space:]]\+//g' > target/coverage.txt
             grep -A 3 'Branch coverage:' target/site/scoverage/overview.html | tail -1 | sed 's/[[:space:]]\+//g' >> target/coverage.txt
@@ -170,7 +170,7 @@ jobs:
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - id: version
-        run: echo version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -P Spark341) >> "$GITHUB_OUTPUT"
+        run: echo version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -P Spark341,scala_2.12.15) >> "$GITHUB_OUTPUT"
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
       - name: target
