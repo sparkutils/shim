@@ -1,0 +1,663 @@
+<html>
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title id="title">
+          org/apache/spark/sql/shim/Invoke.scala.html
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/css/theme.default.min.css" type="text/css"/><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/js/jquery.tablesorter.min.js"></script><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/><script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script><script type="text/javascript">
+        $(document).ready(function() {$(".tablesorter").tablesorter();});
+      </script>
+        <style>
+          table.codegrid { font-family: monospace; font-size: 12px; width: auto!important; }table.statementlist { width: auto!important; font-size: 13px; } table.codegrid td { padding: 0!important; border: 0!important } table td.linenumber { width: 40px!important; } 
+        </style>
+      </head>
+      <body style="font-family: monospace;">
+        <ul class="nav nav-tabs">
+          <li>
+            <a href="#codegrid" data-toggle="tab">Codegrid</a>
+          </li>
+          <li>
+            <a href="#statementlist" data-toggle="tab">Statement List</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="codegrid">
+            <pre style='font-size: 12pt; font-family: courier, monospace;'>1 <span style=''>package org.apache.spark.sql.shim
+</span>2 <span style=''>
+</span>3 <span style=''>import org.apache.spark.sql.catalyst.expressions.Expression
+</span>4 <span style=''>import org.apache.spark.sql.catalyst.expressions.objects.Invoke
+</span>5 <span style=''>import org.apache.spark.sql.types.{AbstractDataType, DataType}
+</span>6 <span style=''>
+</span>7 <span style=''>/*
+</span>8 <span style=''>Invoke change caused breakage in 3.2.0 to 3.2.1
+</span>9 <span style=''>
+</span>10 <span style=''>3.5 below
+</span>11 <span style=''>    targetObject: Expression,
+</span>12 <span style=''>    functionName: String,
+</span>13 <span style=''>    dataType: DataType,
+</span>14 <span style=''>    arguments: Seq[Expression] = Nil,
+</span>15 <span style=''>    methodInputTypes: Seq[AbstractDataType] = Nil,
+</span>16 <span style=''>    propagateNull: Boolean = true,
+</span>17 <span style=''>    returnNullable : Boolean = true,
+</span>18 <span style=''>    isDeterministic: Boolean = true)
+</span>19 <span style=''> */
+</span>20 <span style=''>
+</span>21 <span style=''>object Invoke5 {
+</span>22 <span style=''>
+</span>23 <span style=''>  def apply(targetObject: Expression,
+</span>24 <span style=''>            functionName: String,
+</span>25 <span style=''>            dataType: DataType,
+</span>26 <span style=''>            arguments: Seq[Expression] = Nil,
+</span>27 <span style=''>            methodInputTypes: Seq[AbstractDataType] = Nil): Expression =
+</span>28 <span style=''>    </span><span style='background: #F0ADAD'>Invoke(targetObject, functionName, dataType, arguments, methodInputTypes)</span><span style=''>
+</span>29 <span style=''>
+</span>30 <span style=''>  def unapply(cast: Invoke): Option[(Expression,String,DataType,Seq[Expression],Seq[AbstractDataType])] =
+</span>31 <span style=''>    cast match {
+</span>32 <span style=''>      case Invoke(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, isDeterministic) =&gt;
+</span>33 <span style=''>        </span><span style='background: #F0ADAD'>Some((targetObject, functionName, dataType, arguments, methodInputTypes))</span><span style=''>
+</span>34 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>35 <span style=''>    }
+</span>36 <span style=''>}
+</span>37 <span style=''>
+</span>38 <span style=''>object Invoke6 {
+</span>39 <span style=''>
+</span>40 <span style=''>  def apply(targetObject: Expression,
+</span>41 <span style=''>            functionName: String,
+</span>42 <span style=''>            dataType: DataType,
+</span>43 <span style=''>            arguments: Seq[Expression] = Nil,
+</span>44 <span style=''>            methodInputTypes: Seq[AbstractDataType] = Nil,
+</span>45 <span style=''>            propagateNull: Boolean = true): Expression =
+</span>46 <span style=''>    </span><span style='background: #F0ADAD'>Invoke(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull)</span><span style=''>
+</span>47 <span style=''>
+</span>48 <span style=''>  def unapply(cast: Invoke): Option[(Expression,String,DataType,Seq[Expression],Seq[AbstractDataType],Boolean)] =
+</span>49 <span style=''>    cast match {
+</span>50 <span style=''>      case Invoke(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, isDeterministic) =&gt;
+</span>51 <span style=''>        </span><span style='background: #F0ADAD'>Some((targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull))</span><span style=''>
+</span>52 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>53 <span style=''>    }
+</span>54 <span style=''>}
+</span>55 <span style=''>
+</span>56 <span style=''>object Invoke7 {
+</span>57 <span style=''>
+</span>58 <span style=''>  def apply(targetObject: Expression,
+</span>59 <span style=''>            functionName: String,
+</span>60 <span style=''>            dataType: DataType,
+</span>61 <span style=''>            arguments: Seq[Expression] = Nil,
+</span>62 <span style=''>            methodInputTypes: Seq[AbstractDataType] = Nil,
+</span>63 <span style=''>            propagateNull: Boolean = true,
+</span>64 <span style=''>            returnNullable : Boolean = true): Expression =
+</span>65 <span style=''>    </span><span style='background: #F0ADAD'>Invoke(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable)</span><span style=''>
+</span>66 <span style=''>
+</span>67 <span style=''>  def unapply(cast: Invoke): Option[(Expression,String,DataType,Seq[Expression],Seq[AbstractDataType],Boolean,Boolean)] =
+</span>68 <span style=''>    cast match {
+</span>69 <span style=''>      case Invoke(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, isDeterministic) =&gt;
+</span>70 <span style=''>        </span><span style='background: #F0ADAD'>Some((targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable))</span><span style=''>
+</span>71 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>72 <span style=''>    }
+</span>73 <span style=''>}
+</span>74 <span style=''>
+</span>75 <span style=''>object Invoke8 {
+</span>76 <span style=''>
+</span>77 <span style=''>  def apply(targetObject: Expression,
+</span>78 <span style=''>            functionName: String,
+</span>79 <span style=''>            dataType: DataType,
+</span>80 <span style=''>            arguments: Seq[Expression] = Nil,
+</span>81 <span style=''>            methodInputTypes: Seq[AbstractDataType] = Nil,
+</span>82 <span style=''>            propagateNull: Boolean = true,
+</span>83 <span style=''>            returnNullable : Boolean = true,
+</span>84 <span style=''>            isDeterministic: Boolean = true): Expression =
+</span>85 <span style=''>    </span><span style='background: #F0ADAD'>Invoke(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, isDeterministic)</span><span style=''>
+</span>86 <span style=''>
+</span>87 <span style=''>  def unapply(cast: Invoke): Option[(Expression,String,DataType,Seq[Expression],Seq[AbstractDataType],Boolean,Boolean,Boolean)] =
+</span>88 <span style=''>    cast match {
+</span>89 <span style=''>      case Invoke(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, isDeterministic) =&gt;
+</span>90 <span style=''>        </span><span style='background: #F0ADAD'>Some((targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, isDeterministic))</span><span style=''>
+</span>91 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>92 <span style=''>    }
+</span>93 <span style=''>}
+</span></pre>
+          </div>
+          <div class="tab-pane" id="statementlist">
+            <table cellspacing="0" cellpadding="0" class="table statementlist">
+      <tr>
+        <th>Line</th>
+        <th>Stmt Id</th>
+        <th>Pos</th>
+        <th>Tree</th>
+        <th>Symbol</th>
+        <th>Tests</th>
+        <th>Code</th>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          415
+        </td>
+        <td>
+          813
+          -
+          813
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$8
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$8
+        </td>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          289
+        </td>
+        <td>
+          813
+          -
+          813
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$6
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$6
+        </td>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          232
+        </td>
+        <td>
+          813
+          -
+          886
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply(targetObject, functionName, dataType, arguments, methodInputTypes, org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$6, org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$7, org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$8)
+        </td>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          105
+        </td>
+        <td>
+          813
+          -
+          813
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$7
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$7
+        </td>
+      </tr><tr>
+        <td>
+          33
+        </td>
+        <td>
+          113
+        </td>
+        <td>
+          1160
+          -
+          1227
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple5.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple5.apply[org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType]](targetObject, functionName, dataType, arguments, methodInputTypes)
+        </td>
+      </tr><tr>
+        <td>
+          33
+        </td>
+        <td>
+          462
+        </td>
+        <td>
+          1155
+          -
+          1228
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType])](scala.Tuple5.apply[org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType]](targetObject, functionName, dataType, arguments, methodInputTypes))
+        </td>
+      </tr><tr>
+        <td>
+          34
+        </td>
+        <td>
+          270
+        </td>
+        <td>
+          1245
+          -
+          1249
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr><tr>
+        <td>
+          46
+        </td>
+        <td>
+          397
+        </td>
+        <td>
+          1547
+          -
+          1547
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$8
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$8
+        </td>
+      </tr><tr>
+        <td>
+          46
+        </td>
+        <td>
+          52
+        </td>
+        <td>
+          1547
+          -
+          1547
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$7
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$7
+        </td>
+      </tr><tr>
+        <td>
+          46
+        </td>
+        <td>
+          282
+        </td>
+        <td>
+          1547
+          -
+          1635
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$7, org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$8)
+        </td>
+      </tr><tr>
+        <td>
+          51
+        </td>
+        <td>
+          95
+        </td>
+        <td>
+          1917
+          -
+          1999
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple6.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple6.apply[org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean](targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull)
+        </td>
+      </tr><tr>
+        <td>
+          51
+        </td>
+        <td>
+          418
+        </td>
+        <td>
+          1912
+          -
+          2000
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean)](scala.Tuple6.apply[org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean](targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull))
+        </td>
+      </tr><tr>
+        <td>
+          52
+        </td>
+        <td>
+          221
+        </td>
+        <td>
+          2017
+          -
+          2021
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr><tr>
+        <td>
+          65
+        </td>
+        <td>
+          452
+        </td>
+        <td>
+          2364
+          -
+          2468
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$8)
+        </td>
+      </tr><tr>
+        <td>
+          65
+        </td>
+        <td>
+          18
+        </td>
+        <td>
+          2364
+          -
+          2364
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$8
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply$default$8
+        </td>
+      </tr><tr>
+        <td>
+          70
+        </td>
+        <td>
+          54
+        </td>
+        <td>
+          2753
+          -
+          2857
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean)](scala.Tuple7.apply[org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean](targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable))
+        </td>
+      </tr><tr>
+        <td>
+          70
+        </td>
+        <td>
+          239
+        </td>
+        <td>
+          2758
+          -
+          2856
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple7.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple7.apply[org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean](targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable)
+        </td>
+      </tr><tr>
+        <td>
+          71
+        </td>
+        <td>
+          368
+        </td>
+        <td>
+          2874
+          -
+          2878
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr><tr>
+        <td>
+          85
+        </td>
+        <td>
+          284
+        </td>
+        <td>
+          3266
+          -
+          3387
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.Invoke.apply(targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, isDeterministic)
+        </td>
+      </tr><tr>
+        <td>
+          90
+        </td>
+        <td>
+          403
+        </td>
+        <td>
+          3680
+          -
+          3801
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean, Boolean)](scala.Tuple8.apply[org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean, Boolean](targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, isDeterministic))
+        </td>
+      </tr><tr>
+        <td>
+          90
+        </td>
+        <td>
+          96
+        </td>
+        <td>
+          3685
+          -
+          3800
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple8.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple8.apply[org.apache.spark.sql.catalyst.expressions.Expression, String, org.apache.spark.sql.types.DataType, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean, Boolean](targetObject, functionName, dataType, arguments, methodInputTypes, propagateNull, returnNullable, isDeterministic)
+        </td>
+      </tr><tr>
+        <td>
+          91
+        </td>
+        <td>
+          224
+        </td>
+        <td>
+          3818
+          -
+          3822
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr>
+    </table>
+          </div>
+        </div>
+      </body>
+    </html>

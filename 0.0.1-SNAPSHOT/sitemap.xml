@@ -2,32 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://sparkutils.github.io/shim/0.0.1-SNAPSHOT/</loc>
-         <lastmod>2024-02-27</lastmod>
+         <lastmod>2024-02-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sparkutils.github.io/shim/0.0.1-SNAPSHOT/reference_material/</loc>
-         <lastmod>2024-02-27</lastmod>
+         <lastmod>2024-02-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sparkutils.github.io/shim/0.0.1-SNAPSHOT/background/about/</loc>
-         <lastmod>2024-02-27</lastmod>
+         <lastmod>2024-02-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sparkutils.github.io/shim/0.0.1-SNAPSHOT/background/changelog/</loc>
-         <lastmod>2024-02-27</lastmod>
+         <lastmod>2024-02-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sparkutils.github.io/shim/0.0.1-SNAPSHOT/getting_started/</loc>
-         <lastmod>2024-02-27</lastmod>
+         <lastmod>2024-02-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://sparkutils.github.io/shim/0.0.1-SNAPSHOT/getting_started/running_on_databricks/</loc>
-         <lastmod>2024-02-27</lastmod>
+         <lastmod>2024-02-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

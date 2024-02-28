@@ -243,7 +243,39 @@
         <div class="values members">
               <h3>Value Members</h3>
               <ol>
-                <li name="com.sparkutils.shim#registerSessionPlan" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+                <li name="com.sparkutils.shim#deriveUnitLiteral" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deriveUnitLiteral:org.apache.spark.sql.catalyst.expressions.Expression"></a><a id="deriveUnitLiteral:Expression"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/shim/index.html#deriveUnitLiteral:org.apache.spark.sql.catalyst.expressions.Expression" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deriveUnitLiteral</span><span class="result">: <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span></span>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim#ifIsNull" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ifIsNull(dataType:org.apache.spark.sql.types.DataType,path:org.apache.spark.sql.catalyst.expressions.Expression,nonNullExpr:org.apache.spark.sql.catalyst.expressions.Expression):org.apache.spark.sql.catalyst.expressions.Expression"></a><a id="ifIsNull(DataType,Expression,Expression):Expression"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/shim/index.html#ifIsNull(dataType:org.apache.spark.sql.types.DataType,path:org.apache.spark.sql.catalyst.expressions.Expression,nonNullExpr:org.apache.spark.sql.catalyst.expressions.Expression):org.apache.spark.sql.catalyst.expressions.Expression" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ifIsNull</span><span class="params">(<span name="dataType">dataType: <span class="extype" name="org.apache.spark.sql.types.DataType">DataType</span></span>, <span name="path">path: <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span></span>, <span name="nonNullExpr">nonNullExpr: <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">If the path is null then uses a null literal with dataType, if it's not null it uses the nonNullExpr</p>
+    </li><li name="com.sparkutils.shim#registerSessionPlan" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="registerSessionPlan(logicalPlan:org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan])(isPresentFilter:org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]=&gt;Boolean):Boolean"></a><a id="registerSessionPlan(Rule[LogicalPlan])((Rule[LogicalPlan])⇒Boolean):Boolean"></a>
       <span class="permalink">
       <a href="../../../com/sparkutils/shim/index.html#registerSessionPlan(logicalPlan:org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan])(isPresentFilter:org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]=&gt;Boolean):Boolean" title="Permalink">
