@@ -53,6 +53,7 @@
             <properties>
                 <scalaVersion>2.13.5</scalaVersion>
                 <scalaCompatVersion>2.13</scalaCompatVersion>
+                <scalatestVersion>3.0.8</scalatestVersion>
             </properties>
         </profile>
         <profile>
