@@ -16,11 +16,12 @@ env:
 jobs:
 
   # all versions that can be built with tests - typically oss only.  Fail fast so we can see all compilation or test errors at once
-  testBuilds:
+  testBuilds_2_11:
     strategy:
       fail-fast: false
       matrix:
-        profile: [Spark3, Spark2, Spark32, Spark321, Spark313, Spark332, Spark341, Spark350]
+        profile: [Spark2]
+        scala: ["scala_2.11"]
     runs-on: ubuntu-latest
 
     if: contains(github.event.head_commit.message, '~docsOnly') != true
@@ -30,7 +31,51 @@ jobs:
         with:
           title: Build ${{ matrix.profile }} with tests
           script: |
-            mvn $MAVEN_CLI_OPTS clean test install -P ${{ matrix.profile }}
+            mvn $MAVEN_CLI_OPTS clean test install -P ${{ matrix.profile }},${{ matrix.scala }}
+          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+  testBuilds_2_12_10:
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [Spark3, Spark313]
+        scala: ["scala_2.12.10"]
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.head_commit.message, '~docsOnly') != true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/spark_maven
+        with:
+          title: Build ${{ matrix.profile }} with tests
+          script: |
+            mvn $MAVEN_CLI_OPTS clean test install -P ${{ matrix.profile }},${{ matrix.scala }}
+          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+  testBuilds_2_12_15_and_13_5:
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [Spark32, Spark321, Spark332, Spark341, Spark350]
+        scala: ["scala_2.12.15", "scala_2.13.5"]
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.head_commit.message, '~docsOnly') != true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/spark_maven
+        with:
+          title: Build ${{ matrix.profile }} with tests
+          script: |
+            mvn $MAVEN_CLI_OPTS clean test install -P ${{ matrix.profile }},${{ matrix.scala }}
           gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
@@ -38,10 +83,11 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
   # all versions that cannot be built with tests - typically Databricks only
-  noTestBuilds:
+  noTestBuilds_2_12_10:
     strategy:
       matrix:
-        profile: ["10.4.dbr", "9.1.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr"]
+        profile: ["9.1.dbr"]
+        scala: ["scala_2.12.10"]
     runs-on: ubuntu-latest
 
     if: contains(github.event.head_commit.message, '~docsOnly') != true
@@ -51,7 +97,28 @@ jobs:
         with:
           title: Build ${{ matrix.profile }} without tests
           script: |
-            mvn $MAVEN_CLI_OPTS -DskipTests clean install -P ${{ matrix.profile }}
+            mvn $MAVEN_CLI_OPTS -DskipTests clean install -P ${{ matrix.profile }},${{ matrix.scala }}
+          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+  noTestBuilds_2_12_15_and_13_5:
+    strategy:
+      matrix:
+        profile: ["10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr"]
+        scala: ["scala_2.12.15", "scala_2.13.5"]
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.head_commit.message, '~docsOnly') != true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/spark_maven
+        with:
+          title: Build ${{ matrix.profile }} without tests
+          script: |
+            mvn $MAVEN_CLI_OPTS -DskipTests clean install -P ${{ matrix.profile }},${{ matrix.scala }}
           gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
