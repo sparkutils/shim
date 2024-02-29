@@ -3,3 +3,12 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/.flattened-pom.xml
+/testShades/
+/target/
+/.idea/
+/runtime/target/
+/runtime/.flattened-pom.xml
+/compilation/target/
+/compilation/.flattened-pom.xml
+__pycache__/

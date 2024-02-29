@@ -1,8 +1,8 @@
 package org.apache.spark.sql
 
-import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.RowEncoder
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, Cast, Expression, GetArrayStructFields, GetStructField, Literal, PrettyAttribute}
+import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
+import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute}
 import org.apache.spark.sql.execution.SparkSqlParser
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
@@ -10,6 +10,7 @@ import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.{CalendarInterval, UTF8String}
 
 import java.util.Locale
+import scala.reflect.ClassTag
 
 /**
  * Set of utilities to reach in to private functions
@@ -199,4 +200,37 @@ object ShimUtils {
     }
 
   def rowEncoder(structType: StructType) = RowEncoder(structType)
+
+  def targetStructType(dataType: DataType, nullable: Boolean): StructType =
+    dataType match {
+      case x: StructType =>
+        if (nullable) StructType(x.fields.map(_.copy(nullable = true)))
+        else x
+
+      case dt => new StructType().add("_1", dt, nullable = nullable)
+    }
+
+  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = {
+    val schema = targetStructType(catalystRepr, nullable)
+    val in = BoundReference(0, jvmRepr, nullable)
+
+    val (out, toRowExpressions) = toCatalyst(in) match {
+      case If(_, _, x: CreateNamedStruct) =>
+        val out = BoundReference(0, catalystRepr, nullable)
+
+        (out, x.flatten)
+      case other =>
+        val out = GetColumnByOrdinal(0, catalystRepr)
+
+        (out, CreateNamedStruct(Literal("_1") :: other :: Nil).flatten)
+    }
+
+    new ExpressionEncoder[T](
+      schema = schema,
+      flat = false,
+      serializer = toRowExpressions,
+      deserializer = fromCatalyst(out),
+      clsTag = implicitly[ClassTag[T]]
+    )
+  }
 }

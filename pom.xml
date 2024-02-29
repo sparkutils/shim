@@ -27,12 +27,39 @@
         <url>http://github.com/sparkutils/shim/tree/master</url>
     </scm>
     <profiles>
-        <profile>  
+        <profile>
+            <id>scala_2.11</id>
+            <properties>
+                <scalaVersion>2.11.12</scalaVersion>
+                <scalaCompatVersion>2.11</scalaCompatVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>scala_2.12.10</id>
+            <properties>
+                <scalaVersion>2.12.15</scalaVersion>
+                <scalaCompatVersion>2.12</scalaCompatVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>scala_2.12.15</id> <!-- 3.2 10.4 onwards -->
+            <properties>
+                <scalaVersion>2.12.15</scalaVersion>
+                <scalaCompatVersion>2.12</scalaCompatVersion>
+            </properties>
+        </profile>
+        <profile>
+            <id>scala_2.13.5</id><!-- from 3.2.0 onwards only -->
+            <properties>
+                <scalaVersion>2.13.5</scalaVersion>
+                <scalaCompatVersion>2.13</scalaCompatVersion>
+                <scalatestVersion>3.0.8</scalatestVersion>
+            </properties>
+        </profile>
+        <profile>
             <id>Spark2</id> 
             <properties>
                 <dbrCompatVersion>2.4.0.oss_</dbrCompatVersion>
-                <scalaVersion>2.11.12</scalaVersion>
-                <scalaCompatVersion>2.11</scalaCompatVersion>
                 <framelessVersion>0.8.0</framelessVersion>
                 <sparkVersion>2.4.6</sparkVersion>
                 <sparkCompatVersion>2.4</sparkCompatVersion>
@@ -49,8 +76,6 @@
             <id>Spark3</id> 
             <properties>
                 <dbrCompatVersion>3.0.0.oss_</dbrCompatVersion>
-                <scalaVersion>2.12.10</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.9.0</framelessVersion>
                 <sparkVersion>3.0.3</sparkVersion>
                 <sparkCompatVersion>3.0</sparkCompatVersion>
@@ -67,8 +92,6 @@
             <id>9.1.dbr</id>
             <properties>
                 <dbrCompatVersion>9.1.dbr_</dbrCompatVersion>
-                <scalaVersion>2.12.10</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.10.1</framelessVersion>
                 <sparkVersion>3.1.2</sparkVersion>
                 <sparkCompatVersion>3.1</sparkCompatVersion>
@@ -84,8 +107,6 @@
             <id>Spark313</id>
             <properties>
                 <dbrCompatVersion>3.1.3.oss_</dbrCompatVersion>
-                <scalaVersion>2.12.10</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.10.1</framelessVersion>
                 <sparkVersion>3.1.3</sparkVersion>
                 <sparkCompatVersion>3.1</sparkCompatVersion>
@@ -102,8 +123,6 @@
             <id>Spark32</id>
             <properties>
                 <dbrCompatVersion>3.2.0.oss_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.11.1</framelessVersion>
                 <sparkVersion>3.2.0</sparkVersion>
                 <sparkCompatVersion>3.2</sparkCompatVersion>
@@ -120,8 +139,6 @@
             <id>Spark321</id>
             <properties>
                 <dbrCompatVersion>3.2.1.oss_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.12.0</framelessVersion>
                 <sparkVersion>3.2.1</sparkVersion>
                 <sparkCompatVersion>3.2</sparkCompatVersion>
@@ -138,8 +155,6 @@
             <id>10.4.dbr</id>
             <properties>
                 <dbrCompatVersion>10.4.dbr_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.12.0</framelessVersion>
                 <sparkVersion>3.2.1</sparkVersion>
                 <sparkCompatVersion>3.2</sparkCompatVersion>
@@ -156,8 +171,6 @@
             <id>Spark332</id>
             <properties>
                 <dbrCompatVersion>3.3.2.oss_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.12.0</framelessVersion>
                 <sparkVersion>3.3.2</sparkVersion>
                 <sparkCompatVersion>3.3</sparkCompatVersion>
@@ -174,8 +187,6 @@
             <id>11.3.dbr</id>
             <properties> <!-- also contains backports of 3.4 functionality -->
                 <dbrCompatVersion>11.3.dbr_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.12.0</framelessVersion>
                 <sparkVersion>3.3.0</sparkVersion>
                 <sparkCompatVersion>3.3</sparkCompatVersion>
@@ -192,8 +203,6 @@
             <id>Spark341</id>
             <properties>
                 <dbrCompatVersion>3.4.1.oss_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.14.1</framelessVersion>
                 <sparkVersion>3.4.1</sparkVersion>
                 <sparkCompatVersion>3.4</sparkCompatVersion>
@@ -210,8 +219,6 @@
             <id>12.2.dbr</id>
             <properties> <!-- also contains backports of 3.4 functionality -->
                 <dbrCompatVersion>12.2.dbr_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.14.1</framelessVersion>
                 <sparkVersion>3.3.2</sparkVersion>
                 <sparkCompatVersion>3.3</sparkCompatVersion>
@@ -228,8 +235,6 @@
             <id>13.1.dbr</id>
             <properties> <!-- also contains backports of 3.5 functionality -->
                 <dbrCompatVersion>13.1.dbr_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.14.1</framelessVersion>
                 <sparkVersion>3.4.1</sparkVersion>
                 <sparkCompatVersion>3.4</sparkCompatVersion>
@@ -246,8 +251,6 @@
             <id>13.3.dbr</id>
             <properties> <!-- also contains backports of 3.5 functionality -->
                 <dbrCompatVersion>13.3.dbr_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.14.1</framelessVersion>
                 <sparkVersion>3.4.1</sparkVersion>
                 <sparkCompatVersion>3.4</sparkCompatVersion>
@@ -264,8 +267,6 @@
             <id>Spark350</id>
             <properties>
                 <dbrCompatVersion>3.5.0.oss_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.16.0</framelessVersion>
                 <sparkVersion>3.5.0</sparkVersion>
                 <sparkCompatVersion>3.5</sparkCompatVersion>
@@ -286,8 +287,6 @@
             <id>14.0.dbr</id>
             <properties>
                 <dbrCompatVersion>14.0.dbr_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.16.0</framelessVersion>
                 <sparkVersion>3.5.0</sparkVersion>
                 <sparkCompatVersion>3.5</sparkCompatVersion>
@@ -304,8 +303,6 @@
             <id>14.3.dbr</id>
             <properties>
                 <dbrCompatVersion>14.3.dbr_</dbrCompatVersion>
-                <scalaVersion>2.12.15</scalaVersion>
-                <scalaCompatVersion>2.12</scalaCompatVersion>
                 <framelessVersion>0.16.0</framelessVersion>
                 <sparkVersion>3.5.0</sparkVersion>
                 <sparkCompatVersion>3.5</sparkCompatVersion>

@@ -1,8 +1,8 @@
 package org.apache.spark.sql
 
-import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.RowEncoder
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, Cast, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, Literal, PrettyAttribute}
+import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
+import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute}
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, FunctionIdentifier}
 import org.apache.spark.sql.execution.SparkSqlParser
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
@@ -10,6 +10,7 @@ import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.{CalendarInterval, UTF8String}
 
 import java.util.Locale
+import scala.reflect.ClassTag
 
 /**
  * Set of utilities to reach in to private functions
@@ -182,4 +183,39 @@ object ShimUtils {
     }
 
   def rowEncoder(structType: StructType) = RowEncoder(structType)
+
+  // Below are added for Frameless RowEncoder, TypedEncoder and TypedExpressionEncoder support
+  def targetStructType(dataType: DataType, nullable: Boolean): StructType =
+    dataType match {
+      case x: StructType =>
+        if (nullable) StructType(x.fields.map(_.copy(nullable = true)))
+        else x
+
+      case dt => new StructType().add("value", dt, nullable = nullable)
+    }
+
+  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = {
+    val in = BoundReference(0, jvmRepr, nullable)
+
+    val (out, serializer) = toCatalyst(in) match {
+      case it @ If(_, _, _: CreateNamedStruct) => {
+        val out = GetColumnByOrdinal(0, catalystRepr)
+
+        out -> it
+      }
+
+      case other => {
+        val out = GetColumnByOrdinal(0, catalystRepr)
+
+        out -> other
+      }
+    }
+
+    new ExpressionEncoder[T](
+      objSerializer = serializer,
+      objDeserializer = fromCatalyst(out),
+      clsTag = implicitly[ClassTag[T]]
+    )
+  }
+
 }

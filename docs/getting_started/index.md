@@ -54,24 +54,24 @@ The "compilation" artefacts are only needed if you rely on the internal apis use
 The full list of supported runtimes is below:
 
 | Spark Version | sparkShortVersion | qualityRuntime | scalaCompatVersion |
-|---------------| - |----------------| - |
-| 2.4.6         | 2.4 |                | 2.11 | 
-| 3.0.3         | 3.0 |                | 2.12 | 
-| 3.1.3         | 3.1 |                | 2.12 | 
-| 3.1.3         | 3.1 | 9.1.dbr_       | 2.12 | 
-| 3.2.0         | 3.2 |                | 2.12 | 
-| 3.2.1         | 3.2 | 3.2.1.oss_     | 2.12 | 
-| 3.2.1         | 3.2 | 10.4.dbr_      | 2.12 | 
-| 3.3.2         | 3.3 | 3.3.2.oss_     | 2.12 | 
-| 3.3.2         | 3.3 | 11.3.dbr_      | 2.12 |
-| 3.3.2         | 3.3 | 12.2.dbr_      | 2.12 |
-| 3.3.2         | 3.3 | 13.1.dbr_      | 2.12 |
-| 3.4.1         | 3.4 | 3.4.1.oss_     | 2.12 |
-| 3.4.1         | 3.4 | 13.1.dbr_      | 2.12 |
-| 3.4.1         | 3.4 | 13.3.dbr_      | 2.12 |
-| 3.5.0         | 3.5 | 3.5.0.oss_     | 2.12 |
-| 3.5.0         | 3.5 | 14.0.dbr_      | 2.12 |
-| 3.5.0         | 3.5 | 14.3.dbr_      | 2.12 |
+|---------------| - |----------------|--------------------|
+| 2.4.6         | 2.4 |                | 2.11               | 
+| 3.0.3         | 3.0 |                | 2.12               | 
+| 3.1.3         | 3.1 |                | 2.12               | 
+| 3.1.3         | 3.1 | 9.1.dbr_       | 2.12               | 
+| 3.2.0         | 3.2 |                | 2.12, 2.13         | 
+| 3.2.1         | 3.2 | 3.2.1.oss_     | 2.12, 2.13         | 
+| 3.2.1         | 3.2 | 10.4.dbr_      | 2.12, 2.13         | 
+| 3.3.2         | 3.3 | 3.3.2.oss_     | 2.12, 2.13              | 
+| 3.3.2         | 3.3 | 11.3.dbr_      | 2.12, 2.13              |
+| 3.3.2         | 3.3 | 12.2.dbr_      | 2.12, 2.13               |
+| 3.3.2         | 3.3 | 13.1.dbr_      | 2.12, 2.13               |
+| 3.4.1         | 3.4 | 3.4.1.oss_     | 2.12, 2.13               |
+| 3.4.1         | 3.4 | 13.1.dbr_      | 2.12, 2.13              |
+| 3.4.1         | 3.4 | 13.3.dbr_      | 2.12, 2.13               |
+| 3.5.0         | 3.5 | 3.5.0.oss_     | 2.12, 2.13               |
+| 3.5.0         | 3.5 | 14.0.dbr_      | 2.12, 2.13               |
+| 3.5.0         | 3.5 | 14.3.dbr_      | 2.12, 2.13               |
 
 2.4 support is deprecated and will be removed in a future version.  3.1.2 support is replaced by 3.1.3 due to interpreted encoder issues. 
 
@@ -134,6 +134,9 @@ The known combinations requiring this approach is below:
 | 3.4.1         | 3.4               | 3.4.1.oss_        | 13.3.dbr_               | 2.12 | 
 | 3.5.0         | 3.5               | 3.5.0.oss_        | 14.0.dbr_               | 2.12 | 
 | 3.5.0         | 3.5               | 3.5.0.oss_        | 14.3.dbr_               | 2.12 | 
+
+!!! note "Only 2.12 is supported on DBRs"
+    Although the build is run for 2.13 it's not expected to be used until a later runtime based on 4.0
 
 ### Developing a library against internal APIs changed by Databricks
 
