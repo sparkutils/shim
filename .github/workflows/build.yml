@@ -82,6 +82,29 @@ jobs:
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
+  testBuilds_2_13_12:
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [Spark4]
+        scala: ["scala_2.13.12"]
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.head_commit.message, '~docsOnly') != true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/spark_maven
+        with:
+          title: Build ${{ matrix.profile }},${{ matrix.scala }} with tests
+          script: |
+            mvn $MAVEN_CLI_OPTS clean test install -P ${{ matrix.profile }},${{ matrix.scala }}
+          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          jdk: '21'
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
   # all versions that cannot be built with tests - typically Databricks only
   noTestBuilds_2_12_10:
     strategy:
@@ -273,6 +296,37 @@ jobs:
           script: |
             mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}
           gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+  publish_2_13_12:
+    strategy:
+      matrix:
+        profile: [Spark4]
+        scala: [ "scala_2.13.12" ]
+    needs: [testBuilds_2_13_12, mvn_site] # if the builds don't work don't attempt to publish
+    # needs always per https://github.com/actions/runner/issues/491 very annoying
+    # only do snapshots on main by default, releases/snapshots forced with ~cut-release
+    if: |
+      always() &&
+          !contains(needs.*.result, 'failure') &&
+          !contains(needs.*.result, 'cancelled') &&
+      (contains(github.event.head_commit.message, '~docsOnly') != true) &&
+        ( (endsWith(needs.site.outputs.version, '-SNAPSHOT') && github.ref == 'refs/heads/main') ||
+          contains(github.event.head_commit.message, '~cut-release') )
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/spark_maven
+        with:
+          title: Publishing ${{ matrix.profile }},${{ matrix.scala }}
+          script: |
+            mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}
+          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          jdk: '21'
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
