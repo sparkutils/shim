@@ -23,7 +23,7 @@ runs:
     - uses: vemonet/setup-spark@v1.2.0 # only needed for hadoop version if / when tests are added 2.4 -> 3.5 builds work
       with:
         spark-version: '3.2.1'
-        hadoop-version: '3'
+        hadoop-version: '3.2'
         scala-version: '2.13'
     - name: Set up JDK ${{ inputs.jdk }}
       uses: actions/setup-java@v3.12.0
