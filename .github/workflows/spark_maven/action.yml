@@ -11,21 +11,24 @@ inputs:
     required: false
     default: ""
     description: needed for publish
+  jdk:
+    required: false
+    default: '8'
+    description: swap out the jdk
 
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    - uses: vemonet/setup-spark@v1.2.0
+    - uses: vemonet/setup-spark@v1.2.0 # only needed for hadoop version if / when tests are added 2.4 -> 3.5 builds work
       with:
         spark-version: '3.2.1'
-        hadoop-version: '3.2'
+        hadoop-version: '3'
         scala-version: '2.13'
-        spark-url: 'https://archive.apache.org/dist/spark/spark-3.2.1/spark-3.2.1-bin-hadoop3.2-scala2.13.tgz'
-    - name: Set up JDK 8
+    - name: Set up JDK ${{ inputs.jdk }}
       uses: actions/setup-java@v3.12.0
       with:
-        java-version: '8'
+        java-version: ${{ inputs.jdk }}
         distribution: 'temurin'
         cache: maven #this caches ~/.m2/repo
         server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
