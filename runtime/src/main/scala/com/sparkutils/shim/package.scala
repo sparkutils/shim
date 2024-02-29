@@ -35,7 +35,7 @@ package object shim {
   /**
    *  work around 2.13 issue / possibly 4 the encoder generates Seq -> ArraySeq$ofRef for a DF with a Seq in it.
    *  CatalystTypeConverters looks for immutable.Seq not collection.Seq, which is different in 2.13 so we need to check for it
-   *  RowEncoder is responsible for generating that and wrapped array disappears in 2.13
+   *  RowEncoder is responsible for generating that and wrapped array disappears in 2.13 
    */
   def toCatalyst(any: Any): Any = any match {
     case a: scala.collection.mutable.ArraySeq[_] =>
