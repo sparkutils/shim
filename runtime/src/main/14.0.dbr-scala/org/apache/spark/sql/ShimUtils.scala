@@ -7,8 +7,6 @@ import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If}
 import org.apache.spark.sql.catalyst.parser.ParseException
-import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.catalyst.rules.Rule
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
 import org.apache.spark.sql.execution.SparkSqlParser
@@ -192,4 +190,7 @@ object ShimUtils {
       clsTag = implicitly[ClassTag[T]]
     )
   }
+
+  def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
+    new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""" )
 }

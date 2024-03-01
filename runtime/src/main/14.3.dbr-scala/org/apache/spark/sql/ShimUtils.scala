@@ -221,4 +221,8 @@ object ShimUtils {
       clsTag = implicitly[ClassTag[T]]
     )
   }
+
+  // currently not Spark 4 as of 1.3.24
+  def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
+    new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""" )
 }

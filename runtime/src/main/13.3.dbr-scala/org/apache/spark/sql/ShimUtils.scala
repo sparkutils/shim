@@ -256,4 +256,7 @@ object ShimUtils {
       clsTag = implicitly[ClassTag[T]]
     )
   }
+
+  def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
+    new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""" )
 }
