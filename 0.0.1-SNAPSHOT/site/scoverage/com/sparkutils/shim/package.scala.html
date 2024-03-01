@@ -25,47 +25,73 @@
             <pre style='font-size: 12pt; font-family: courier, monospace;'>1 <span style=''>package com.sparkutils
 </span>2 <span style=''>
 </span>3 <span style=''>import org.apache.spark.sql.SparkSession
-</span>4 <span style=''>import org.apache.spark.sql.catalyst.expressions.{Expression, If, IsNull, Literal}
-</span>5 <span style=''>import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-</span>6 <span style=''>import org.apache.spark.sql.catalyst.rules.Rule
-</span>7 <span style=''>import org.apache.spark.sql.types.DataType
-</span>8 <span style=''>
-</span>9 <span style=''>/**
-</span>10 <span style=''> * A collection of functions with possibly varying behaviour across Spark versions.  Should actual implementations fracture they will be implemented as part of ShimUtils but the interface will remain to proxy the calls.
-</span>11 <span style=''> */
-</span>12 <span style=''>package object shim {
+</span>4 <span style=''>import org.apache.spark.sql.catalyst.CatalystTypeConverters.convertToCatalyst
+</span>5 <span style=''>import org.apache.spark.sql.catalyst.InternalRow
+</span>6 <span style=''>import org.apache.spark.sql.catalyst.expressions.{Expression, If, IsNull, Literal}
+</span>7 <span style=''>import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+</span>8 <span style=''>import org.apache.spark.sql.catalyst.rules.Rule
+</span>9 <span style=''>import org.apache.spark.sql.catalyst.util.{ArrayBasedMapData, GenericArrayData}
+</span>10 <span style=''>import org.apache.spark.sql.types.DataType
+</span>11 <span style=''>
+</span>12 <span style=''>import scala.collection.Map
 </span>13 <span style=''>
-</span>14 <span style=''>  /**
-</span>15 <span style=''>   * Registers a session only plan via experimental methods when isPresentFilter is not true
-</span>16 <span style=''>   * @param logicalPlan
-</span>17 <span style=''>   * @param isPresentFilter a filter that should return true when the plan is identical and it should not be added
-</span>18 <span style=''>   * @return true if the plan has been added
-</span>19 <span style=''>   */
-</span>20 <span style=''>  def registerSessionPlan(logicalPlan: Rule[LogicalPlan])(isPresentFilter: Rule[LogicalPlan] =&gt; Boolean): Boolean = {
-</span>21 <span style=''>    val methods = </span><span style='background: #F0ADAD'>SparkSession.active.sessionState.experimentalMethods</span><span style=''>
-</span>22 <span style=''>    if (</span><span style='background: #F0ADAD'>methods.extraOptimizations.forall(!isPresentFilter(_))</span><span style=''>) </span><span style='background: #F0ADAD'>{
-</span>23 <span style=''></span><span style='background: #F0ADAD'>      methods.extraOptimizations = methods.extraOptimizations :+ logicalPlan
-</span>24 <span style=''></span><span style='background: #F0ADAD'>      true
-</span>25 <span style=''></span><span style='background: #F0ADAD'>    }</span><span style=''> else
-</span>26 <span style=''>      </span><span style='background: #F0ADAD'>false</span><span style=''>
-</span>27 <span style=''>  }
-</span>28 <span style=''>
-</span>29 <span style=''>  // below are for Framless support
-</span>30 <span style=''>  def deriveUnitLiteral: Expression = </span><span style='background: #F0ADAD'>Literal.fromObject(())</span><span style=''>
-</span>31 <span style=''>
-</span>32 <span style=''>  /**
-</span>33 <span style=''>   * If the path is null then uses a null literal with dataType, if it's not null it uses the nonNullExpr
-</span>34 <span style=''>   * @param dataType
-</span>35 <span style=''>   * @param path
-</span>36 <span style=''>   * @param nonNullExpr
-</span>37 <span style=''>   * @return
-</span>38 <span style=''>   */
-</span>39 <span style=''>  def ifIsNull(dataType: DataType, path: Expression, nonNullExpr: Expression): Expression = {
-</span>40 <span style=''>    val nullExpr = </span><span style='background: #F0ADAD'>Literal.create(null, dataType)</span><span style=''>
-</span>41 <span style=''>
-</span>42 <span style=''>    </span><span style='background: #F0ADAD'>If(IsNull(path), nullExpr, nonNullExpr)</span><span style=''>
-</span>43 <span style=''>  }
-</span>44 <span style=''>}
+</span>14 <span style=''>/**
+</span>15 <span style=''> * A collection of functions with possibly varying behaviour across Spark versions.  Should actual implementations fracture they will be implemented as part of ShimUtils but the interface will remain to proxy the calls.
+</span>16 <span style=''> */
+</span>17 <span style=''>package object shim {
+</span>18 <span style=''>
+</span>19 <span style=''>  /**
+</span>20 <span style=''>   * Registers a session only plan via experimental methods when isPresentFilter is not true
+</span>21 <span style=''>   * @param logicalPlan
+</span>22 <span style=''>   * @param isPresentFilter a filter that should return true when the plan is identical and it should not be added
+</span>23 <span style=''>   * @return true if the plan has been added
+</span>24 <span style=''>   */
+</span>25 <span style=''>  def registerSessionPlan(logicalPlan: Rule[LogicalPlan])(isPresentFilter: Rule[LogicalPlan] =&gt; Boolean): Boolean = {
+</span>26 <span style=''>    val methods = </span><span style='background: #F0ADAD'>SparkSession.active.sessionState.experimentalMethods</span><span style=''>
+</span>27 <span style=''>    if (</span><span style='background: #F0ADAD'>methods.extraOptimizations.forall(!isPresentFilter(_))</span><span style=''>) </span><span style='background: #F0ADAD'>{
+</span>28 <span style=''></span><span style='background: #F0ADAD'>      methods.extraOptimizations = methods.extraOptimizations :+ logicalPlan
+</span>29 <span style=''></span><span style='background: #F0ADAD'>      true
+</span>30 <span style=''></span><span style='background: #F0ADAD'>    }</span><span style=''> else
+</span>31 <span style=''>      </span><span style='background: #F0ADAD'>false</span><span style=''>
+</span>32 <span style=''>  }
+</span>33 <span style=''>
+</span>34 <span style=''>
+</span>35 <span style=''>  /**
+</span>36 <span style=''>   *  work around 2.13 issue / possibly 4 the encoder generates Seq -&gt; ArraySeq$ofRef for a DF with a Seq in it.
+</span>37 <span style=''>   *  CatalystTypeConverters looks for immutable.Seq not collection.Seq, which is different in 2.13 so we need to check for it
+</span>38 <span style=''>   *  RowEncoder is responsible for generating that and wrapped array disappears in 2.13
+</span>39 <span style=''>   */
+</span>40 <span style=''>  def toCatalyst(any: Any): Any = any match {
+</span>41 <span style=''>    case a: scala.collection.mutable.ArraySeq[_] =&gt;
+</span>42 <span style=''>      </span><span style='background: #F0ADAD'>new GenericArrayData(a.toSeq.map(toCatalyst _))</span><span style=''>
+</span>43 <span style=''>    case seq: Seq[Any] =&gt; </span><span style='background: #F0ADAD'>new GenericArrayData(seq.map(toCatalyst _).toArray)</span><span style=''>
+</span>44 <span style=''>    case r: org.apache.spark.sql.Row =&gt; </span><span style='background: #F0ADAD'>InternalRow(r.toSeq.map(toCatalyst _): _*)</span><span style=''>
+</span>45 <span style=''>    case arr: Array[_] =&gt; </span><span style='background: #F0ADAD'>new GenericArrayData(arr.map(toCatalyst _))</span><span style=''>
+</span>46 <span style=''>    case map: Map[_, _] =&gt;
+</span>47 <span style=''>      </span><span style='background: #F0ADAD'>ArrayBasedMapData(
+</span>48 <span style=''></span><span style='background: #F0ADAD'>        map,
+</span>49 <span style=''></span><span style='background: #F0ADAD'>        (key: Any) =&gt; toCatalyst(key),
+</span>50 <span style=''></span><span style='background: #F0ADAD'>        (value: Any) =&gt; toCatalyst(value))</span><span style=''>
+</span>51 <span style=''>
+</span>52 <span style=''>    case other =&gt; </span><span style='background: #F0ADAD'>convertToCatalyst(other)</span><span style=''>
+</span>53 <span style=''>  }
+</span>54 <span style=''>
+</span>55 <span style=''>  // below are for Framless support
+</span>56 <span style=''>  def deriveUnitLiteral: Expression = </span><span style='background: #F0ADAD'>Literal.fromObject(())</span><span style=''>
+</span>57 <span style=''>
+</span>58 <span style=''>  /**
+</span>59 <span style=''>   * If the path is null then uses a null literal with dataType, if it's not null it uses the nonNullExpr
+</span>60 <span style=''>   * @param dataType
+</span>61 <span style=''>   * @param path
+</span>62 <span style=''>   * @param nonNullExpr
+</span>63 <span style=''>   * @return
+</span>64 <span style=''>   */
+</span>65 <span style=''>  def ifIsNull(dataType: DataType, path: Expression, nonNullExpr: Expression): Expression = {
+</span>66 <span style=''>    val nullExpr = </span><span style='background: #F0ADAD'>Literal.create(null, dataType)</span><span style=''>
+</span>67 <span style=''>
+</span>68 <span style=''>    </span><span style='background: #F0ADAD'>If(IsNull(path), nullExpr, nonNullExpr)</span><span style=''>
+</span>69 <span style=''>  }
+</span>70 <span style=''>}
 </span></pre>
           </div>
           <div class="tab-pane" id="statementlist">
@@ -80,15 +106,15 @@
         <th>Code</th>
       </tr><tr>
         <td>
-          21
+          26
         </td>
         <td>
           1
         </td>
         <td>
-          979
+          1215
           -
-          1031
+          1267
         </td>
         <td>
           Select
@@ -104,15 +130,15 @@
         </td>
       </tr><tr>
         <td>
-          22
+          27
         </td>
         <td>
-          244
+          253
         </td>
         <td>
-          1040
+          1276
           -
-          1094
+          1330
         </td>
         <td>
           Apply
@@ -128,15 +154,15 @@
         </td>
       </tr><tr>
         <td>
-          22
+          27
         </td>
         <td>
-          417
+          432
         </td>
         <td>
-          1096
+          1332
           -
-          1191
+          1427
         </td>
         <td>
           Block
@@ -155,15 +181,15 @@
         </td>
       </tr><tr>
         <td>
-          22
+          27
         </td>
         <td>
-          350
+          362
         </td>
         <td>
-          1074
+          1310
           -
-          1093
+          1329
         </td>
         <td>
           Select
@@ -179,63 +205,15 @@
         </td>
       </tr><tr>
         <td>
-          23
+          28
         </td>
         <td>
-          169
+          397
         </td>
         <td>
-          1104
+          1369
           -
-          1174
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          org.apache.spark.sql.ExperimentalMethods.extraOptimizations_=
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          methods.extraOptimizations_=(methods.extraOptimizations.:+[org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan], Seq[org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]]](logicalPlan)(collection.this.Seq.canBuildFrom[org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]]))
-        </td>
-      </tr><tr>
-        <td>
-          23
-        </td>
-        <td>
-          70
-        </td>
-        <td>
-          1160
-          -
-          1160
-        </td>
-        <td>
-          TypeApply
-        </td>
-        <td>
-          scala.collection.Seq.canBuildFrom
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          collection.this.Seq.canBuildFrom[org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]]
-        </td>
-      </tr><tr>
-        <td>
-          23
-        </td>
-        <td>
-          384
-        </td>
-        <td>
-          1133
-          -
-          1174
+          1410
         </td>
         <td>
           ApplyToImplicitArgs
@@ -251,15 +229,63 @@
         </td>
       </tr><tr>
         <td>
-          24
+          28
         </td>
         <td>
-          511
+          175
         </td>
         <td>
-          1181
+          1340
           -
-          1185
+          1410
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.ExperimentalMethods.extraOptimizations_=
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          methods.extraOptimizations_=(methods.extraOptimizations.:+[org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan], Seq[org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]]](logicalPlan)(collection.this.Seq.canBuildFrom[org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]]))
+        </td>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          72
+        </td>
+        <td>
+          1396
+          -
+          1396
+        </td>
+        <td>
+          TypeApply
+        </td>
+        <td>
+          scala.collection.Seq.canBuildFrom
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          collection.this.Seq.canBuildFrom[org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]]
+        </td>
+      </tr><tr>
+        <td>
+          29
+        </td>
+        <td>
+          529
+        </td>
+        <td>
+          1417
+          -
+          1421
         </td>
         <td>
           Literal
@@ -275,15 +301,15 @@
         </td>
       </tr><tr>
         <td>
-          26
+          31
         </td>
         <td>
           2
         </td>
         <td>
-          1203
+          1439
           -
-          1208
+          1444
         </td>
         <td>
           Block
@@ -299,15 +325,15 @@
         </td>
       </tr><tr>
         <td>
-          26
+          31
         </td>
         <td>
-          234
+          243
         </td>
         <td>
-          1203
+          1439
           -
-          1208
+          1444
         </td>
         <td>
           Literal
@@ -323,15 +349,511 @@
         </td>
       </tr><tr>
         <td>
-          30
+          42
         </td>
         <td>
-          337
+          74
         </td>
         <td>
-          1288
+          1917
           -
-          1310
+          1942
+        </td>
+        <td>
+          ApplyToImplicitArgs
+        </td>
+        <td>
+          scala.collection.TraversableLike.map
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          a.toSeq.map[Any, Seq[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(collection.this.Seq.canBuildFrom[Any])
+        </td>
+      </tr><tr>
+        <td>
+          42
+        </td>
+        <td>
+          268
+        </td>
+        <td>
+          1928
+          -
+          1928
+        </td>
+        <td>
+          TypeApply
+        </td>
+        <td>
+          scala.collection.Seq.canBuildFrom
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          collection.this.Seq.canBuildFrom[Any]
+        </td>
+      </tr><tr>
+        <td>
+          42
+        </td>
+        <td>
+          348
+        </td>
+        <td>
+          1929
+          -
+          1939
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(any)
+        </td>
+      </tr><tr>
+        <td>
+          42
+        </td>
+        <td>
+          392
+        </td>
+        <td>
+          1896
+          -
+          1943
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.util.GenericArrayData.&lt;init&gt;
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          new org.apache.spark.sql.catalyst.util.GenericArrayData(a.toSeq.map[Any, Seq[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(collection.this.Seq.canBuildFrom[Any]))
+        </td>
+      </tr><tr>
+        <td>
+          43
+        </td>
+        <td>
+          436
+        </td>
+        <td>
+          1991
+          -
+          2020
+        </td>
+        <td>
+          ApplyToImplicitArgs
+        </td>
+        <td>
+          scala.collection.TraversableOnce.toArray
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          seq.map[Any, Seq[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(collection.this.Seq.canBuildFrom[Any]).toArray[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))
+        </td>
+      </tr><tr>
+        <td>
+          43
+        </td>
+        <td>
+          244
+        </td>
+        <td>
+          1970
+          -
+          2021
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.util.GenericArrayData.&lt;init&gt;
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          new org.apache.spark.sql.catalyst.util.GenericArrayData(seq.map[Any, Seq[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(collection.this.Seq.canBuildFrom[Any]).toArray[Any]((ClassTag.Any: scala.reflect.ClassTag[Any])))
+        </td>
+      </tr><tr>
+        <td>
+          43
+        </td>
+        <td>
+          521
+        </td>
+        <td>
+          1998
+          -
+          1998
+        </td>
+        <td>
+          TypeApply
+        </td>
+        <td>
+          scala.collection.Seq.canBuildFrom
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          collection.this.Seq.canBuildFrom[Any]
+        </td>
+      </tr><tr>
+        <td>
+          43
+        </td>
+        <td>
+          177
+        </td>
+        <td>
+          1999
+          -
+          2009
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(any)
+        </td>
+      </tr><tr>
+        <td>
+          44
+        </td>
+        <td>
+          59
+        </td>
+        <td>
+          2062
+          -
+          2104
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.InternalRow.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.InternalRow.apply((r.toSeq.map[Any, Seq[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(collection.this.Seq.canBuildFrom[Any]): _*))
+        </td>
+      </tr><tr>
+        <td>
+          44
+        </td>
+        <td>
+          271
+        </td>
+        <td>
+          2074
+          -
+          2099
+        </td>
+        <td>
+          ApplyToImplicitArgs
+        </td>
+        <td>
+          scala.collection.TraversableLike.map
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          r.toSeq.map[Any, Seq[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(collection.this.Seq.canBuildFrom[Any])
+        </td>
+      </tr><tr>
+        <td>
+          44
+        </td>
+        <td>
+          351
+        </td>
+        <td>
+          2085
+          -
+          2085
+        </td>
+        <td>
+          TypeApply
+        </td>
+        <td>
+          scala.collection.Seq.canBuildFrom
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          collection.this.Seq.canBuildFrom[Any]
+        </td>
+      </tr><tr>
+        <td>
+          44
+        </td>
+        <td>
+          21
+        </td>
+        <td>
+          2086
+          -
+          2096
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(any)
+        </td>
+      </tr><tr>
+        <td>
+          45
+        </td>
+        <td>
+          438
+        </td>
+        <td>
+          2131
+          -
+          2174
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.util.GenericArrayData.&lt;init&gt;
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          new org.apache.spark.sql.catalyst.util.GenericArrayData(scala.Predef.genericArrayOps[_](arr).map[Any, Array[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(scala.this.Array.canBuildFrom[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))))
+        </td>
+      </tr><tr>
+        <td>
+          45
+        </td>
+        <td>
+          533
+        </td>
+        <td>
+          2152
+          -
+          2173
+        </td>
+        <td>
+          ApplyToImplicitArgs
+        </td>
+        <td>
+          scala.collection.TraversableLike.map
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Predef.genericArrayOps[_](arr).map[Any, Array[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(scala.this.Array.canBuildFrom[Any]((ClassTag.Any: scala.reflect.ClassTag[Any])))
+        </td>
+      </tr><tr>
+        <td>
+          45
+        </td>
+        <td>
+          195
+        </td>
+        <td>
+          2159
+          -
+          2159
+        </td>
+        <td>
+          ApplyToImplicitArgs
+        </td>
+        <td>
+          scala.Array.canBuildFrom
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.this.Array.canBuildFrom[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))
+        </td>
+      </tr><tr>
+        <td>
+          45
+        </td>
+        <td>
+          395
+        </td>
+        <td>
+          2160
+          -
+          2170
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(any)
+        </td>
+      </tr><tr>
+        <td>
+          47
+        </td>
+        <td>
+          368
+        </td>
+        <td>
+          2208
+          -
+          2321
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.util.ArrayBasedMapData.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.util.ArrayBasedMapData.apply(map, ((key: Any) =&gt; `package`.this.toCatalyst(key)), ((value: Any) =&gt; `package`.this.toCatalyst(value)))
+        </td>
+      </tr><tr>
+        <td>
+          49
+        </td>
+        <td>
+          209
+        </td>
+        <td>
+          2262
+          -
+          2277
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(key)
+        </td>
+      </tr><tr>
+        <td>
+          50
+        </td>
+        <td>
+          24
+        </td>
+        <td>
+          2303
+          -
+          2320
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(value)
+        </td>
+      </tr><tr>
+        <td>
+          52
+        </td>
+        <td>
+          160
+        </td>
+        <td>
+          2341
+          -
+          2365
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.CatalystTypeConverters.convertToCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.CatalystTypeConverters.convertToCatalyst(other)
+        </td>
+      </tr><tr>
+        <td>
+          56
+        </td>
+        <td>
+          60
+        </td>
+        <td>
+          2445
+          -
+          2467
         </td>
         <td>
           Apply
@@ -347,15 +869,15 @@
         </td>
       </tr><tr>
         <td>
-          40
+          66
         </td>
         <td>
-          259
+          386
         </td>
         <td>
-          1618
+          2775
           -
-          1648
+          2805
         </td>
         <td>
           Apply
@@ -371,15 +893,15 @@
         </td>
       </tr><tr>
         <td>
-          42
+          68
         </td>
         <td>
-          379
+          528
         </td>
         <td>
-          1654
+          2811
           -
-          1693
+          2850
         </td>
         <td>
           Apply
@@ -395,15 +917,15 @@
         </td>
       </tr><tr>
         <td>
-          42
+          68
         </td>
         <td>
-          72
+          197
         </td>
         <td>
-          1657
+          2814
           -
-          1669
+          2826
         </td>
         <td>
           Apply

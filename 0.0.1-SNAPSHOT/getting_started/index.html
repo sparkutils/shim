@@ -419,79 +419,79 @@
 <td>3.2.0</td>
 <td>3.2</td>
 <td></td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.2.1</td>
 <td>3.2</td>
 <td>3.2.1.oss_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.2.1</td>
 <td>3.2</td>
 <td>10.4.dbr_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.3.2</td>
 <td>3.3</td>
 <td>3.3.2.oss_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.3.2</td>
 <td>3.3</td>
 <td>11.3.dbr_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.3.2</td>
 <td>3.3</td>
 <td>12.2.dbr_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.3.2</td>
 <td>3.3</td>
 <td>13.1.dbr_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.4.1</td>
 <td>3.4</td>
 <td>3.4.1.oss_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.4.1</td>
 <td>3.4</td>
 <td>13.1.dbr_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.4.1</td>
 <td>3.4</td>
 <td>13.3.dbr_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.5.0</td>
 <td>3.5</td>
 <td>3.5.0.oss_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.5.0</td>
 <td>3.5</td>
 <td>14.0.dbr_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 <tr>
 <td>3.5.0</td>
 <td>3.5</td>
 <td>14.3.dbr_</td>
-<td>2.12</td>
+<td>2.12, 2.13</td>
 </tr>
 </tbody>
 </table>
@@ -599,6 +599,10 @@ Similarly, 4.0 / 14.2 introduces a change in resolution so a new runtime version
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Only 2.12 is supported on DBRs</p>
+<p>Although the build is run for 2.13 it's not expected to be used until a later runtime based on 4.0</p>
+</div>
 <h3 id="developing-a-library-against-internal-apis-changed-by-databricks">Developing a library against internal APIs changed by Databricks<a class="headerlink" href="#developing-a-library-against-internal-apis-changed-by-databricks" title="Permanent link">¶</a></h3>
 <p>In this scenario, similar to Quality, it is assumed you want to use internal apis covered in the version specific "compilation" source.  The approach taken is to force Databricks runtime compatible interfaces higher up in the classpath than the OSS equivalents (or indeed provide them where the OSS version doesn't have them - like backported code from as yet unreleased OSS versions).</p>
 <p>This approach requires your build tool environment to support runtime ordering in the build, if it does then you may simply depend on the shim_compilation artefact as provided scope.  The scala maven plugin does not maintain order from maven, which is fine for most usages, just not this one....</p>
@@ -693,10 +697,10 @@ Similarly, 4.0 / 14.2 introduces a change in resolution so a new runtime version
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">February 28, 2024 18:15:37</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">March 1, 2024 11:14:22</span>
 <br/>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">February 28, 2024 18:15:37</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">March 1, 2024 11:14:22</span>
 </small>
 </div>
 </article>
