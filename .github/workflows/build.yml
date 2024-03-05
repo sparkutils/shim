@@ -27,6 +27,8 @@ jobs:
             scala: ["scala_2.12.10"]
           - profile: [ Spark32, Spark321, Spark332, Spark341, Spark350 ]
             scala: [ "scala_2.12.15", "scala_2.13.5" ]
+          - profile: [ Spark4 ]
+            scala: [ "scala_2.13.12" ]
     runs-on: ubuntu-latest
 
     if: contains(github.event.head_commit.message, '~docsOnly') != true
@@ -38,29 +40,6 @@ jobs:
           script: |
             mvn $MAVEN_CLI_OPTS clean test install -P ${{ matrix.profile }},${{ matrix.scala }}
           gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-
-  testBuilds_2_13_12:
-    strategy:
-      fail-fast: false
-      matrix:
-        profile: [Spark4]
-        scala: ["scala_2.13.12"]
-    runs-on: ubuntu-latest
-
-    if: contains(github.event.head_commit.message, '~docsOnly') != true
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/spark_maven
-        with:
-          title: Build ${{ matrix.profile }},${{ matrix.scala }} with tests
-          script: |
-            mvn $MAVEN_CLI_OPTS clean test install -P ${{ matrix.profile }},${{ matrix.scala }}
-          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          jdk: '21'
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
@@ -164,6 +143,8 @@ jobs:
             scala: [ "scala_2.12.10" ]
           - profile: [ Spark32, Spark321, Spark332, Spark341, Spark350, "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ]
             scala: [ "scala_2.12.15", "scala_2.13.5" ]
+          - profile: [ Spark4 ]
+            scala: [ "scala_2.13.12" ]
     needs: [testBuilds_2_11] # if the builds don't work don't attempt to publish
     # needs always per https://github.com/actions/runner/issues/491 very annoying
     # only do snapshots on main by default, releases/snapshots forced with ~cut-release
@@ -189,100 +170,6 @@ jobs:
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
-<<<<<<< HEAD
-=======
-  publish_2_12_10:
-    strategy:
-      matrix:
-        profile: [Spark3, Spark313, "9.1.dbr"]
-        scala: [ "scala_2.12.10" ]
-    needs: [testBuilds_2_12_10, mvn_site, noTestBuilds_2_12_10] # if the builds don't work don't attempt to publish
-    # needs always per https://github.com/actions/runner/issues/491 very annoying
-    # only do snapshots on main by default, releases/snapshots forced with ~cut-release
-    if: |
-      always() &&
-          !contains(needs.*.result, 'failure') &&
-          !contains(needs.*.result, 'cancelled') &&
-      (contains(github.event.head_commit.message, '~docsOnly') != true) &&
-        ( (endsWith(needs.site.outputs.version, '-SNAPSHOT') && github.ref == 'refs/heads/main') ||
-          contains(github.event.head_commit.message, '~cut-release') )
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/spark_maven
-        with:
-          title: Publishing ${{ matrix.profile }},${{ matrix.scala }}
-          script: |
-            mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}
-          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-
-  publish_2_12_15_and_13_5:
-    strategy:
-      matrix:
-        profile: [Spark32, Spark321, Spark332, Spark341, Spark350, "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr"]
-        scala: [ "scala_2.12.15", "scala_2.13.5" ]
-    needs: [testBuilds_2_12_15_and_13_5, mvn_site, noTestBuilds_2_12_15_and_13_5] # if the builds don't work don't attempt to publish
-    # needs always per https://github.com/actions/runner/issues/491 very annoying
-    # only do snapshots on main by default, releases/snapshots forced with ~cut-release
-    if: |
-      always() &&
-          !contains(needs.*.result, 'failure') &&
-          !contains(needs.*.result, 'cancelled') &&
-      (contains(github.event.head_commit.message, '~docsOnly') != true) &&
-        ( (endsWith(needs.site.outputs.version, '-SNAPSHOT') && github.ref == 'refs/heads/main') ||
-          contains(github.event.head_commit.message, '~cut-release') )
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/spark_maven
-        with:
-          title: Publishing ${{ matrix.profile }},${{ matrix.scala }}
-          script: |
-            mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}
-          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-
-  publish_2_13_12:
-    strategy:
-      matrix:
-        profile: [Spark4]
-        scala: [ "scala_2.13.12" ]
-    needs: [testBuilds_2_13_12, mvn_site] # if the builds don't work don't attempt to publish
-    # needs always per https://github.com/actions/runner/issues/491 very annoying
-    # only do snapshots on main by default, releases/snapshots forced with ~cut-release
-    if: |
-      always() &&
-          !contains(needs.*.result, 'failure') &&
-          !contains(needs.*.result, 'cancelled') &&
-      (contains(github.event.head_commit.message, '~docsOnly') != true) &&
-        ( (endsWith(needs.site.outputs.version, '-SNAPSHOT') && github.ref == 'refs/heads/main') ||
-          contains(github.event.head_commit.message, '~cut-release') )
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/spark_maven
-        with:
-          title: Publishing ${{ matrix.profile }},${{ matrix.scala }}
-          script: |
-            mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}
-          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          jdk: '21'
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-
->>>>>>> origin/publishOnly
   site:
     needs: [mvn_site]
     runs-on: ubuntu-latest
