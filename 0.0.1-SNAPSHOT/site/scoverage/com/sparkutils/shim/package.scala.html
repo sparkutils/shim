@@ -59,7 +59,7 @@
 </span>35 <span style=''>  /**
 </span>36 <span style=''>   *  work around 2.13 issue / possibly 4 the encoder generates Seq -&gt; ArraySeq$ofRef for a DF with a Seq in it.
 </span>37 <span style=''>   *  CatalystTypeConverters looks for immutable.Seq not collection.Seq, which is different in 2.13 so we need to check for it
-</span>38 <span style=''>   *  RowEncoder is responsible for generating that and wrapped array disappears in 2.13
+</span>38 <span style=''>   *  RowEncoder is responsible for generating that and wrapped array disappears in 2.13 
 </span>39 <span style=''>   */
 </span>40 <span style=''>  def toCatalyst(any: Any): Any = any match {
 </span>41 <span style=''>    case a: scala.collection.mutable.ArraySeq[_] =&gt;
@@ -355,9 +355,9 @@
           26
         </td>
         <td>
-          1928
+          1929
           -
-          1928
+          1929
         </td>
         <td>
           TypeApply
@@ -379,9 +379,9 @@
           379
         </td>
         <td>
-          1917
+          1918
           -
-          1942
+          1943
         </td>
         <td>
           ApplyToImplicitArgs
@@ -405,9 +405,9 @@
           216
         </td>
         <td>
-          1929
+          1930
           -
-          1939
+          1940
         </td>
         <td>
           Apply
@@ -429,9 +429,9 @@
           165
         </td>
         <td>
-          1896
+          1897
           -
-          1943
+          1944
         </td>
         <td>
           Apply
@@ -455,9 +455,9 @@
           62
         </td>
         <td>
-          1999
+          2000
           -
-          2009
+          2010
         </td>
         <td>
           Apply
@@ -479,9 +479,9 @@
           397
         </td>
         <td>
-          1998
+          1999
           -
-          1998
+          1999
         </td>
         <td>
           TypeApply
@@ -503,9 +503,9 @@
           542
         </td>
         <td>
-          1970
+          1971
           -
-          2021
+          2022
         </td>
         <td>
           Apply
@@ -529,9 +529,9 @@
           204
         </td>
         <td>
-          1991
+          1992
           -
-          2020
+          2021
         </td>
         <td>
           ApplyToImplicitArgs
@@ -555,9 +555,9 @@
           355
         </td>
         <td>
-          2062
+          2063
           -
-          2104
+          2105
         </td>
         <td>
           Apply
@@ -581,9 +581,9 @@
           13
         </td>
         <td>
-          2074
+          2075
           -
-          2099
+          2100
         </td>
         <td>
           ApplyToImplicitArgs
@@ -607,9 +607,9 @@
           219
         </td>
         <td>
-          2085
+          2086
           -
-          2085
+          2086
         </td>
         <td>
           TypeApply
@@ -631,9 +631,9 @@
           440
         </td>
         <td>
-          2086
+          2087
           -
-          2096
+          2097
         </td>
         <td>
           Apply
@@ -655,9 +655,9 @@
           53
         </td>
         <td>
-          2159
+          2160
           -
-          2159
+          2160
         </td>
         <td>
           ApplyToImplicitArgs
@@ -679,9 +679,9 @@
           205
         </td>
         <td>
-          2131
+          2132
           -
-          2174
+          2175
         </td>
         <td>
           Apply
@@ -705,9 +705,9 @@
           399
         </td>
         <td>
-          2152
+          2153
           -
-          2173
+          2174
         </td>
         <td>
           ApplyToImplicitArgs
@@ -731,9 +731,9 @@
           157
         </td>
         <td>
-          2160
+          2161
           -
-          2170
+          2171
         </td>
         <td>
           Apply
@@ -755,9 +755,9 @@
           215
         </td>
         <td>
-          2208
+          2209
           -
-          2321
+          2322
         </td>
         <td>
           Apply
@@ -779,9 +779,9 @@
           534
         </td>
         <td>
-          2262
+          2263
           -
-          2277
+          2278
         </td>
         <td>
           Apply
@@ -803,9 +803,9 @@
           331
         </td>
         <td>
-          2303
+          2304
           -
-          2320
+          2321
         </td>
         <td>
           Apply
@@ -827,9 +827,9 @@
           16
         </td>
         <td>
-          2341
+          2342
           -
-          2365
+          2366
         </td>
         <td>
           Apply
@@ -851,9 +851,9 @@
           359
         </td>
         <td>
-          2445
+          2446
           -
-          2467
+          2468
         </td>
         <td>
           Apply
@@ -875,9 +875,9 @@
           151
         </td>
         <td>
-          2775
+          2776
           -
-          2805
+          2806
         </td>
         <td>
           Apply
@@ -899,9 +899,9 @@
           59
         </td>
         <td>
-          2814
+          2815
           -
-          2826
+          2827
         </td>
         <td>
           Apply
@@ -923,9 +923,9 @@
           389
         </td>
         <td>
-          2811
+          2812
           -
-          2850
+          2851
         </td>
         <td>
           Apply
