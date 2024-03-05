@@ -49,6 +49,13 @@
             </properties>
         </profile>
         <profile>
+            <id>scala_2.12.18</id> <!-- 4 onwards -->
+            <properties>
+                <scalaVersion>2.12.18</scalaVersion>
+                <scalaCompatVersion>2.12</scalaCompatVersion>
+            </properties>
+        </profile>
+        <profile>
             <id>scala_2.13.5</id><!-- from 3.2.0 onwards only -->
             <properties>
                 <scalaVersion>2.13.5</scalaVersion>
