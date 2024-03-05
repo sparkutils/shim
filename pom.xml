@@ -49,7 +49,7 @@
             </properties>
         </profile>
         <profile>
-            <id>scala_2.12.18</id> <!-- 4 onwards -->
+            <id>scala_2.12.18</id> <!-- 4 was built against this, seemingly dropped since Sep 23 -->
             <properties>
                 <scalaVersion>2.12.18</scalaVersion>
                 <scalaCompatVersion>2.12</scalaCompatVersion>
