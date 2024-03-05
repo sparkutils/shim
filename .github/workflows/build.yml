@@ -26,7 +26,7 @@ jobs:
       testString: test
       theMatrix: |
         {
-          "profile": "Spark2"
+          "profile": "Spark2",
           "scala": "scala_2.11"
         }
 
@@ -36,7 +36,7 @@ jobs:
       testString: test
       theMatrix: |
         {
-          "profile": ["Spark3", "Spark313"]
+          "profile": ["Spark3", "Spark313"],
           "scala": ["scala_2.12.10"]
         }  
 
@@ -46,7 +46,7 @@ jobs:
       testString: test
       theMatrix: |
         {
-          "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350" ]
+          "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350" ],
           "scala": [ "scala_2.12.15", "scala_2.13.5" ]
         }
 
@@ -56,7 +56,7 @@ jobs:
       testString: test
       theMatrix: |
         {
-          "profile": ["Spark4"]
+          "profile": ["Spark4"],
           "scala": ["scala_2.12.18", "scala_2.13.12"]
         }
 
@@ -66,7 +66,7 @@ jobs:
       testString: -DskipTests
       theMatrix: |
         {
-          "profile": "9.1.dbr"
+          "profile": "9.1.dbr",
           "scala": ["scala_2.12.10"]
         }
 
@@ -76,7 +76,7 @@ jobs:
       testString: -DskipTests
       theMatrix: |
         {
-          "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ]
+          "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ],
           "scala": [ "scala_2.12.15", "scala_2.13.5" ]
         }
 
@@ -143,7 +143,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": "Spark2"
+          "profile": "Spark2",
           "scala": "scala_2.11"
         }
 
@@ -153,7 +153,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": ["Spark3", "Spark313", "9.1.dbr"]
+          "profile": ["Spark3", "Spark313", "9.1.dbr"],
           "scala": ["scala_2.12.10"]
         }  
 
@@ -163,7 +163,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350", "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ]
+          "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350", "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ],
           "scala": [ "scala_2.12.15", "scala_2.13.5" ]
         }
 
@@ -173,7 +173,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": ["Spark4"]
+          "profile": ["Spark4"],
           "scala": ["scala_2.12.18", "scala_2.13.12"]
         }
 
