@@ -10,7 +10,7 @@ runs:
   strategy:
     fail-fast: false
     matrix: ${{ fromJSON(inputs.theMatrix) }}
-  runs-on: ubuntu-latest
+
   # only publish snapshots on main by default, or when ~cut-release is in the commits
   # needs always per https://github.com/actions/runner/issues/491 very annoying
   # only do snapshots on main by default, releases/snapshots forced with ~cut-release
