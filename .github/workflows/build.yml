@@ -26,8 +26,8 @@ jobs:
       testString: test
       theMatrix: |
         {
-          "profile": "Spark2",
-          "scala": "scala_2.11"
+          "profile": ["Spark2"],
+          "scala": ["scala_2.11"]
         }
 
   testBuilds_2_12_10:
@@ -66,7 +66,7 @@ jobs:
       testString: -DskipTests
       theMatrix: |
         {
-          "profile": "9.1.dbr",
+          "profile": ["9.1.dbr"],
           "scala": ["scala_2.12.10"]
         }
 
@@ -143,8 +143,8 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": "Spark2",
-          "scala": "scala_2.11"
+          "profile": ["Spark2"],
+          "scala": ["scala_2.11"]
         }
 
   publish_2_12_10:
