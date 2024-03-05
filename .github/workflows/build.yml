@@ -12,10 +12,6 @@ env:
   MAVEN_CLI_TESTSHADES_OPTS: "-f testShades/pom.xml --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
   # -Dmaven.repo.local=.m2/repository not needed on github, seems ~/.m2 is supported / expected
   MAVEN_OPTS: "-Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.class=standard -Dmaven.wagon.http.retryHandler.count=3 -Dhttps.protocols=TLSv1.2 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
-  GPG_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-  OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-  OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-  MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
 jobs:
 
@@ -125,6 +121,11 @@ jobs:
 
             grep -A 3 'Statement coverage:' target/site/scoverage/overview.html | tail -1 | sed 's/[[:space:]]\+//g' > target/coverage.txt
             grep -A 3 'Branch coverage:' target/site/scoverage/overview.html | tail -1 | sed 's/[[:space:]]\+//g' >> target/coverage.txt
+          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          env:
+            OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+            OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+            MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - id: version
         run: echo version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -P Spark341,scala_2.12.15) >> "$GITHUB_OUTPUT"
       - name: Upload coverage to Codecov
