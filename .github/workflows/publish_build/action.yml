@@ -1,29 +1,32 @@
 name: Runs publish maven and spark setup in a matrix
 description: matrix caller for publish run
-inputs:
-  theMatrix:
-    required: true
-    description: the json matrix to build against
+on:
+  workflow_call:
+    inputs:
+      theMatrix:
+        required: true
+        description: the json matrix to build against
 
-runs:
-  using: "composite"
-  strategy:
-    fail-fast: false
-    matrix: ${{ fromJSON(inputs.theMatrix) }}
+jobs:
+  theRun:
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(inputs.theMatrix) }}
 
-  # only publish snapshots on main by default, or when ~cut-release is in the commits
-  # needs always per https://github.com/actions/runner/issues/491 very annoying
-  # only do snapshots on main by default, releases/snapshots forced with ~cut-release
-  if: |
-    always() &&
-        !contains(needs.*.result, 'failure') &&
-        !contains(needs.*.result, 'cancelled') &&
-    (contains(github.event.head_commit.message, '~docsOnly') != true) &&
-      ( (endsWith(needs.site.outputs.version, '-SNAPSHOT') && github.ref == 'refs/heads/main') ||
-        contains(github.event.head_commit.message, '~cut-release') )
-  steps:
-    - uses: ./.github/workflows/spark_maven
-      with:
-        title: Build ${{ matrix.profile }},${{ matrix.scala }} with ${{ inputs.testString }}
-        script: |
-          mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}
+    runs-on: ubuntu-latest
+    # only publish snapshots on main by default, or when ~cut-release is in the commits
+    # needs always per https://github.com/actions/runner/issues/491 very annoying
+    # only do snapshots on main by default, releases/snapshots forced with ~cut-release
+    if: |
+      always() &&
+          !contains(needs.*.result, 'failure') &&
+          !contains(needs.*.result, 'cancelled') &&
+      (contains(github.event.head_commit.message, '~docsOnly') != true) &&
+        ( (endsWith(needs.site.outputs.version, '-SNAPSHOT') && github.ref == 'refs/heads/main') ||
+          contains(github.event.head_commit.message, '~cut-release') )
+    steps:
+      - uses: ./.github/workflows/spark_maven
+        with:
+          title: Build ${{ matrix.profile }},${{ matrix.scala }} with ${{ inputs.testString }}
+          script: |
+            mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}

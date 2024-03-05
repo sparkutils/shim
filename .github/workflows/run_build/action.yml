@@ -1,23 +1,26 @@
 name: Runs maven and spark setup in a matrix
 description: matrix caller for test run
-inputs:
-  testString:
-    required: true
-    description: theTestString test or -DskipTests
-  theMatrix:
-    required: true
-    description: the json matrix to build against
+on:
+  workflow_call:
+    inputs:
+      testString:
+        required: true
+        description: theTestString test or -DskipTests
+      theMatrix:
+        required: true
+        description: the json matrix to build against
 
-runs:
-  using: "composite"
-  strategy:
-    fail-fast: false
-    matrix: ${{ fromJSON(inputs.theMatrix) }}
+jobs:
+  theRun:
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(inputs.theMatrix) }}
 
-  if: contains(github.event.head_commit.message, '~docsOnly') != true
-  steps:
-    - uses: ./.github/workflows/spark_maven
-      with:
-        title: Build ${{ matrix.profile }},${{ matrix.scala }} with ${{ inputs.testString }}
-        script: |
-          mvn $MAVEN_CLI_OPTS clean ${{ inputs.testString }} install -P ${{ matrix.profile }},${{ matrix.scala }}
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, '~docsOnly') != true
+    steps:
+      - uses: ./.github/workflows/spark_maven
+        with:
+          title: Build ${{ matrix.profile }},${{ matrix.scala }} with ${{ inputs.testString }}
+          script: |
+            mvn $MAVEN_CLI_OPTS clean ${{ inputs.testString }} install -P ${{ matrix.profile }},${{ matrix.scala }}
