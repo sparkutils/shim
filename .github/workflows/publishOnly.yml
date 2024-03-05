@@ -18,7 +18,6 @@ env:
 jobs:
 
   publish_Spark2:
-    needs: [testBuild_Spark2]
     uses: ./.github/workflows/publish_build.yml
     with:
       theMatrix: |
@@ -26,9 +25,9 @@ jobs:
           "profile": ["Spark2"],
           "scala": ["scala_2.11"]
         }
+    secrets: inherit
 
   publish_2_12_10:
-    needs: [ testBuilds_2_12_10, noTestBuilds_2_12_10 ]
     uses: ./.github/workflows/publish_build.yml
     with:
       theMatrix: |
@@ -36,9 +35,9 @@ jobs:
           "profile": ["Spark3", "Spark313", "9.1.dbr"],
           "scala": ["scala_2.12.10"]
         }  
+    secrets: inherit
 
   publish_2_12_15_and_13_5:
-    needs: [testBuilds_2_12_15_and_13_5, noTestBuilds_2_12_15_and_13_5]
     uses: ./.github/workflows/publish_build.yml
     with:
       theMatrix: |
@@ -46,9 +45,9 @@ jobs:
           "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350", "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ],
           "scala": [ "scala_2.12.15", "scala_2.13.5" ]
         }
+    secrets: inherit
 
   publish_2_12_18_and_2_13_12:
-    needs: [testBuilds_2_12_18_and_2_13_12]
     uses: ./.github/workflows/publish_build.yml
     with:
       theMatrix: |
@@ -56,3 +55,4 @@ jobs:
           "profile": ["Spark4"],
           "scala": ["scala_2.12.18", "scala_2.13.12"]
         }
+    secrets: inherit

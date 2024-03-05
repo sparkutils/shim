@@ -7,6 +7,15 @@ on:
         required: true
         type: string
         description: the json matrix to build against
+    secrets:
+      gpgKey:
+        required: true
+      OSSRH_USERNAME:
+        required: true
+      OSSRH_TOKEN:
+        required: true
+      MAVEN_GPG_PASSPHRASE:
+        required: true
 
 jobs:
   theRun:
@@ -32,8 +41,8 @@ jobs:
           title: Build ${{ matrix.profile }},${{ matrix.scala }} with ${{ inputs.testString }}
           script: |
             mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}
+          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         env:
-          GPG_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
