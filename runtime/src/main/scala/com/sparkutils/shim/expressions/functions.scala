@@ -7,9 +7,9 @@ import org.apache.spark.sql.catalyst.expressions.{Coalesce, Expression}
  */
 
 object Coalesce1 {
-  def apply(seq: scala.collection.immutable.Seq[Expression]): Coalesce =
+  def apply(seq: scala.Seq[Expression]): Coalesce =
     Coalesce(seq)
 
-  def unapply(coalesce: Coalesce): Option[scala.collection.immutable.Seq[Expression]] =
+  def unapply(coalesce: Coalesce): Option[scala.Seq[Expression]] =
     Coalesce.unapply(coalesce)
 }
