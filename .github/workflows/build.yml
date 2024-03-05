@@ -21,7 +21,6 @@ jobs:
 
   # all versions that can be built with tests - typically oss only.  Fail fast so we can see all compilation or test errors at once
   testBuild_Spark2:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/run_build.yml
     with:
       testString: test
