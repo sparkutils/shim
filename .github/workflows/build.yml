@@ -25,48 +25,60 @@ jobs:
     with:
       testString: test
       theMatrix: |
-        profile: Spark2
-        scala: "scala_2.11"
+        {
+          "profile": "Spark2"
+          "scala": "scala_2.11"
+        }
 
   testBuilds_2_12_10:
     uses: ./.github/workflows/run_build.yml
     with:
       testString: test
       theMatrix: |
-        profile: [Spark3, Spark313]
-        scala: ["scala_2.12.10"]
+        {
+          "profile": ["Spark3", "Spark313"]
+          "scala": ["scala_2.12.10"]
+        }  
 
   testBuilds_2_12_15_and_13_5:
     uses: ./.github/workflows/run_build.yml
     with:
       testString: test
       theMatrix: |
-        profile: [ Spark32, Spark321, Spark332, Spark341, Spark350 ]
-        scala: [ "scala_2.12.15", "scala_2.13.5" ]
+        {
+          "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350" ]
+          "scala": [ "scala_2.12.15", "scala_2.13.5" ]
+        }
 
   testBuilds_2_12_18_and_2_13_12:
     uses: ./.github/workflows/run_build.yml
     with:
       testString: test
       theMatrix: |
-        profile: [Spark4]
-        scala: ["scala_2.12.18", "scala_2.13.12"]
+        {
+          "profile": ["Spark4"]
+          "scala": ["scala_2.12.18", "scala_2.13.12"]
+        }
 
   noTestBuilds_2_12_10:
     uses: ./.github/workflows/run_build.yml
     with:
       testString: -DskipTests
       theMatrix: |
-        profile: "9.1.dbr"
-        scala: ["scala_2.12.10"]
+        {
+          "profile": "9.1.dbr"
+          "scala": ["scala_2.12.10"]
+        }
 
   noTestBuilds_2_12_15_and_13_5:
     uses: ./.github/workflows/run_build.yml
     with:
       testString: -DskipTests
       theMatrix: |
-        profile: [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ]
-        scala: [ "scala_2.12.15", "scala_2.13.5" ]
+        {
+          "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ]
+          "scala": [ "scala_2.12.15", "scala_2.13.5" ]
+        }
 
   # prove tests run with single thread, ensures compilation issues aren't hidden by being run on multiple threads instead of re-used in the same thread (e.g. state resetting etc.)
   # build scoverage tests on 3.3.0 first with aggregate, the copy the data out, not doing a clean build fails on site.  Also needs single threading to work, have noticed multiple failures and inconsistent coverage.
@@ -130,33 +142,41 @@ jobs:
     uses: ./.github/workflows/publish_build.yml
     with:
       theMatrix: |
-        profile: Spark2
-        scala: "scala_2.11"
+        {
+          "profile": "Spark2"
+          "scala": "scala_2.11"
+        }
 
   publish_2_12_10:
     needs: [ testBuilds_2_12_10, noTestBuilds_2_12_10 ]
     uses: ./.github/workflows/publish_build.yml
     with:
       theMatrix: |
-        profile: [Spark3, Spark313, "9.1.dbr"]
-        scala: ["scala_2.12.10"]
+        {
+          "profile": ["Spark3", "Spark313", "9.1.dbr"]
+          "scala": ["scala_2.12.10"]
+        }  
 
   publish_2_12_15_and_13_5:
     needs: [testBuilds_2_12_15_and_13_5, noTestBuilds_2_12_15_and_13_5]
     uses: ./.github/workflows/publish_build.yml
     with:
       theMatrix: |
-        profile: [ Spark32, Spark321, Spark332, Spark341, Spark350, "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ]
-        scala: [ "scala_2.12.15", "scala_2.13.5" ]
+        {
+          "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350", "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ]
+          "scala": [ "scala_2.12.15", "scala_2.13.5" ]
+        }
 
   publish_2_12_18_and_2_13_12:
     needs: [testBuilds_2_12_18_and_2_13_12]
     uses: ./.github/workflows/publish_build.yml
     with:
       theMatrix: |
-        profile: [Spark4]
-        scala: ["scala_2.12.18", "scala_2.13.12"]
-        
+        {
+          "profile": ["Spark4"]
+          "scala": ["scala_2.12.18", "scala_2.13.12"]
+        }
+
   site:
     needs: [mvn_site]
     runs-on: ubuntu-latest
