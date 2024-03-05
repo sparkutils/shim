@@ -1,5 +1,5 @@
 name: Runs maven and spark setup in a matrix
-description: matrix caller for test run
+
 on:
   workflow_call:
     inputs:

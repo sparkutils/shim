@@ -1,5 +1,5 @@
 name: Runs publish maven and spark setup in a matrix
-description: matrix caller for publish run
+
 on:
   workflow_call:
     inputs:
