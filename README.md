@@ -85,4 +85,3 @@ OSS compilation jars are provided for easier configuration.
 * Copying source code from Spark where needed
 
 The public compile time interface usage of arity introduces some verbosity, it is suggested developers use aliases on import to hide this.
- 
