@@ -145,7 +145,7 @@ jobs:
             scala: [ "scala_2.12.15", "scala_2.13.5" ]
           - profile: [ Spark4 ]
             scala: [ "scala_2.13.12" ]
-    needs: [testBuilds_2_11] # if the builds don't work don't attempt to publish
+    needs: [testBuilds, noTestBuilds] # if the builds don't work don't attempt to publish
     # needs always per https://github.com/actions/runner/issues/491 very annoying
     # only do snapshots on main by default, releases/snapshots forced with ~cut-release
     if: |
