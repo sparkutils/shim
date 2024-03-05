@@ -5,6 +5,7 @@ on:
     inputs:
       theMatrix:
         required: true
+        type: string
         description: the json matrix to build against
 
 jobs:
