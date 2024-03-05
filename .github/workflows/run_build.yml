@@ -1,0 +1,43 @@
+name: Runs maven and spark setup in a matrix
+
+on:
+  workflow_call:
+    inputs:
+      testString:
+        required: true
+        type: string
+        description: theTestString test or -DskipTests
+      theMatrix:
+        required: true
+        type: string
+        description: the json matrix to build against
+    secrets:
+      MAVEN_GPG_PRIVATE_KEY:
+        required: true
+      OSSRH_USERNAME:
+        required: true
+      OSSRH_TOKEN:
+        required: true
+      MAVEN_GPG_PASSPHRASE:
+        required: true
+
+jobs:
+  theRun:
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(inputs.theMatrix) }}
+
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, '~docsOnly') != true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/spark_maven
+        with:
+          title: Build ${{ matrix.profile }},${{ matrix.scala }} with ${{ inputs.testString }}
+          script: |
+            mvn $MAVEN_CLI_OPTS clean ${{ inputs.testString }} install -P ${{ matrix.profile }},${{ matrix.scala }}
+          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}

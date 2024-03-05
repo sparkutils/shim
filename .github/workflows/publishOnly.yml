@@ -13,29 +13,42 @@ env:
 
 jobs:
 
-  # only publish snapshots on main by default, or when ~cut-release is in the commits
-  publishOnly_2_13_12:
-    strategy:
-      matrix:
-        profile: [Spark4]
-        scala: [ "scala_2.13.12" ]
-    # needs always per https://github.com/actions/runner/issues/491 very annoying
-    # only do snapshots on main by default, releases/snapshots forced with ~cut-release
-    if: |
-      (contains(github.event.head_commit.message, '~docsOnly') != true) &&
-        ( (endsWith(needs.site.outputs.version, '-SNAPSHOT') && github.ref == 'refs/heads/main') ||
-          contains(github.event.head_commit.message, '~cut-release') )
-    runs-on: ubuntu-latest
+  publish_Spark2:
+    uses: ./.github/workflows/publish_build.yml
+    with:
+      theMatrix: |
+        {
+          "profile": ["Spark2"],
+          "scala": ["scala_2.11"]
+        }
+    secrets: inherit
 
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/spark_maven
-        with:
-          title: Publishing ${{ matrix.profile }},${{ matrix.scala }}
-          script: |
-            mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}
-          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+  publish_2_12_10:
+    uses: ./.github/workflows/publish_build.yml
+    with:
+      theMatrix: |
+        {
+          "profile": ["Spark3", "Spark313", "9.1.dbr"],
+          "scala": ["scala_2.12.10"]
+        }  
+    secrets: inherit
+
+  publish_2_12_15_and_13_5:
+    uses: ./.github/workflows/publish_build.yml
+    with:
+      theMatrix: |
+        {
+          "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350", "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ],
+          "scala": [ "scala_2.12.15", "scala_2.13.5" ]
+        }
+    secrets: inherit
+
+  publish_2_12_18_and_2_13_12:
+    uses: ./.github/workflows/publish_build.yml
+    with:
+      theMatrix: |
+        {
+          "profile": ["Spark4"],
+          "scala": ["scala_2.12.18", "scala_2.13.12"]
+        }
+    secrets: inherit

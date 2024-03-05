@@ -7,14 +7,14 @@ inputs:
   script:
     required: true
     description: script to run for step
-  gpgKey:
-    required: false
-    default: ""
-    description: needed for publish
   jdk:
     required: false
     default: '8'
     description: swap out the jdk
+  gpgKey:
+    required: false
+    default: ""
+    description: needed for publish
 
 runs:
   using: "composite"
