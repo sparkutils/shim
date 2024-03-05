@@ -23,6 +23,7 @@ jobs:
   testBuild_Spark2:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/workflows/run_build.yml@main
         with:
           testString: test
