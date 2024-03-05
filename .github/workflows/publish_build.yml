@@ -25,6 +25,7 @@ jobs:
         ( (endsWith(needs.site.outputs.version, '-SNAPSHOT') && github.ref == 'refs/heads/main') ||
           contains(github.event.head_commit.message, '~cut-release') )
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/workflows/spark_maven
         with:
           title: Build ${{ matrix.profile }},${{ matrix.scala }} with ${{ inputs.testString }}
