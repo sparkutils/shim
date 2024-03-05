@@ -31,7 +31,6 @@ jobs:
         }
 
   testBuilds_2_12_10:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/run_build.yml
     with:
       testString: test
@@ -42,7 +41,6 @@ jobs:
         }  
 
   testBuilds_2_12_15_and_13_5:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/run_build.yml
     with:
       testString: test
@@ -53,7 +51,6 @@ jobs:
         }
 
   testBuilds_2_12_18_and_2_13_12:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/run_build.yml
     with:
       testString: test
@@ -64,7 +61,6 @@ jobs:
         }
 
   noTestBuilds_2_12_10:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/run_build.yml
     with:
       testString: -DskipTests
@@ -75,7 +71,6 @@ jobs:
         }
 
   noTestBuilds_2_12_15_and_13_5:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/run_build.yml
     with:
       testString: -DskipTests
@@ -143,7 +138,6 @@ jobs:
       version: ${{ steps.version.outputs.version }}
 
   publish_Spark2:
-    runs-on: ubuntu-latest
     needs: [testBuild_Spark2]
     uses: ./.github/workflows/publish_build.yml
     with:
@@ -154,7 +148,6 @@ jobs:
         }
 
   publish_2_12_10:
-    runs-on: ubuntu-latest
     needs: [ testBuilds_2_12_10, noTestBuilds_2_12_10 ]
     uses: ./.github/workflows/publish_build.yml
     with:
@@ -166,7 +159,6 @@ jobs:
         }  
 
   publish_2_12_15_and_13_5:
-    runs-on: ubuntu-latest
     needs: [testBuilds_2_12_15_and_13_5, noTestBuilds_2_12_15_and_13_5]
     uses: ./.github/workflows/publish_build.yml
     with:
@@ -178,7 +170,6 @@ jobs:
         }
 
   publish_2_12_18_and_2_13_12:
-    runs-on: ubuntu-latest
     needs: [testBuilds_2_12_18_and_2_13_12]
     uses: ./.github/workflows/publish_build.yml
     with:
