@@ -14,7 +14,7 @@ env:
 jobs:
 
   publish_Spark2:
-    uses: ./.github/workflows/publish_build.yml
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
@@ -24,7 +24,7 @@ jobs:
     secrets: inherit
 
   publish_2_12_10:
-    uses: ./.github/workflows/publish_build.yml
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
@@ -34,7 +34,7 @@ jobs:
     secrets: inherit
 
   publish_2_12_15_and_13_5:
-    uses: ./.github/workflows/publish_build.yml
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
@@ -44,7 +44,7 @@ jobs:
     secrets: inherit
 
   publish_2_12_18_and_2_13_12:
-    uses: ./.github/workflows/publish_build.yml
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
