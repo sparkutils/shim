@@ -2,7 +2,7 @@
       <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title id="title">
-          com/sparkutils/shim/expressions/functions.scala.html
+          com/sparkutils/shim/expressions/named.scala.html
         </title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/css/theme.default.min.css" type="text/css"/><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/js/jquery.tablesorter.min.js"></script><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/><script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script><script type="text/javascript">
         $(document).ready(function() {$(".tablesorter").tablesorter();});
@@ -24,19 +24,20 @@
           <div class="tab-pane active" id="codegrid">
             <pre style='font-size: 12pt; font-family: courier, monospace;'>1 <span style=''>package com.sparkutils.shim.expressions
 </span>2 <span style=''>
-</span>3 <span style=''>import org.apache.spark.sql.catalyst.expressions.{Coalesce, Expression}
-</span>4 <span style=''>
-</span>5 <span style=''>/*
-</span>6 <span style=''> * Collection of shims on really stable interfaces for functional expressions
-</span>7 <span style=''> */
-</span>8 <span style=''>
-</span>9 <span style=''>object Coalesce1 {
-</span>10 <span style=''>  def apply(seq: scala.Seq[Expression]): Coalesce =
-</span>11 <span style=''>    </span><span style='background: #F0ADAD'>Coalesce(seq)</span><span style=''>
-</span>12 <span style=''>
-</span>13 <span style=''>  def unapply(coalesce: Coalesce): Option[scala.Seq[Expression]] =
-</span>14 <span style=''>    </span><span style='background: #F0ADAD'>Coalesce.unapply(coalesce)</span><span style=''>
-</span>15 <span style=''>}
+</span>3 <span style=''>import org.apache.spark.sql.catalyst.expressions.{Alias, ExprId, Expression, NamedExpression}
+</span>4 <span style=''>import org.apache.spark.sql.types.Metadata
+</span>5 <span style=''>
+</span>6 <span style=''>/*
+</span>7 <span style=''> * Collection of shims on really stable interfaces for named expressions
+</span>8 <span style=''> */
+</span>9 <span style=''>
+</span>10 <span style=''>object Alias2 {
+</span>11 <span style=''>  def apply(child: Expression, name: String)(exprId: ExprId = NamedExpression.newExprId, qualifier: scala.Seq[String] = scala.Seq.empty, explicitMetadata: Option[Metadata] = None, nonInheritableMetadataKeys: scala.Seq[String] = scala.Seq.empty): Alias =
+</span>12 <span style=''>    </span><span style='background: #F0ADAD'>Alias(child, name)(exprId, qualifier, explicitMetadata, nonInheritableMetadataKeys)</span><span style=''>
+</span>13 <span style=''>
+</span>14 <span style=''>  def unapply(alias: Alias): Option[(Expression, String)] =
+</span>15 <span style=''>    </span><span style='background: #F0ADAD'>Alias.unapply(alias)</span><span style=''>
+</span>16 <span style=''>}
 </span></pre>
           </div>
           <div class="tab-pane" id="statementlist">
@@ -51,51 +52,51 @@
         <th>Code</th>
       </tr><tr>
         <td>
-          11
+          12
         </td>
         <td>
-          1
+          450
         </td>
         <td>
-          275
+          534
           -
-          288
+          617
         </td>
         <td>
           Apply
         </td>
         <td>
-          org.apache.spark.sql.catalyst.expressions.Coalesce.apply
+          org.apache.spark.sql.catalyst.expressions.Alias.apply
         </td>
         <td>
           
         </td>
         <td style="background: #F0ADAD">
-          org.apache.spark.sql.catalyst.expressions.Coalesce.apply(seq)
+          org.apache.spark.sql.catalyst.expressions.Alias.apply(child, name)(exprId, qualifier, explicitMetadata, nonInheritableMetadataKeys)
         </td>
       </tr><tr>
         <td>
-          14
+          15
         </td>
         <td>
-          372
+          252
         </td>
         <td>
-          361
+          683
           -
-          387
+          703
         </td>
         <td>
           Apply
         </td>
         <td>
-          org.apache.spark.sql.catalyst.expressions.Coalesce.unapply
+          org.apache.spark.sql.catalyst.expressions.Alias.unapply
         </td>
         <td>
           
         </td>
         <td style="background: #F0ADAD">
-          org.apache.spark.sql.catalyst.expressions.Coalesce.unapply(coalesce)
+          org.apache.spark.sql.catalyst.expressions.Alias.unapply(alias)
         </td>
       </tr>
     </table>
