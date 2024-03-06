@@ -17,7 +17,7 @@ jobs:
 
   # all versions that can be built with tests - typically oss only.  Fail fast so we can see all compilation or test errors at once
   testBuild_Spark2:
-    uses: ./.github/workflows/run_build.yml
+    uses: sparkutils/building/.github/workflows/run_build.yml@main
     with:
       testString: test
       theMatrix: |
@@ -28,7 +28,7 @@ jobs:
     secrets: inherit
 
   testBuilds_2_12_10:
-    uses: ./.github/workflows/run_build.yml
+    uses: sparkutils/building/.github/workflows/run_build.yml@main
     with:
       testString: test
       theMatrix: |
@@ -39,7 +39,7 @@ jobs:
     secrets: inherit
 
   testBuilds_2_12_15_and_13_5:
-    uses: ./.github/workflows/run_build.yml
+    uses: sparkutils/building/.github/workflows/run_build.yml@main
     with:
       testString: test
       theMatrix: |
@@ -50,18 +50,18 @@ jobs:
     secrets: inherit
 
   testBuilds_2_12_18_and_2_13_12:
-    uses: ./.github/workflows/run_build.yml
+    uses: sparkutils/building/.github/workflows/run_build.yml@main
     with:
       testString: test
       theMatrix: |
         {
           "profile": ["Spark4"],
-          "scala": ["scala_2.12.18", "scala_2.13.12"]
+          "scala": [ "scala_2.13.12"]
         }
     secrets: inherit
 
   noTestBuilds_2_12_10:
-    uses: ./.github/workflows/run_build.yml
+    uses: sparkutils/building/.github/workflows/run_build.yml@main
     with:
       testString: -DskipTests
       theMatrix: |
@@ -72,7 +72,7 @@ jobs:
     secrets: inherit
 
   noTestBuilds_2_12_15_and_13_5:
-    uses: ./.github/workflows/run_build.yml
+    uses: sparkutils/building/.github/workflows/run_build.yml@main
     with:
       testString: -DskipTests
       theMatrix: |
@@ -92,7 +92,7 @@ jobs:
       - uses: s-weigand/setup-conda@v1
         with:
           python-version: '3.10'
-      - uses: ./.github/workflows/spark_maven
+      - uses: sparkutils/spark-maven-action@main
         with:
           title: Building site against Spark340
           script: |
@@ -146,7 +146,7 @@ jobs:
 
   publish_Spark2:
     needs: [testBuild_Spark2]
-    uses: ./.github/workflows/publish_build.yml
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
@@ -157,7 +157,7 @@ jobs:
 
   publish_2_12_10:
     needs: [ testBuilds_2_12_10, noTestBuilds_2_12_10 ]
-    uses: ./.github/workflows/publish_build.yml
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
@@ -168,7 +168,7 @@ jobs:
 
   publish_2_12_15_and_13_5:
     needs: [testBuilds_2_12_15_and_13_5, noTestBuilds_2_12_15_and_13_5]
-    uses: ./.github/workflows/publish_build.yml
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
@@ -179,12 +179,12 @@ jobs:
 
   publish_2_12_18_and_2_13_12:
     needs: [testBuilds_2_12_18_and_2_13_12]
-    uses: ./.github/workflows/publish_build.yml
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
           "profile": ["Spark4"],
-          "scala": ["scala_2.12.18", "scala_2.13.12"]
+          "scala": ["scala_2.13.12"]
         }
     secrets: inherit
 
@@ -198,7 +198,7 @@ jobs:
         with:
           name: target-mvn_site
           path: target
-      - uses: ./.github/workflows/mkdocs
+      - uses: sparkutils/mkdocs-action@main
         with:
           prepScript: |
             cp -rf target/target/site docs/
