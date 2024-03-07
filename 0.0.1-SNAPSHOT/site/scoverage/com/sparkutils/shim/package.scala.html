@@ -109,7 +109,7 @@
           26
         </td>
         <td>
-          557
+          559
         </td>
         <td>
           1215
@@ -133,7 +133,31 @@
           27
         </td>
         <td>
-          403
+          459
+        </td>
+        <td>
+          1310
+          -
+          1329
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.Boolean.unary_!
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          isPresentFilter.apply(x$1).unary_!
+        </td>
+      </tr><tr>
+        <td>
+          27
+        </td>
+        <td>
+          405
         </td>
         <td>
           1332
@@ -160,31 +184,7 @@
           27
         </td>
         <td>
-          457
-        </td>
-        <td>
-          1310
-          -
-          1329
-        </td>
-        <td>
-          Select
-        </td>
-        <td>
-          scala.Boolean.unary_!
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          isPresentFilter.apply(x$1).unary_!
-        </td>
-      </tr><tr>
-        <td>
-          27
-        </td>
-        <td>
-          220
+          221
         </td>
         <td>
           1276
@@ -232,7 +232,7 @@
           28
         </td>
         <td>
-          385
+          387
         </td>
         <td>
           1369
@@ -304,31 +304,7 @@
           31
         </td>
         <td>
-          549
-        </td>
-        <td>
-          1439
-          -
-          1444
-        </td>
-        <td>
-          Block
-        </td>
-        <td>
-          &lt;nosymbol&gt;
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          false
-        </td>
-      </tr><tr>
-        <td>
-          31
-        </td>
-        <td>
-          208
+          209
         </td>
         <td>
           1439
@@ -349,29 +325,51 @@
         </td>
       </tr><tr>
         <td>
-          42
+          31
         </td>
         <td>
-          361
+          551
         </td>
         <td>
-          1897
+          1439
           -
-          1944
+          1444
         </td>
         <td>
-          Apply
+          Block
         </td>
         <td>
-          org.apache.spark.sql.catalyst.util.GenericArrayData.&lt;init&gt;
+          &lt;nosymbol&gt;
         </td>
         <td>
           
         </td>
         <td style="background: #F0ADAD">
-          new org.apache.spark.sql.catalyst.util.GenericArrayData(a.toSeq.map[Any, Seq[Any]]({
-  ((any: Any) =&gt; `package`.this.toCatalyst(any))
-})(collection.this.Seq.canBuildFrom[Any]))
+          false
+        </td>
+      </tr><tr>
+        <td>
+          42
+        </td>
+        <td>
+          448
+        </td>
+        <td>
+          1930
+          -
+          1940
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(any)
         </td>
       </tr><tr>
         <td>
@@ -404,7 +402,33 @@
           42
         </td>
         <td>
-          223
+          362
+        </td>
+        <td>
+          1897
+          -
+          1944
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.util.GenericArrayData.&lt;init&gt;
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          new org.apache.spark.sql.catalyst.util.GenericArrayData(a.toSeq.map[Any, Seq[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(collection.this.Seq.canBuildFrom[Any]))
+        </td>
+      </tr><tr>
+        <td>
+          42
+        </td>
+        <td>
+          224
         </td>
         <td>
           1929
@@ -425,34 +449,10 @@
         </td>
       </tr><tr>
         <td>
-          42
-        </td>
-        <td>
-          446
-        </td>
-        <td>
-          1930
-          -
-          1940
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          com.sparkutils.shim.toCatalyst
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          `package`.this.toCatalyst(any)
-        </td>
-      </tr><tr>
-        <td>
           43
         </td>
         <td>
-          209
+          210
         </td>
         <td>
           1971
@@ -472,32 +472,6 @@
           new org.apache.spark.sql.catalyst.util.GenericArrayData(seq.map[Any, Seq[Any]]({
   ((any: Any) =&gt; `package`.this.toCatalyst(any))
 })(collection.this.Seq.canBuildFrom[Any]).toArray[Any]((ClassTag.Any: scala.reflect.ClassTag[Any])))
-        </td>
-      </tr><tr>
-        <td>
-          43
-        </td>
-        <td>
-          405
-        </td>
-        <td>
-          1992
-          -
-          2021
-        </td>
-        <td>
-          ApplyToImplicitArgs
-        </td>
-        <td>
-          scala.collection.TraversableOnce.toArray
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          seq.map[Any, Seq[Any]]({
-  ((any: Any) =&gt; `package`.this.toCatalyst(any))
-})(collection.this.Seq.canBuildFrom[Any]).toArray[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))
         </td>
       </tr><tr>
         <td>
@@ -549,27 +523,29 @@
         </td>
       </tr><tr>
         <td>
-          44
+          43
         </td>
         <td>
-          541
+          407
         </td>
         <td>
-          2087
+          1992
           -
-          2097
+          2021
         </td>
         <td>
-          Apply
+          ApplyToImplicitArgs
         </td>
         <td>
-          com.sparkutils.shim.toCatalyst
+          scala.collection.TraversableOnce.toArray
         </td>
         <td>
           
         </td>
         <td style="background: #F0ADAD">
-          `package`.this.toCatalyst(any)
+          seq.map[Any, Seq[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(collection.this.Seq.canBuildFrom[Any]).toArray[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))
         </td>
       </tr><tr>
         <td>
@@ -602,7 +578,7 @@
           44
         </td>
         <td>
-          336
+          337
         </td>
         <td>
           2086
@@ -626,7 +602,7 @@
           44
         </td>
         <td>
-          219
+          220
         </td>
         <td>
           2075
@@ -646,6 +622,80 @@
           r.toSeq.map[Any, Seq[Any]]({
   ((any: Any) =&gt; `package`.this.toCatalyst(any))
 })(collection.this.Seq.canBuildFrom[Any])
+        </td>
+      </tr><tr>
+        <td>
+          44
+        </td>
+        <td>
+          543
+        </td>
+        <td>
+          2087
+          -
+          2097
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(any)
+        </td>
+      </tr><tr>
+        <td>
+          45
+        </td>
+        <td>
+          397
+        </td>
+        <td>
+          2132
+          -
+          2175
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.util.GenericArrayData.&lt;init&gt;
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          new org.apache.spark.sql.catalyst.util.GenericArrayData(scala.Predef.genericArrayOps[_](arr).map[Any, Array[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(scala.this.Array.canBuildFrom[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))))
+        </td>
+      </tr><tr>
+        <td>
+          45
+        </td>
+        <td>
+          366
+        </td>
+        <td>
+          2161
+          -
+          2171
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(any)
         </td>
       </tr><tr>
         <td>
@@ -678,32 +728,6 @@
           45
         </td>
         <td>
-          395
-        </td>
-        <td>
-          2132
-          -
-          2175
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          org.apache.spark.sql.catalyst.util.GenericArrayData.&lt;init&gt;
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          new org.apache.spark.sql.catalyst.util.GenericArrayData(scala.Predef.genericArrayOps[_](arr).map[Any, Array[Any]]({
-  ((any: Any) =&gt; `package`.this.toCatalyst(any))
-})(scala.this.Array.canBuildFrom[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))))
-        </td>
-      </tr><tr>
-        <td>
-          45
-        </td>
-        <td>
           153
         </td>
         <td>
@@ -725,34 +749,10 @@
         </td>
       </tr><tr>
         <td>
-          45
-        </td>
-        <td>
-          365
-        </td>
-        <td>
-          2161
-          -
-          2171
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          com.sparkutils.shim.toCatalyst
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          `package`.this.toCatalyst(any)
-        </td>
-      </tr><tr>
-        <td>
           47
         </td>
         <td>
-          331
+          332
         </td>
         <td>
           2209
@@ -776,7 +776,7 @@
           49
         </td>
         <td>
-          213
+          214
         </td>
         <td>
           2263
@@ -800,7 +800,7 @@
           50
         </td>
         <td>
-          543
+          545
         </td>
         <td>
           2304
@@ -824,7 +824,7 @@
           52
         </td>
         <td>
-          246
+          247
         </td>
         <td>
           2342
@@ -872,7 +872,7 @@
           66
         </td>
         <td>
-          391
+          393
         </td>
         <td>
           2776

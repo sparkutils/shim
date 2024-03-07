@@ -26,51 +26,57 @@
 </span>2 <span style=''>
 </span>3 <span style=''>import com.sparkutils.shim.ShowParams
 </span>4 <span style=''>import org.apache.spark.sql.catalyst.expressions.{LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
-</span>5 <span style=''>import org.apache.spark.sql.{Column, DataFrame}
-</span>6 <span style=''>
-</span>7 <span style=''>import java.util.concurrent.atomic.AtomicInteger
-</span>8 <span style=''>
-</span>9 <span style=''>object utils {
-</span>10 <span style=''>
-</span>11 <span style=''>  def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
-</span>12 <span style=''>    </span><span style='background: #F0ADAD'>dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)</span><span style=''>
-</span>13 <span style=''>
-</span>14 <span style=''>  def named(col: Column): NamedExpression = </span><span style='background: #F0ADAD'>col.named</span><span style=''>
-</span>15 <span style=''>
-</span>16 <span style=''>  // taken from functions, where they are private
-</span>17 <span style=''>  def createLambda(f: Column =&gt; Column) = {
-</span>18 <span style=''>    val x = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)))</span><span style=''>
-</span>19 <span style=''>    val function = </span><span style='background: #F0ADAD'>f(Column(x)).expr</span><span style=''>
-</span>20 <span style=''>    </span><span style='background: #F0ADAD'>LambdaFunction(function, Seq(x))</span><span style=''>
-</span>21 <span style=''>  }
-</span>22 <span style=''>
-</span>23 <span style=''>  def createLambda(f: (Column, Column) =&gt; Column) = {
-</span>24 <span style=''>    val x = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)))</span><span style=''>
-</span>25 <span style=''>    val y = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;y&quot;)))</span><span style=''>
-</span>26 <span style=''>    val function = </span><span style='background: #F0ADAD'>f(Column(x), Column(y)).expr</span><span style=''>
-</span>27 <span style=''>    </span><span style='background: #F0ADAD'>LambdaFunction(function, Seq(x, y))</span><span style=''>
-</span>28 <span style=''>  }
-</span>29 <span style=''>
-</span>30 <span style=''>  def createLambda(f: (Column, Column, Column) =&gt; Column) = {
-</span>31 <span style=''>    val x = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)))</span><span style=''>
-</span>32 <span style=''>    val y = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;y&quot;)))</span><span style=''>
-</span>33 <span style=''>    val z = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;z&quot;)))</span><span style=''>
-</span>34 <span style=''>    val function = </span><span style='background: #F0ADAD'>f(Column(x), Column(y), Column(z)).expr</span><span style=''>
-</span>35 <span style=''>    </span><span style='background: #F0ADAD'>LambdaFunction(function, Seq(x, y, z))</span><span style=''>
-</span>36 <span style=''>  }
-</span>37 <span style=''>
-</span>38 <span style=''>}
-</span>39 <span style=''>
-</span>40 <span style=''>// TODO remove with 2.4, it's only here until 0.2.0 as 3 introduced freshVarName
-</span>41 <span style=''>object UnresolvedNamedLambdaVariableT {
-</span>42 <span style=''>
-</span>43 <span style=''>  // Counter to ensure lambda variable names are unique
-</span>44 <span style=''>  private val nextVarNameId = </span><span style='background: #F0ADAD'>new AtomicInteger(0)</span><span style=''>
+</span>5 <span style=''>import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+</span>6 <span style=''>import org.apache.spark.sql.{Column, DataFrame, Dataset, SparkSession}
+</span>7 <span style=''>
+</span>8 <span style=''>import java.util.concurrent.atomic.AtomicInteger
+</span>9 <span style=''>
+</span>10 <span style=''>object utils {
+</span>11 <span style=''>
+</span>12 <span style=''>  def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
+</span>13 <span style=''>    </span><span style='background: #F0ADAD'>dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)</span><span style=''>
+</span>14 <span style=''>
+</span>15 <span style=''>  def named(col: Column): NamedExpression = </span><span style='background: #F0ADAD'>col.named</span><span style=''>
+</span>16 <span style=''>
+</span>17 <span style=''>  // taken from functions, where they are private
+</span>18 <span style=''>  def createLambda(f: Column =&gt; Column) = {
+</span>19 <span style=''>    val x = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)))</span><span style=''>
+</span>20 <span style=''>    val function = </span><span style='background: #F0ADAD'>f(Column(x)).expr</span><span style=''>
+</span>21 <span style=''>    </span><span style='background: #F0ADAD'>LambdaFunction(function, Seq(x))</span><span style=''>
+</span>22 <span style=''>  }
+</span>23 <span style=''>
+</span>24 <span style=''>  def createLambda(f: (Column, Column) =&gt; Column) = {
+</span>25 <span style=''>    val x = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)))</span><span style=''>
+</span>26 <span style=''>    val y = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;y&quot;)))</span><span style=''>
+</span>27 <span style=''>    val function = </span><span style='background: #F0ADAD'>f(Column(x), Column(y)).expr</span><span style=''>
+</span>28 <span style=''>    </span><span style='background: #F0ADAD'>LambdaFunction(function, Seq(x, y))</span><span style=''>
+</span>29 <span style=''>  }
+</span>30 <span style=''>
+</span>31 <span style=''>  def createLambda(f: (Column, Column, Column) =&gt; Column) = {
+</span>32 <span style=''>    val x = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)))</span><span style=''>
+</span>33 <span style=''>    val y = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;y&quot;)))</span><span style=''>
+</span>34 <span style=''>    val z = </span><span style='background: #F0ADAD'>UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName(&quot;z&quot;)))</span><span style=''>
+</span>35 <span style=''>    val function = </span><span style='background: #F0ADAD'>f(Column(x), Column(y), Column(z)).expr</span><span style=''>
+</span>36 <span style=''>    </span><span style='background: #F0ADAD'>LambdaFunction(function, Seq(x, y, z))</span><span style=''>
+</span>37 <span style=''>  }
+</span>38 <span style=''>
+</span>39 <span style=''>  def logicalPlan(ds: Dataset[_]): LogicalPlan = </span><span style='background: #F0ADAD'>ds.logicalPlan</span><span style=''>
+</span>40 <span style=''>
+</span>41 <span style=''>  def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
+</span>42 <span style=''>    </span><span style='background: #F0ADAD'>Dataset.ofRows(sparkSession, logicalPlan)</span><span style=''>
+</span>43 <span style=''>
+</span>44 <span style=''>}
 </span>45 <span style=''>
-</span>46 <span style=''>  def freshVarName(name: String): String = {
-</span>47 <span style=''>    </span><span style='background: #F0ADAD'>s&quot;${name}_${nextVarNameId.getAndIncrement()}&quot;</span><span style=''>
-</span>48 <span style=''>  }
-</span>49 <span style=''>}
+</span>46 <span style=''>// TODO remove with 2.4, it's only here until 0.2.0 as 3 introduced freshVarName
+</span>47 <span style=''>object UnresolvedNamedLambdaVariableT {
+</span>48 <span style=''>
+</span>49 <span style=''>  // Counter to ensure lambda variable names are unique
+</span>50 <span style=''>  private val nextVarNameId = </span><span style='background: #F0ADAD'>new AtomicInteger(0)</span><span style=''>
+</span>51 <span style=''>
+</span>52 <span style=''>  def freshVarName(name: String): String = {
+</span>53 <span style=''>    </span><span style='background: #F0ADAD'>s&quot;${name}_${nextVarNameId.getAndIncrement()}&quot;</span><span style=''>
+</span>54 <span style=''>  }
+</span>55 <span style=''>}
 </span></pre>
           </div>
           <div class="tab-pane" id="statementlist">
@@ -85,39 +91,15 @@
         <th>Code</th>
       </tr><tr>
         <td>
-          12
+          13
         </td>
         <td>
-          241
+          391
         </td>
         <td>
-          405
+          532
           -
-          423
-        </td>
-        <td>
-          Select
-        </td>
-        <td>
-          com.sparkutils.shim.ShowParams.numRows
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          showParams.numRows
-        </td>
-      </tr><tr>
-        <td>
-          12
-        </td>
-        <td>
-          389
-        </td>
-        <td>
-          446
-          -
-          465
+          551
         </td>
         <td>
           Select
@@ -133,15 +115,15 @@
         </td>
       </tr><tr>
         <td>
-          12
+          13
         </td>
         <td>
           15
         </td>
         <td>
-          425
+          511
           -
-          444
+          530
         </td>
         <td>
           Select
@@ -157,15 +139,15 @@
         </td>
       </tr><tr>
         <td>
-          12
+          13
         </td>
         <td>
           152
         </td>
         <td>
-          384
+          470
           -
-          466
+          552
         </td>
         <td>
           Apply
@@ -181,15 +163,39 @@
         </td>
       </tr><tr>
         <td>
-          14
+          13
         </td>
         <td>
-          534
+          242
         </td>
         <td>
-          512
+          491
           -
-          521
+          509
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          com.sparkutils.shim.ShowParams.numRows
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          showParams.numRows
+        </td>
+      </tr><tr>
+        <td>
+          15
+        </td>
+        <td>
+          536
+        </td>
+        <td>
+          598
+          -
+          607
         </td>
         <td>
           Select
@@ -205,39 +211,15 @@
         </td>
       </tr><tr>
         <td>
-          18
+          19
         </td>
         <td>
-          202
+          425
         </td>
         <td>
-          659
+          749
           -
-          712
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          scala.collection.generic.GenericCompanion.apply
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          scala.collection.Seq.apply[String](UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;))
-        </td>
-      </tr><tr>
-        <td>
-          18
-        </td>
-        <td>
-          423
-        </td>
-        <td>
-          663
-          -
-          711
+          797
         </td>
         <td>
           Apply
@@ -253,15 +235,15 @@
         </td>
       </tr><tr>
         <td>
-          18
+          19
         </td>
         <td>
-          560
+          562
         </td>
         <td>
-          629
+          715
           -
-          713
+          799
         </td>
         <td>
           Apply
@@ -280,12 +262,36 @@
           19
         </td>
         <td>
-          244
+          203
         </td>
         <td>
-          733
+          745
           -
-          750
+          798
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.collection.generic.GenericCompanion.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.collection.Seq.apply[String](UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;))
+        </td>
+      </tr><tr>
+        <td>
+          20
+        </td>
+        <td>
+          245
+        </td>
+        <td>
+          819
+          -
+          836
         </td>
         <td>
           Select
@@ -301,15 +307,15 @@
         </td>
       </tr><tr>
         <td>
-          19
+          20
         </td>
         <td>
-          330
+          331
         </td>
         <td>
-          735
+          821
           -
-          744
+          830
         </td>
         <td>
           Apply
@@ -325,15 +331,15 @@
         </td>
       </tr><tr>
         <td>
-          20
+          21
         </td>
         <td>
           154
         </td>
         <td>
-          755
+          841
           -
-          787
+          873
         </td>
         <td>
           Apply
@@ -349,15 +355,15 @@
         </td>
       </tr><tr>
         <td>
-          20
+          21
         </td>
         <td>
-          390
+          392
         </td>
         <td>
-          755
+          841
           -
-          755
+          841
         </td>
         <td>
           Select
@@ -373,15 +379,15 @@
         </td>
       </tr><tr>
         <td>
-          20
+          21
         </td>
         <td>
           33
         </td>
         <td>
-          780
+          866
           -
-          786
+          872
         </td>
         <td>
           Apply
@@ -397,63 +403,15 @@
         </td>
       </tr><tr>
         <td>
-          24
+          25
         </td>
         <td>
-          525
+          427
         </td>
         <td>
-          893
+          975
           -
-          941
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          org.apache.spark.sql.shim.UnresolvedNamedLambdaVariableT.freshVarName
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)
-        </td>
-      </tr><tr>
-        <td>
-          24
-        </td>
-        <td>
-          193
-        </td>
-        <td>
-          859
-          -
-          943
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable.apply
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable.apply(scala.collection.Seq.apply[String](UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)))
-        </td>
-      </tr><tr>
-        <td>
-          24
-        </td>
-        <td>
-          425
-        </td>
-        <td>
-          889
-          -
-          942
+          1028
         </td>
         <td>
           Apply
@@ -472,12 +430,60 @@
           25
         </td>
         <td>
+          194
+        </td>
+        <td>
+          945
+          -
+          1029
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable.apply(scala.collection.Seq.apply[String](UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)))
+        </td>
+      </tr><tr>
+        <td>
+          25
+        </td>
+        <td>
+          527
+        </td>
+        <td>
+          979
+          -
+          1027
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.shim.UnresolvedNamedLambdaVariableT.freshVarName
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;)
+        </td>
+      </tr><tr>
+        <td>
+          26
+        </td>
+        <td>
           140
         </td>
         <td>
-          956
+          1042
           -
-          1040
+          1126
         </td>
         <td>
           Apply
@@ -493,15 +499,15 @@
         </td>
       </tr><tr>
         <td>
-          25
+          26
         </td>
         <td>
-          561
+          563
         </td>
         <td>
-          990
+          1076
           -
-          1038
+          1124
         </td>
         <td>
           Apply
@@ -517,15 +523,15 @@
         </td>
       </tr><tr>
         <td>
-          25
+          26
         </td>
         <td>
-          347
+          348
         </td>
         <td>
-          986
+          1072
           -
-          1039
+          1125
         </td>
         <td>
           Apply
@@ -541,39 +547,15 @@
         </td>
       </tr><tr>
         <td>
-          26
+          27
         </td>
         <td>
-          35
+          176
         </td>
         <td>
-          1062
+          1146
           -
-          1071
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          org.apache.spark.sql.Column.apply
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          org.apache.spark.sql.Column.apply(x)
-        </td>
-      </tr><tr>
-        <td>
-          26
-        </td>
-        <td>
-          175
-        </td>
-        <td>
-          1060
-          -
-          1088
+          1174
         </td>
         <td>
           Select
@@ -589,15 +571,39 @@
         </td>
       </tr><tr>
         <td>
-          26
+          27
         </td>
         <td>
-          374
+          35
         </td>
         <td>
-          1073
+          1148
           -
-          1082
+          1157
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.Column.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.Column.apply(x)
+        </td>
+      </tr><tr>
+        <td>
+          27
+        </td>
+        <td>
+          376
+        </td>
+        <td>
+          1159
+          -
+          1168
         </td>
         <td>
           Apply
@@ -613,39 +619,15 @@
         </td>
       </tr><tr>
         <td>
-          27
+          28
         </td>
         <td>
-          414
+          528
         </td>
         <td>
-          1093
+          1204
           -
-          1093
-        </td>
-        <td>
-          Select
-        </td>
-        <td>
-          org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply$default$3
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply$default$3
-        </td>
-      </tr><tr>
-        <td>
-          27
-        </td>
-        <td>
-          526
-        </td>
-        <td>
-          1118
-          -
-          1127
+          1213
         </td>
         <td>
           Apply
@@ -661,15 +643,15 @@
         </td>
       </tr><tr>
         <td>
-          27
+          28
         </td>
         <td>
-          197
+          198
         </td>
         <td>
-          1093
+          1179
           -
-          1128
+          1214
         </td>
         <td>
           Apply
@@ -685,39 +667,39 @@
         </td>
       </tr><tr>
         <td>
-          31
+          28
         </td>
         <td>
-          340
+          416
         </td>
         <td>
-          1238
+          1179
           -
-          1291
+          1179
         </td>
         <td>
-          Apply
+          Select
         </td>
         <td>
-          scala.collection.generic.GenericCompanion.apply
+          org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply$default$3
         </td>
         <td>
           
         </td>
         <td style="background: #F0ADAD">
-          scala.collection.Seq.apply[String](UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;))
+          org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply$default$3
         </td>
       </tr><tr>
         <td>
-          31
+          32
         </td>
         <td>
-          555
+          557
         </td>
         <td>
-          1242
+          1328
           -
-          1290
+          1376
         </td>
         <td>
           Apply
@@ -733,15 +715,15 @@
         </td>
       </tr><tr>
         <td>
-          31
+          32
         </td>
         <td>
           141
         </td>
         <td>
-          1208
+          1294
           -
-          1292
+          1378
         </td>
         <td>
           Apply
@@ -760,12 +742,36 @@
           32
         </td>
         <td>
+          341
+        </td>
+        <td>
+          1324
+          -
+          1377
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.collection.generic.GenericCompanion.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.collection.Seq.apply[String](UnresolvedNamedLambdaVariableT.freshVarName(&quot;x&quot;))
+        </td>
+      </tr><tr>
+        <td>
+          33
+        </td>
+        <td>
           2
         </td>
         <td>
-          1339
+          1425
           -
-          1387
+          1473
         </td>
         <td>
           Apply
@@ -781,15 +787,15 @@
         </td>
       </tr><tr>
         <td>
-          32
+          33
         </td>
         <td>
           151
         </td>
         <td>
-          1305
+          1391
           -
-          1389
+          1475
         </td>
         <td>
           Apply
@@ -805,15 +811,15 @@
         </td>
       </tr><tr>
         <td>
-          32
+          33
         </td>
         <td>
-          378
+          380
         </td>
         <td>
-          1335
+          1421
           -
-          1388
+          1474
         </td>
         <td>
           Apply
@@ -829,63 +835,15 @@
         </td>
       </tr><tr>
         <td>
-          33
+          34
         </td>
         <td>
-          200
+          418
         </td>
         <td>
-          1402
+          1518
           -
-          1486
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable.apply
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable.apply(scala.collection.Seq.apply[String](UnresolvedNamedLambdaVariableT.freshVarName(&quot;z&quot;)))
-        </td>
-      </tr><tr>
-        <td>
-          33
-        </td>
-        <td>
-          519
-        </td>
-        <td>
-          1436
-          -
-          1484
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          org.apache.spark.sql.shim.UnresolvedNamedLambdaVariableT.freshVarName
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          UnresolvedNamedLambdaVariableT.freshVarName(&quot;z&quot;)
-        </td>
-      </tr><tr>
-        <td>
-          33
-        </td>
-        <td>
-          416
-        </td>
-        <td>
-          1432
-          -
-          1485
+          1571
         </td>
         <td>
           Apply
@@ -904,12 +862,60 @@
           34
         </td>
         <td>
+          521
+        </td>
+        <td>
+          1522
+          -
+          1570
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.shim.UnresolvedNamedLambdaVariableT.freshVarName
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          UnresolvedNamedLambdaVariableT.freshVarName(&quot;z&quot;)
+        </td>
+      </tr><tr>
+        <td>
+          34
+        </td>
+        <td>
+          201
+        </td>
+        <td>
+          1488
+          -
+          1572
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable.apply(scala.collection.Seq.apply[String](UnresolvedNamedLambdaVariableT.freshVarName(&quot;z&quot;)))
+        </td>
+      </tr><tr>
+        <td>
+          35
+        </td>
+        <td>
           131
         </td>
         <td>
-          1530
+          1616
           -
-          1539
+          1625
         </td>
         <td>
           Apply
@@ -925,15 +931,15 @@
         </td>
       </tr><tr>
         <td>
-          34
+          35
         </td>
         <td>
           4
         </td>
         <td>
-          1506
+          1592
           -
-          1545
+          1631
         </td>
         <td>
           Select
@@ -949,39 +955,15 @@
         </td>
       </tr><tr>
         <td>
-          34
+          35
         </td>
         <td>
-          551
+          330
         </td>
         <td>
-          1508
+          1605
           -
-          1517
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          org.apache.spark.sql.Column.apply
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          org.apache.spark.sql.Column.apply(x)
-        </td>
-      </tr><tr>
-        <td>
-          34
-        </td>
-        <td>
-          329
-        </td>
-        <td>
-          1519
-          -
-          1528
+          1614
         </td>
         <td>
           Apply
@@ -1000,12 +982,36 @@
           35
         </td>
         <td>
+          553
+        </td>
+        <td>
+          1594
+          -
+          1603
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.Column.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.Column.apply(x)
+        </td>
+      </tr><tr>
+        <td>
+          36
+        </td>
+        <td>
           173
         </td>
         <td>
-          1550
+          1636
           -
-          1550
+          1636
         </td>
         <td>
           Select
@@ -1021,39 +1027,15 @@
         </td>
       </tr><tr>
         <td>
-          35
+          36
         </td>
         <td>
-          508
+          382
         </td>
         <td>
-          1550
+          1661
           -
-          1588
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply(function, scala.collection.Seq.apply[org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable](x, y, z), org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply$default$3)
-        </td>
-      </tr><tr>
-        <td>
-          35
-        </td>
-        <td>
-          380
-        </td>
-        <td>
-          1575
-          -
-          1587
+          1673
         </td>
         <td>
           Apply
@@ -1069,15 +1051,87 @@
         </td>
       </tr><tr>
         <td>
-          44
+          36
         </td>
         <td>
-          298
+          510
         </td>
         <td>
-          1805
+          1636
           -
-          1825
+          1674
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply(function, scala.collection.Seq.apply[org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable](x, y, z), org.apache.spark.sql.catalyst.expressions.LambdaFunction.apply$default$3)
+        </td>
+      </tr><tr>
+        <td>
+          39
+        </td>
+        <td>
+          299
+        </td>
+        <td>
+          1729
+          -
+          1743
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.Dataset.logicalPlan
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          ds.logicalPlan
+        </td>
+      </tr><tr>
+        <td>
+          42
+        </td>
+        <td>
+          187
+        </td>
+        <td>
+          1829
+          -
+          1870
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.Dataset.ofRows
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.Dataset.ofRows(sparkSession, logicalPlan)
+        </td>
+      </tr><tr>
+        <td>
+          50
+        </td>
+        <td>
+          555
+        </td>
+        <td>
+          2083
+          -
+          2103
         </td>
         <td>
           Apply
@@ -1093,63 +1147,15 @@
         </td>
       </tr><tr>
         <td>
-          47
-        </td>
-        <td>
-          355
-        </td>
-        <td>
-          1920
-          -
-          1921
-        </td>
-        <td>
-          Literal
-        </td>
-        <td>
-          &lt;nosymbol&gt;
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          &quot;&quot;
-        </td>
-      </tr><tr>
-        <td>
-          47
+          53
         </td>
         <td>
           116
         </td>
         <td>
-          1888
+          2163
           -
-          1919
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          java.util.concurrent.atomic.AtomicInteger.getAndIncrement
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          UnresolvedNamedLambdaVariableT.this.nextVarNameId.getAndIncrement()
-        </td>
-      </tr><tr>
-        <td>
-          47
-        </td>
-        <td>
-          186
-        </td>
-        <td>
-          1878
-          -
-          1879
+          2165
         </td>
         <td>
           Literal
@@ -1161,19 +1167,19 @@
           
         </td>
         <td style="background: #F0ADAD">
-          &quot;&quot;
+          &quot;_&quot;
         </td>
       </tr><tr>
         <td>
-          47
+          53
         </td>
         <td>
-          6
+          175
         </td>
         <td>
-          1876
+          2154
           -
-          1921
+          2199
         </td>
         <td>
           Apply
@@ -1189,15 +1195,39 @@
         </td>
       </tr><tr>
         <td>
-          47
+          53
         </td>
         <td>
-          553
+          368
         </td>
         <td>
-          1885
+          2166
           -
-          1887
+          2197
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          java.util.concurrent.atomic.AtomicInteger.getAndIncrement
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          UnresolvedNamedLambdaVariableT.this.nextVarNameId.getAndIncrement()
+        </td>
+      </tr><tr>
+        <td>
+          53
+        </td>
+        <td>
+          356
+        </td>
+        <td>
+          2156
+          -
+          2157
         </td>
         <td>
           Literal
@@ -1209,7 +1239,31 @@
           
         </td>
         <td style="background: #F0ADAD">
-          &quot;_&quot;
+          &quot;&quot;
+        </td>
+      </tr><tr>
+        <td>
+          53
+        </td>
+        <td>
+          6
+        </td>
+        <td>
+          2198
+          -
+          2199
+        </td>
+        <td>
+          Literal
+        </td>
+        <td>
+          &lt;nosymbol&gt;
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          &quot;&quot;
         </td>
       </tr>
     </table>
