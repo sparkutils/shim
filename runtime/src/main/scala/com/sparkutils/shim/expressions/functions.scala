@@ -4,7 +4,8 @@ import org.apache.spark.sql
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.catalyst.expressions.{Coalesce, CreateNamedStruct, CreateStruct, Expression}
 
-import scala.annotation.nowarn
+// TODO add back in after dropping 2.4 / 2.11
+// import scala.annotation.nowarn
 
 /*
  * Collection of shims on really stable interfaces for functional expressions
@@ -22,19 +23,14 @@ object Coalesce1 {
 // be removed, shim later..
 object functions {
 
-  @nowarn
   def sumDistinct(e: Column): Column = sql.functions.sumDistinct(e)
 
-  @nowarn
   def shiftRightUnsigned(e: Column, numBits: Int): Column = sql.functions.shiftRightUnsigned(e, numBits)
 
-  @nowarn
   def shiftRight(e: Column, numBits: Int): Column = sql.functions.shiftRight(e, numBits)
 
-  @nowarn
   def shiftLeft(e: Column, numBits: Int): Column = sql.functions.shiftLeft(e, numBits)
 
-  @nowarn
   def bitwiseNOT(e: Column): Column = sql.functions.bitwiseNOT(e)
 
 }
