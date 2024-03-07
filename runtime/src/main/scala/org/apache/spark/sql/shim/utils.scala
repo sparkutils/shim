@@ -2,7 +2,8 @@ package org.apache.spark.sql.shim
 
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.expressions.{LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
-import org.apache.spark.sql.{Column, DataFrame}
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+import org.apache.spark.sql.{Column, DataFrame, Dataset, SparkSession}
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -34,6 +35,11 @@ object utils {
     val function = f(Column(x), Column(y), Column(z)).expr
     LambdaFunction(function, Seq(x, y, z))
   }
+
+  def logicalPlan(ds: Dataset[_]): LogicalPlan = ds.logicalPlan
+
+  def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
+    Dataset.ofRows(sparkSession, logicalPlan)
 
 }
 
