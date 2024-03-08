@@ -1,0 +1,823 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title>Shim Runtime 0.0.1-RC1 API  - com.sparkutils.shim.expressions</title>
+          <meta name="description" content="Shim Runtime 0.0.1 - RC1 API - com.sparkutils.shim.expressions" />
+          <meta name="keywords" content="Shim Runtime 0.0.1 RC1 API com.sparkutils.shim.expressions" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      
+      <link href="../../../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.min.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../../../lib/index.js"></script>
+      <script type="text/javascript" src="../../../../index.js"></script>
+      <script type="text/javascript" src="../../../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title">Shim Runtime 0.0.1-RC1 API<span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="../../../../index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.com" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="com"></a><a id="com:com"></a>
+      <span class="permalink">
+      <a href="../../../../com/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../index.html"><span class="name">com</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="com.sparkutils" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sparkutils"></a><a id="sparkutils:sparkutils"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html"><span class="name">sparkutils</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="com">com</a></dd></dl></div>
+    </li><li name="com.sparkutils.shim" visbl="pub" class="indented3 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="shim"></a><a id="shim:shim"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="A collection of functions with possibly varying behaviour across Spark versions." href="../index.html"><span class="name">shim</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">A collection of functions with possibly varying behaviour across Spark versions.</p><div class="fullcomment"><div class="comment cmt"><p>A collection of functions with possibly varying behaviour across Spark versions.  Should actual implementations fracture they will be implemented as part of ShimUtils but the interface will remain to proxy the calls.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.sparkutils">sparkutils</a></dd></dl></div>
+    </li><li name="com.sparkutils.shim.expressions" visbl="pub" class="indented4 current" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="expressions"></a><a id="expressions:expressions"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">expressions</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.sparkutils.shim">shim</a></dd></dl></div>
+    </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="Alias2$.html" title=""></a>
+                        <a href="Alias2$.html" title="">Alias2</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="And2$.html" title=""></a>
+                        <a href="And2$.html" title="">And2</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="Cast2$.html" title=""></a>
+                        <a href="Cast2$.html" title="">Cast2</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="Cast3$.html" title=""></a>
+                        <a href="Cast3$.html" title="">Cast3</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="Cast4$.html" title=""></a>
+                        <a href="Cast4$.html" title="">Cast4</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="Coalesce1$.html" title=""></a>
+                        <a href="Coalesce1$.html" title="">Coalesce1</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="CreateNamedStruct1$.html" title=""></a>
+                        <a href="CreateNamedStruct1$.html" title="">CreateNamedStruct1</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="CreateStruct1$.html" title=""></a>
+                        <a href="CreateStruct1$.html" title="">CreateStruct1</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="EqualNullSafe2$.html" title=""></a>
+                        <a href="EqualNullSafe2$.html" title="">EqualNullSafe2</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="EqualTo2$.html" title=""></a>
+                        <a href="EqualTo2$.html" title="">EqualTo2</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="ExternalMapToCatalyst7$.html" title=""></a>
+                        <a href="ExternalMapToCatalyst7$.html" title="">ExternalMapToCatalyst7</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="trait" href="FoldableUnevaluable.html" title="2.4 and 3.0 version doesn't have foldable as false so the optimiser tries to fold, we need Unevaluable for 14.4"></a>
+                        <a href="FoldableUnevaluable.html" title="2.4 and 3.0 version doesn't have foldable as false so the optimiser tries to fold, we need Unevaluable for 14.4">FoldableUnevaluable</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="GetStructField3$.html" title=""></a>
+                        <a href="GetStructField3$.html" title="">GetStructField3</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="trait" href="HigherOrderFunctionLike.html" title=""></a>
+                        <a href="HigherOrderFunctionLike.html" title="">HigherOrderFunctionLike</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="IsNotNull1$.html" title=""></a>
+                        <a href="IsNotNull1$.html" title="">IsNotNull1</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="IsNull1$.html" title=""></a>
+                        <a href="IsNull1$.html" title="">IsNull1</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="MapGroups4$.html" title=""></a>
+                        <a href="MapGroups4$.html" title="">MapGroups4</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="MapGroups5$.html" title=""></a>
+                        <a href="MapGroups5$.html" title="">MapGroups5</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="MapObjects5$.html" title=""></a>
+                        <a href="MapObjects5$.html" title="">MapObjects5</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="Names$.html" title="Hides differences in name usage"></a>
+                        <a href="Names$.html" title="Hides differences in name usage">Names</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="Not1$.html" title=""></a>
+                        <a href="Not1$.html" title="">Not1</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="Or2$.html" title=""></a>
+                        <a href="Or2$.html" title="">Or2</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="trait" href="PredicateHelperPlus.html" title="Wraps PredicateHelper, 2.4 doesn't have the findExpression function and it's needed for joins on 3.3"></a>
+                        <a href="PredicateHelperPlus.html" title="Wraps PredicateHelper, 2.4 doesn't have the findExpression function and it's needed for joins on 3.3">PredicateHelperPlus</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="trait" href="StatefulLike.html" title=""></a>
+                        <a href="StatefulLike.html" title="">StatefulLike</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="UnresolvedFunction4$.html" title=""></a>
+                        <a href="UnresolvedFunction4$.html" title="">UnresolvedFunction4</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="UnresolvedFunction5$.html" title="Identifier is always a String (2.4 and 3 have a type)"></a>
+                        <a href="UnresolvedFunction5$.html" title="Identifier is always a String (2.4 and 3 have a type)">UnresolvedFunction5</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="UnwrapOption2$.html" title=""></a>
+                        <a href="UnwrapOption2$.html" title="">UnwrapOption2</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="WrapOption2$.html" title=""></a>
+                        <a href="WrapOption2$.html" title="">WrapOption2</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="functions$.html" title=""></a>
+                        <a href="functions$.html" title="">functions</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="package value">
+      <div id="definition">
+        <div class="big-circle package">p</div>
+        <p id="owner"><a href="../../../index.html" class="extype" name="com">com</a>.<a href="../../index.html" class="extype" name="com.sparkutils">sparkutils</a>.<a href="../index.html" class="extype" name="com.sparkutils.shim">shim</a></p>
+        <h1>expressions<span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">expressions</span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              
+            </ol>
+          </div>
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.sparkutils.shim.expressions.FoldableUnevaluable" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FoldableUnevaluableextendsExpressionwithUnevaluable"></a><a id="FoldableUnevaluable:FoldableUnevaluable"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/FoldableUnevaluable.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="2.4 and 3.0 version doesn't have foldable as false so the optimiser tries to fold, we need Unevaluable for 14.4" href="FoldableUnevaluable.html"><span class="name">FoldableUnevaluable</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span> with <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Unevaluable">Unevaluable</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">2.4 and 3.0 version doesn't have foldable as false so the optimiser tries to fold, we need Unevaluable for 14.4
+</p>
+    </li><li name="com.sparkutils.shim.expressions.HigherOrderFunctionLike" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HigherOrderFunctionLikeextendsExpressionwithHigherOrderFunction"></a><a id="HigherOrderFunctionLike:HigherOrderFunctionLike"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/HigherOrderFunctionLike.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="HigherOrderFunctionLike.html"><span class="name">HigherOrderFunctionLike</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span> with <span class="extype" name="org.apache.spark.sql.catalyst.expressions.HigherOrderFunction">HigherOrderFunction</span></span>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.PredicateHelperPlus" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="PredicateHelperPlusextendsPredicateHelper"></a><a id="PredicateHelperPlus:PredicateHelperPlus"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/PredicateHelperPlus.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Wraps PredicateHelper, 2.4 doesn't have the findExpression function and it's needed for joins on 3.3" href="PredicateHelperPlus.html"><span class="name">PredicateHelperPlus</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.sql.catalyst.expressions.PredicateHelper">PredicateHelper</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Wraps PredicateHelper, 2.4 doesn't have the findExpression function and it's needed for joins on 3.3
+</p>
+    </li><li name="com.sparkutils.shim.expressions.StatefulLike" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StatefulLikeextendsExpressionwithNondeterministic"></a><a id="StatefulLike:StatefulLike"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/StatefulLike.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="StatefulLike.html"><span class="name">StatefulLike</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span> with <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Nondeterministic">Nondeterministic</span></span>
+      </span>
+      
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="com.sparkutils.shim.expressions.Alias2" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Alias2"></a><a id="Alias2:Alias2"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/Alias2$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Alias2$.html"><span class="name">Alias2</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.And2" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="And2"></a><a id="And2:And2"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/And2$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="And2$.html"><span class="name">And2</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.Cast2" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cast2"></a><a id="Cast2:Cast2"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/Cast2$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Cast2$.html"><span class="name">Cast2</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.Cast3" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cast3"></a><a id="Cast3:Cast3"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/Cast3$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Cast3$.html"><span class="name">Cast3</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.Cast4" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cast4"></a><a id="Cast4:Cast4"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/Cast4$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Cast4$.html"><span class="name">Cast4</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.Coalesce1" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Coalesce1"></a><a id="Coalesce1:Coalesce1"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/Coalesce1$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Coalesce1$.html"><span class="name">Coalesce1</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.CreateNamedStruct1" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CreateNamedStruct1"></a><a id="CreateNamedStruct1:CreateNamedStruct1"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/CreateNamedStruct1$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="CreateNamedStruct1$.html"><span class="name">CreateNamedStruct1</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.CreateStruct1" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CreateStruct1"></a><a id="CreateStruct1:CreateStruct1"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/CreateStruct1$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="CreateStruct1$.html"><span class="name">CreateStruct1</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.EqualNullSafe2" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EqualNullSafe2"></a><a id="EqualNullSafe2:EqualNullSafe2"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/EqualNullSafe2$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="EqualNullSafe2$.html"><span class="name">EqualNullSafe2</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.EqualTo2" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EqualTo2"></a><a id="EqualTo2:EqualTo2"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/EqualTo2$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="EqualTo2$.html"><span class="name">EqualTo2</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.ExternalMapToCatalyst7" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExternalMapToCatalyst7"></a><a id="ExternalMapToCatalyst7:ExternalMapToCatalyst7"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/ExternalMapToCatalyst7$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="ExternalMapToCatalyst7$.html"><span class="name">ExternalMapToCatalyst7</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.GetStructField3" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GetStructField3"></a><a id="GetStructField3:GetStructField3"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/GetStructField3$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="GetStructField3$.html"><span class="name">GetStructField3</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.IsNotNull1" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IsNotNull1"></a><a id="IsNotNull1:IsNotNull1"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/IsNotNull1$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="IsNotNull1$.html"><span class="name">IsNotNull1</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.IsNull1" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IsNull1"></a><a id="IsNull1:IsNull1"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/IsNull1$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="IsNull1$.html"><span class="name">IsNull1</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.MapGroups4" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MapGroups4"></a><a id="MapGroups4:MapGroups4"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/MapGroups4$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="MapGroups4$.html"><span class="name">MapGroups4</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.MapGroups5" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MapGroups5"></a><a id="MapGroups5:MapGroups5"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/MapGroups5$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="MapGroups5$.html"><span class="name">MapGroups5</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.MapObjects5" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MapObjects5"></a><a id="MapObjects5:MapObjects5"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/MapObjects5$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="MapObjects5$.html"><span class="name">MapObjects5</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.Names" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Names"></a><a id="Names:Names"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/Names$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="Hides differences in name usage" href="Names$.html"><span class="name">Names</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Hides differences in name usage
+</p>
+    </li><li name="com.sparkutils.shim.expressions.Not1" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Not1"></a><a id="Not1:Not1"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/Not1$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Not1$.html"><span class="name">Not1</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.Or2" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Or2"></a><a id="Or2:Or2"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/Or2$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Or2$.html"><span class="name">Or2</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.UnresolvedFunction4" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnresolvedFunction4"></a><a id="UnresolvedFunction4:UnresolvedFunction4"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/UnresolvedFunction4$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="UnresolvedFunction4$.html"><span class="name">UnresolvedFunction4</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.UnresolvedFunction5" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnresolvedFunction5"></a><a id="UnresolvedFunction5:UnresolvedFunction5"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/UnresolvedFunction5$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="Identifier is always a String (2.4 and 3 have a type)" href="UnresolvedFunction5$.html"><span class="name">UnresolvedFunction5</span></a>
+      </span>
+      
+      <p class="shortcomment cmt">Identifier is always a String (2.4 and 3 have a type)
+</p>
+    </li><li name="com.sparkutils.shim.expressions.UnwrapOption2" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnwrapOption2"></a><a id="UnwrapOption2:UnwrapOption2"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/UnwrapOption2$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="UnwrapOption2$.html"><span class="name">UnwrapOption2</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.WrapOption2" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WrapOption2"></a><a id="WrapOption2:WrapOption2"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/WrapOption2$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="WrapOption2$.html"><span class="name">WrapOption2</span></a>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim.expressions.functions" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="functions"></a><a id="functions:functions"></a>
+      <span class="permalink">
+      <a href="../../../../com/sparkutils/shim/expressions/functions$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="functions$.html"><span class="name">functions</span></a>
+      </span>
+      
+      
+    </li>
+              </ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>
