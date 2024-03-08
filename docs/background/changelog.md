@@ -1,4 +1,4 @@
-### 0.0.1-RC1 <small>8th March, 2024</small>
+### 0.0.1-RC2 <small>8th March, 2024</small>
 
 #1 - Quality support
 

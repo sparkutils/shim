@@ -1,7 +1,6 @@
 package org.apache.spark.sql.shim
 
 import com.sparkutils.shim.ShowParams
-import org.apache.spark.ml.linalg.{MatrixUDT, VectorUDT}
 import org.apache.spark.sql.catalyst.expressions.{LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.{Column, DataFrame, Dataset, SparkSession}
@@ -43,11 +42,15 @@ object utils {
   def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
     Dataset.ofRows(sparkSession, logicalPlan)
 
+}
+
+object mlUtils {
+
   // because org.apache.spark.ml.linalg.VectorUDT is private[spark]
-  val vectorUdt: VectorUDT = new org.apache.spark.ml.linalg.VectorUDT
+  val vectorUdt = new org.apache.spark.ml.linalg.VectorUDT
 
   // because org.apache.spark.ml.linalg.MatrixUDT is private[spark]
-  val matrixUdt: MatrixUDT = new org.apache.spark.ml.linalg.MatrixUDT
+  val matrixUdt = new org.apache.spark.ml.linalg.MatrixUDT
 
 }
 
