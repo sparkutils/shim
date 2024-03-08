@@ -109,7 +109,7 @@
           26
         </td>
         <td>
-          559
+          561
         </td>
         <td>
           1215
@@ -133,7 +133,7 @@
           27
         </td>
         <td>
-          459
+          460
         </td>
         <td>
           1310
@@ -157,7 +157,7 @@
           27
         </td>
         <td>
-          405
+          406
         </td>
         <td>
           1332
@@ -232,7 +232,7 @@
           28
         </td>
         <td>
-          387
+          388
         </td>
         <td>
           1369
@@ -328,7 +328,7 @@
           31
         </td>
         <td>
-          551
+          553
         </td>
         <td>
           1439
@@ -346,30 +346,6 @@
         </td>
         <td style="background: #F0ADAD">
           false
-        </td>
-      </tr><tr>
-        <td>
-          42
-        </td>
-        <td>
-          448
-        </td>
-        <td>
-          1930
-          -
-          1940
-        </td>
-        <td>
-          Apply
-        </td>
-        <td>
-          com.sparkutils.shim.toCatalyst
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          `package`.this.toCatalyst(any)
         </td>
       </tr><tr>
         <td>
@@ -402,7 +378,7 @@
           42
         </td>
         <td>
-          362
+          363
         </td>
         <td>
           1897
@@ -428,6 +404,30 @@
           42
         </td>
         <td>
+          449
+        </td>
+        <td>
+          1930
+          -
+          1940
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.toCatalyst
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          `package`.this.toCatalyst(any)
+        </td>
+      </tr><tr>
+        <td>
+          42
+        </td>
+        <td>
           224
         </td>
         <td>
@@ -446,6 +446,32 @@
         </td>
         <td style="background: #F0ADAD">
           collection.this.Seq.canBuildFrom[Any]
+        </td>
+      </tr><tr>
+        <td>
+          43
+        </td>
+        <td>
+          408
+        </td>
+        <td>
+          1992
+          -
+          2021
+        </td>
+        <td>
+          ApplyToImplicitArgs
+        </td>
+        <td>
+          scala.collection.TraversableOnce.toArray
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          seq.map[Any, Seq[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(collection.this.Seq.canBuildFrom[Any]).toArray[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))
         </td>
       </tr><tr>
         <td>
@@ -523,32 +549,6 @@
         </td>
       </tr><tr>
         <td>
-          43
-        </td>
-        <td>
-          407
-        </td>
-        <td>
-          1992
-          -
-          2021
-        </td>
-        <td>
-          ApplyToImplicitArgs
-        </td>
-        <td>
-          scala.collection.TraversableOnce.toArray
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          seq.map[Any, Seq[Any]]({
-  ((any: Any) =&gt; `package`.this.toCatalyst(any))
-})(collection.this.Seq.canBuildFrom[Any]).toArray[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))
-        </td>
-      </tr><tr>
-        <td>
           44
         </td>
         <td>
@@ -572,30 +572,6 @@
           org.apache.spark.sql.catalyst.InternalRow.apply((r.toSeq.map[Any, Seq[Any]]({
   ((any: Any) =&gt; `package`.this.toCatalyst(any))
 })(collection.this.Seq.canBuildFrom[Any]): _*))
-        </td>
-      </tr><tr>
-        <td>
-          44
-        </td>
-        <td>
-          337
-        </td>
-        <td>
-          2086
-          -
-          2086
-        </td>
-        <td>
-          TypeApply
-        </td>
-        <td>
-          scala.collection.Seq.canBuildFrom
-        </td>
-        <td>
-          
-        </td>
-        <td style="background: #F0ADAD">
-          collection.this.Seq.canBuildFrom[Any]
         </td>
       </tr><tr>
         <td>
@@ -628,7 +604,7 @@
           44
         </td>
         <td>
-          543
+          545
         </td>
         <td>
           2087
@@ -649,36 +625,34 @@
         </td>
       </tr><tr>
         <td>
-          45
+          44
         </td>
         <td>
-          397
+          338
         </td>
         <td>
-          2132
+          2086
           -
-          2175
+          2086
         </td>
         <td>
-          Apply
+          TypeApply
         </td>
         <td>
-          org.apache.spark.sql.catalyst.util.GenericArrayData.&lt;init&gt;
+          scala.collection.Seq.canBuildFrom
         </td>
         <td>
           
         </td>
         <td style="background: #F0ADAD">
-          new org.apache.spark.sql.catalyst.util.GenericArrayData(scala.Predef.genericArrayOps[_](arr).map[Any, Array[Any]]({
-  ((any: Any) =&gt; `package`.this.toCatalyst(any))
-})(scala.this.Array.canBuildFrom[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))))
+          collection.this.Seq.canBuildFrom[Any]
         </td>
       </tr><tr>
         <td>
           45
         </td>
         <td>
-          366
+          367
         </td>
         <td>
           2161
@@ -749,10 +723,36 @@
         </td>
       </tr><tr>
         <td>
+          45
+        </td>
+        <td>
+          398
+        </td>
+        <td>
+          2132
+          -
+          2175
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.util.GenericArrayData.&lt;init&gt;
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          new org.apache.spark.sql.catalyst.util.GenericArrayData(scala.Predef.genericArrayOps[_](arr).map[Any, Array[Any]]({
+  ((any: Any) =&gt; `package`.this.toCatalyst(any))
+})(scala.this.Array.canBuildFrom[Any]((ClassTag.Any: scala.reflect.ClassTag[Any]))))
+        </td>
+      </tr><tr>
+        <td>
           47
         </td>
         <td>
-          332
+          333
         </td>
         <td>
           2209
@@ -800,7 +800,7 @@
           50
         </td>
         <td>
-          545
+          547
         </td>
         <td>
           2304
@@ -872,7 +872,7 @@
           66
         </td>
         <td>
-          393
+          394
         </td>
         <td>
           2776
