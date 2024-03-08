@@ -1,6 +1,7 @@
 package org.apache.spark.sql.shim
 
 import com.sparkutils.shim.ShowParams
+import org.apache.spark.ml.linalg.{MatrixUDT, VectorUDT}
 import org.apache.spark.sql.catalyst.expressions.{LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.{Column, DataFrame, Dataset, SparkSession}
@@ -36,10 +37,17 @@ object utils {
     LambdaFunction(function, Seq(x, y, z))
   }
 
+  // below support moving FramelessInternals to frameless
   def logicalPlan(ds: Dataset[_]): LogicalPlan = ds.logicalPlan
 
   def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
     Dataset.ofRows(sparkSession, logicalPlan)
+
+  // because org.apache.spark.ml.linalg.VectorUDT is private[spark]
+  val vectorUdt: VectorUDT = new org.apache.spark.ml.linalg.VectorUDT
+
+  // because org.apache.spark.ml.linalg.MatrixUDT is private[spark]
+  val matrixUdt: MatrixUDT = new org.apache.spark.ml.linalg.MatrixUDT
 
 }
 
