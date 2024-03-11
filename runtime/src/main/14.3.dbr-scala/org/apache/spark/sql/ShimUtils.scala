@@ -8,13 +8,14 @@ import org.apache.spark.sql.catalyst.expressions.{Add, BinaryOperator, BoundRefe
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.util.TypeUtils
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
-import org.apache.spark.sql.execution.SparkSqlParser
+import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.parser.ParseException
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 import scala.reflect.ClassTag
 
@@ -225,4 +226,7 @@ object ShimUtils {
   // currently not Spark 4 as of 1.3.24
   def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
     new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""" )
+
+  def executePlan(ds: Dataset[_], plan: LogicalPlan): QueryExecution =
+    ds.sparkSession.sessionState.executePlan(plan)
 }
