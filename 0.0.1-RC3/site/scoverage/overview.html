@@ -1,0 +1,2304 @@
+<html>
+      <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+      <title id="title">Scoverage Code Coverage</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/css/theme.default.min.css" type="text/css"/><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/js/jquery.tablesorter.min.js"></script><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/><script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script><script type="text/javascript">
+        $(document).ready(function() {$(".tablesorter").tablesorter();});
+      </script>
+      <style>
+        .meter {
+        height: 14px;
+        position: relative;
+        background: #BB2020;
+}
+
+.meter span {
+	display: block;
+	height: 100%;
+	background-color: rgb(43,194,83);
+	background-image: -webkit-gradient(
+	  linear,
+	  left bottom,
+	  left top,
+	  color-stop(0, rgb(43,194,83)),
+	  color-stop(1, rgb(84,240,84))
+	 );
+	background-image: -webkit-linear-gradient(
+	  center bottom,
+	  rgb(43,194,83) 37%,
+	  rgb(84,240,84) 69%
+	 );
+	background-image: -moz-linear-gradient(
+	  center bottom,
+	  rgb(43,194,83) 37%,
+	  rgb(84,240,84) 69%
+	 );
+	background-image: -ms-linear-gradient(
+	  center bottom,
+	  rgb(43,194,83) 37%,
+	  rgb(84,240,84) 69%
+	 );
+	background-image: -o-linear-gradient(
+	  center bottom,
+	  rgb(43,194,83) 37%,
+	  rgb(84,240,84) 69%
+	 );
+	-webkit-box-shadow:
+	  inset 0 2px 9px  rgba(255,255,255,0.3),
+	  inset 0 -2px 6px rgba(0,0,0,0.4);
+	-moz-box-shadow:
+	  inset 0 2px 9px  rgba(255,255,255,0.3),
+	  inset 0 -2px 6px rgba(0,0,0,0.4);
+	position: relative;
+	overflow: hidden;
+}
+      </style>
+    </head><body style="font-family: monospace;">
+      <div class="alert alert-info">
+        <b>
+          SCoverage
+        </b>
+        generated at
+        Mon Mar 11 18:54:17 UTC 2024
+      </div>
+      <div class="overview">
+        <div class="stats">
+          <table class="table">
+      <tr>
+        <td>
+          Lines of code:
+        </td>
+        <td>
+          1389
+        </td>
+        <td>
+          Files:
+        </td>
+        <td>
+          21
+        </td>
+        <td>
+          Classes:
+        </td>
+        <td>
+          46
+        </td>
+        <td>
+          Methods:
+        </td>
+        <td>
+          109
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Lines per file:
+        </td>
+        <td>
+          66.14
+        </td>
+        <td>
+          Packages:
+        </td>
+        <td>
+          5
+        </td>
+        <td>
+          Classes per package:
+        </td>
+        <td>
+          9.20
+        </td>
+        <td>
+          Methods per class:
+        </td>
+        <td>
+          2.37
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Total statements:
+        </td>
+        <td>
+          572
+        </td>
+        <td>
+          Invoked statements:
+        </td>
+        <td>
+          0
+        </td>
+        <td>
+          Total branches:
+        </td>
+        <td>
+          30
+        </td>
+        <td>
+          Invoked branches:
+        </td>
+        <td>
+          0
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Ignored statements:
+        </td>
+        <td>
+          0
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          Statement coverage:
+        </td>
+        <td>
+          0.00
+          %
+        </td>
+        <td colspan="2">
+          <div class="meter">
+            <span style="width: 0%"></span>
+          </div>
+        </td>
+        <td>
+          Branch coverage:
+        </td>
+        <td>
+          0.00
+          %
+        </td>
+        <td colspan="2">
+          <div class="meter">
+            <span style="width: 0%"></span>
+          </div>
+        </td>
+      </tr>
+    </table>
+        </div>
+        <div>
+          <table class="tablesorter table table-striped" style="font-size:13px">
+      <thead>
+        <tr>
+          <th>
+            Class
+          </th>
+          <th>
+            Source file
+          </th>
+          <th>
+            Lines
+          </th>
+          <th>
+            Methods
+          </th>
+          <th>
+            Statements
+          </th>
+          <th>
+            Invoked
+          </th>
+          <th>
+            Coverage
+          </th>
+          <th>
+          </th>
+          <th>
+            Branches
+          </th>
+          <th>
+            Invoked
+          </th>
+          <th>
+            Coverage
+          </th>
+          <th>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/named.scala.html">
+          Alias2
+        </a>
+      </td>
+      <td>
+        named.scala
+      </td>
+      <td>
+        15
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/logical.scala.html">
+          And2
+        </a>
+      </td>
+      <td>
+        logical.scala
+      </td>
+      <td>
+        14
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/Cast.scala.html">
+          Cast2
+        </a>
+      </td>
+      <td>
+        Cast.scala
+      </td>
+      <td>
+        24
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        6
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/Cast.scala.html">
+          Cast3
+        </a>
+      </td>
+      <td>
+        Cast.scala
+      </td>
+      <td>
+        44
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        5
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/Cast.scala.html">
+          Cast4
+        </a>
+      </td>
+      <td>
+        Cast.scala
+      </td>
+      <td>
+        64
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        5
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/functions.scala.html">
+          Coalesce1
+        </a>
+      </td>
+      <td>
+        functions.scala
+      </td>
+      <td>
+        19
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/CreateNamedStruct.scala.html">
+          CreateNamedStruct1
+        </a>
+      </td>
+      <td>
+        CreateNamedStruct.scala
+      </td>
+      <td>
+        23
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        3
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/functions.scala.html">
+          CreateStruct1
+        </a>
+      </td>
+      <td>
+        functions.scala
+      </td>
+      <td>
+        40
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/logical.scala.html">
+          EqualNullSafe2
+        </a>
+      </td>
+      <td>
+        logical.scala
+      </td>
+      <td>
+        30
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/logical.scala.html">
+          EqualTo2
+        </a>
+      </td>
+      <td>
+        logical.scala
+      </td>
+      <td>
+        38
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/ExternalMapToCatalyst.scala.html">
+          ExternalMapToCatalyst7
+        </a>
+      </td>
+      <td>
+        ExternalMapToCatalyst.scala
+      </td>
+      <td>
+        17
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/GetStructField.scala.html">
+          GetStructField3
+        </a>
+      </td>
+      <td>
+        GetStructField.scala
+      </td>
+      <td>
+        22
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        4
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/logical.scala.html">
+          IsNotNull1
+        </a>
+      </td>
+      <td>
+        logical.scala
+      </td>
+      <td>
+        62
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/logical.scala.html">
+          IsNull1
+        </a>
+      </td>
+      <td>
+        logical.scala
+      </td>
+      <td>
+        54
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/MapGroups.scala.html">
+          MapGroups4
+        </a>
+      </td>
+      <td>
+        MapGroups.scala
+      </td>
+      <td>
+        14
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/MapGroups.scala.html">
+          MapGroups5
+        </a>
+      </td>
+      <td>
+        MapGroups.scala
+      </td>
+      <td>
+        31
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/MapObjects.scala.html">
+          MapObjects5
+        </a>
+      </td>
+      <td>
+        MapObjects.scala
+      </td>
+      <td>
+        26
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/Names.scala.html">
+          Names
+        </a>
+      </td>
+      <td>
+        Names.scala
+      </td>
+      <td>
+        24
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        10
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/logical.scala.html">
+          Not1
+        </a>
+      </td>
+      <td>
+        logical.scala
+      </td>
+      <td>
+        46
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/logical.scala.html">
+          Or2
+        </a>
+      </td>
+      <td>
+        logical.scala
+      </td>
+      <td>
+        22
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/PredicateHelperPlus.scala.html">
+          PredicateHelperPlus
+        </a>
+      </td>
+      <td>
+        PredicateHelperPlus.scala
+      </td>
+      <td>
+        24
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        8
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/UnresolvedFunction.scala.html">
+          UnresolvedFunction4
+        </a>
+      </td>
+      <td>
+        UnresolvedFunction.scala
+      </td>
+      <td>
+        58
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        8
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/UnresolvedFunction.scala.html">
+          UnresolvedFunction5
+        </a>
+      </td>
+      <td>
+        UnresolvedFunction.scala
+      </td>
+      <td>
+        32
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        8
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/UnwrapOption.scala.html">
+          UnwrapOption2
+        </a>
+      </td>
+      <td>
+        UnwrapOption.scala
+      </td>
+      <td>
+        18
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        4
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/WrapOption.scala.html">
+          WrapOption2
+        </a>
+      </td>
+      <td>
+        WrapOption.scala
+      </td>
+      <td>
+        17
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        4
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/expressions/functions.scala.html">
+          functions
+        </a>
+      </td>
+      <td>
+        functions.scala
+      </td>
+      <td>
+        34
+      </td>
+      <td>
+        5
+      </td>
+      <td>
+        5
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="com/sparkutils/shim/package.scala.html">
+          package
+        </a>
+      </td>
+      <td>
+        package.scala
+      </td>
+      <td>
+        68
+      </td>
+      <td>
+        4
+      </td>
+      <td>
+        34
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/Invoke.scala.html">
+          Invoke5
+        </a>
+      </td>
+      <td>
+        Invoke.scala
+      </td>
+      <td>
+        34
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        7
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/Invoke.scala.html">
+          Invoke6
+        </a>
+      </td>
+      <td>
+        Invoke.scala
+      </td>
+      <td>
+        52
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        6
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/Invoke.scala.html">
+          Invoke7
+        </a>
+      </td>
+      <td>
+        Invoke.scala
+      </td>
+      <td>
+        71
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        5
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/Invoke.scala.html">
+          Invoke8
+        </a>
+      </td>
+      <td>
+        Invoke.scala
+      </td>
+      <td>
+        91
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        4
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/NewInstance.scala.html">
+          NewInstance4
+        </a>
+      </td>
+      <td>
+        NewInstance.scala
+      </td>
+      <td>
+        53
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        6
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/NewInstance.scala.html">
+          NewInstance5
+        </a>
+      </td>
+      <td>
+        NewInstance.scala
+      </td>
+      <td>
+        81
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        5
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/NewInstance.scala.html">
+          NewInstance6
+        </a>
+      </td>
+      <td>
+        NewInstance.scala
+      </td>
+      <td>
+        108
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        4
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/StaticInvoke.scala.html">
+          StaticInvoke4
+        </a>
+      </td>
+      <td>
+        StaticInvoke.scala
+      </td>
+      <td>
+        40
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        8
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/StaticInvoke.scala.html">
+          StaticInvoke5
+        </a>
+      </td>
+      <td>
+        StaticInvoke.scala
+      </td>
+      <td>
+        67
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        7
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/StaticInvoke.scala.html">
+          StaticInvoke6
+        </a>
+      </td>
+      <td>
+        StaticInvoke.scala
+      </td>
+      <td>
+        94
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        6
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/StaticInvoke.scala.html">
+          StaticInvoke7
+        </a>
+      </td>
+      <td>
+        StaticInvoke.scala
+      </td>
+      <td>
+        121
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        5
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/StaticInvoke.scala.html">
+          StaticInvoke8
+        </a>
+      </td>
+      <td>
+        StaticInvoke.scala
+      </td>
+      <td>
+        148
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        4
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/utils.scala.html">
+          UnresolvedNamedLambdaVariableT
+        </a>
+      </td>
+      <td>
+        utils.scala
+      </td>
+      <td>
+        64
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        6
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/expressions/InputTypeChecks.scala.html">
+          InputTypeChecks
+        </a>
+      </td>
+      <td>
+        InputTypeChecks.scala
+      </td>
+      <td>
+        19
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        7
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/hash/Hash.scala.html">
+          HashLongsExpression
+        </a>
+      </td>
+      <td>
+        Hash.scala
+      </td>
+      <td>
+        337
+      </td>
+      <td>
+        22
+      </td>
+      <td>
+        216
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        12
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/hash/Hash.scala.html">
+          InterpretedHashLongsFunction
+        </a>
+      </td>
+      <td>
+        Hash.scala
+      </td>
+      <td>
+        450
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        83
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        10
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/hash/Hash.scala.html">
+          SafeUTF8
+        </a>
+      </td>
+      <td>
+        Hash.scala
+      </td>
+      <td>
+        357
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        21
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        4
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/utils.scala.html">
+          mlUtils
+        </a>
+      </td>
+      <td>
+        utils.scala
+      </td>
+      <td>
+        53
+      </td>
+      <td>
+        1
+      </td>
+      <td>
+        2
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr><tr>
+      <td>
+        <a href="org/apache/spark/sql/shim/utils.scala.html">
+          utils
+        </a>
+      </td>
+      <td>
+        utils.scala
+      </td>
+      <td>
+        43
+      </td>
+      <td>
+        5
+      </td>
+      <td>
+        43
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        0
+      </td>
+      <td>
+        <div class="meter">
+          <span style="width: 0%"></span>
+        </div>
+      </td>
+      <td>
+        0.00
+        %
+      </td>
+    </tr>
+      </tbody>
+    </table>
+        </div>
+      </div>
+    </body>
+    </html>

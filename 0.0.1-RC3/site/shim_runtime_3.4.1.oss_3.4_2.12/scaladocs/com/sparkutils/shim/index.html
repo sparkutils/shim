@@ -1,0 +1,348 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title>Shim Runtime 0.0.1-RC3 API  - com.sparkutils.shim</title>
+          <meta name="description" content="Shim Runtime 0.0.1 - RC3 API - com.sparkutils.shim" />
+          <meta name="keywords" content="Shim Runtime 0.0.1 RC3 API com.sparkutils.shim" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      
+      <link href="../../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.min.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../../lib/index.js"></script>
+      <script type="text/javascript" src="../../../index.js"></script>
+      <script type="text/javascript" src="../../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title">Shim Runtime 0.0.1-RC3 API<span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="../../../index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.com" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="com"></a><a id="com:com"></a>
+      <span class="permalink">
+      <a href="../../../com/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html"><span class="name">com</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="com.sparkutils" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sparkutils"></a><a id="sparkutils:sparkutils"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html"><span class="name">sparkutils</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com">com</a></dd></dl></div>
+    </li><li name="com.sparkutils.shim" visbl="pub" class="indented3 current" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="shim"></a><a id="shim:shim"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/shim/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">shim</span>
+      </span>
+      
+      <p class="shortcomment cmt">A collection of functions with possibly varying behaviour across Spark versions.</p><div class="fullcomment"><div class="comment cmt"><p>A collection of functions with possibly varying behaviour across Spark versions.  Should actual implementations fracture they will be implemented as part of ShimUtils but the interface will remain to proxy the calls.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.sparkutils">sparkutils</a></dd></dl></div>
+    </li><li name="com.sparkutils.shim.expressions" visbl="pub" class="indented4 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="expressions"></a><a id="expressions:expressions"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/shim/expressions/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="expressions/index.html"><span class="name">expressions</span></a>
+      </span>
+      
+      
+    </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="class" href="ShowParams.html" title="Paramters to pass into showString for debugging / validation"></a>
+                        <a href="ShowParams.html" title="Paramters to pass into showString for debugging / validation">ShowParams</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="package value">
+      <div id="definition">
+        <div class="big-circle package">p</div>
+        <p id="owner"><a href="../../index.html" class="extype" name="com">com</a>.<a href="../index.html" class="extype" name="com.sparkutils">sparkutils</a></p>
+        <h1>shim<span class="permalink">
+      <a href="../../../com/sparkutils/shim/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">shim</span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A collection of functions with possibly varying behaviour across Spark versions.  Should actual implementations fracture they will be implemented as part of ShimUtils but the interface will remain to proxy the calls.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="com.sparkutils.shim"><span>shim</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.sparkutils.shim.ShowParams" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ShowParamsextendsProductwithSerializable"></a><a id="ShowParams:ShowParams"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/shim/ShowParams.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="Paramters to pass into showString for debugging / validation" href="ShowParams.html"><span class="name">ShowParams</span></a><span class="params">(<span name="numRows">numRows: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1000</span></span>, <span name="truncate">truncate: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="vertical">vertical: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Paramters to pass into showString for debugging / validation</p><div class="fullcomment"><div class="comment cmt"><p>Paramters to pass into showString for debugging / validation</p></div><dl class="paramcmts block"><dt class="param">numRows</dt><dd class="cmt"><p>defaults to 1000</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="com.sparkutils.shim#deriveUnitLiteral" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="deriveUnitLiteral:org.apache.spark.sql.catalyst.expressions.Expression"></a><a id="deriveUnitLiteral:Expression"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/shim/index.html#deriveUnitLiteral:org.apache.spark.sql.catalyst.expressions.Expression" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deriveUnitLiteral</span><span class="result">: <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span></span>
+      </span>
+      
+      
+    </li><li name="com.sparkutils.shim#ifIsNull" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ifIsNull(dataType:org.apache.spark.sql.types.DataType,path:org.apache.spark.sql.catalyst.expressions.Expression,nonNullExpr:org.apache.spark.sql.catalyst.expressions.Expression):org.apache.spark.sql.catalyst.expressions.Expression"></a><a id="ifIsNull(DataType,Expression,Expression):Expression"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/shim/index.html#ifIsNull(dataType:org.apache.spark.sql.types.DataType,path:org.apache.spark.sql.catalyst.expressions.Expression,nonNullExpr:org.apache.spark.sql.catalyst.expressions.Expression):org.apache.spark.sql.catalyst.expressions.Expression" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ifIsNull</span><span class="params">(<span name="dataType">dataType: <span class="extype" name="org.apache.spark.sql.types.DataType">DataType</span></span>, <span name="path">path: <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span></span>, <span name="nonNullExpr">nonNullExpr: <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.catalyst.expressions.Expression">Expression</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">If the path is null then uses a null literal with dataType, if it's not null it uses the nonNullExpr</p>
+    </li><li name="com.sparkutils.shim#registerSessionPlan" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="registerSessionPlan(logicalPlan:org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan])(isPresentFilter:org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]=&gt;Boolean):Boolean"></a><a id="registerSessionPlan(Rule[LogicalPlan])((Rule[LogicalPlan])⇒Boolean):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/shim/index.html#registerSessionPlan(logicalPlan:org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan])(isPresentFilter:org.apache.spark.sql.catalyst.rules.Rule[org.apache.spark.sql.catalyst.plans.logical.LogicalPlan]=&gt;Boolean):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">registerSessionPlan</span><span class="params">(<span name="logicalPlan">logicalPlan: <span class="extype" name="org.apache.spark.sql.catalyst.rules.Rule">Rule</span>[<span class="extype" name="org.apache.spark.sql.catalyst.plans.logical.LogicalPlan">LogicalPlan</span>]</span>)</span><span class="params">(<span name="isPresentFilter">isPresentFilter: (<span class="extype" name="org.apache.spark.sql.catalyst.rules.Rule">Rule</span>[<span class="extype" name="org.apache.spark.sql.catalyst.plans.logical.LogicalPlan">LogicalPlan</span>]) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Registers a session only plan via experimental methods when isPresentFilter is not true</p><div class="fullcomment"><div class="comment cmt"><p>Registers a session only plan via experimental methods when isPresentFilter is not true</p></div><dl class="paramcmts block"><dt class="param">isPresentFilter</dt><dd class="cmt"><p>a filter that should return true when the plan is identical and it should not be added</p></dd><dt>returns</dt><dd class="cmt"><p>true if the plan has been added</p></dd></dl></div>
+    </li><li name="com.sparkutils.shim#toCatalyst" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toCatalyst(any:Any):Any"></a><a id="toCatalyst(Any):Any"></a>
+      <span class="permalink">
+      <a href="../../../com/sparkutils/shim/index.html#toCatalyst(any:Any):Any" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toCatalyst</span><span class="params">(<span name="any">any: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      
+      <p class="shortcomment cmt"> work around 2.13 issue / possibly 4 the encoder generates Seq -&gt; ArraySeq$ofRef for a DF with a Seq in it.</p><div class="fullcomment"><div class="comment cmt"><p> work around 2.13 issue / possibly 4 the encoder generates Seq -&gt; ArraySeq$ofRef for a DF with a Seq in it.
+ CatalystTypeConverters looks for immutable.Seq not collection.Seq, which is different in 2.13 so we need to check for it
+ RowEncoder is responsible for generating that and wrapped array disappears in 2.13
+</p></div></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>
