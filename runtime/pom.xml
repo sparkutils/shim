@@ -6,7 +6,7 @@
     <parent>
         <artifactId>shim_root_${dbrCompatVersion}${sparkCompatVersion}_${scalaCompatVersion}</artifactId>
         <groupId>com.sparkutils</groupId>
-        <version>0.0.1-RC3</version>
+        <version>0.0.1-RC4-SNAPSHOT</version>
     </parent>
     <version>${project.parent.version}</version>
     <name>Shim Runtime</name>

@@ -10,7 +10,14 @@ object MapGroups4 {
                                                  groupingAttributes: Seq[Attribute],
                                                  dataAttributes: Seq[Attribute],
                                                  child: LogicalPlan
-                                               ): LogicalPlan = SMapGroups(func, groupingAttributes, dataAttributes, child)
+                                               ): LogicalPlan =
+    SMapGroups(
+      func,
+      groupingAttributes,
+      dataAttributes,
+      Seq(), // #698 - no order given
+      child
+    )
 }
 
 object MapGroups5 {
@@ -25,6 +32,7 @@ object MapGroups5 {
       func,
       groupingAttributes,
       dataAttributes,
+      dataOrder,
       child
     )
 }
