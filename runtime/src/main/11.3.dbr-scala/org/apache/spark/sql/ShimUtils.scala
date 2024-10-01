@@ -3,7 +3,7 @@ package org.apache.spark.sql
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute, NamedExpression}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.util.TypeUtils
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, FunctionIdentifier}
@@ -258,4 +258,25 @@ object ShimUtils {
 
   def executePlan(ds: Dataset[_], plan: LogicalPlan): QueryExecution =
     ds.sparkSession.sessionState.executePlan(plan)
+
+  /**
+   * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides wrapping function
+   * @param expression
+   * @return
+   */
+  def column(expression: Expression): Column = new Column(expression)
+
+  /**
+   * 4 preview2 moves named to ExpressionUtils
+   * @param expression
+   * @return
+   */
+  def toNamed(col: Column): NamedExpression = col.named
+
+  /**
+   * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides unwrapping function
+   * @param expression
+   * @return
+   */
+  def expression(column: Column): Expression = column.expr
 }

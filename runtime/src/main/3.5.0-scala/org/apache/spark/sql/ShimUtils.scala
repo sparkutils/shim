@@ -5,7 +5,7 @@ import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdi
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
-import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If}
+import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
 import org.apache.spark.sql.catalyst.parser.ParseException
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.rules.Rule
@@ -198,4 +198,26 @@ object ShimUtils {
 
   def executePlan(ds: Dataset[_], plan: LogicalPlan): QueryExecution =
     ds.sparkSession.sessionState.executePlan(plan)
+
+  /**
+   * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides wrapping function
+   * @param expression
+   * @return
+   */
+  def column(expression: Expression): Column = new Column(expression)
+
+  /**
+   * 4 preview2 moves named to ExpressionUtils
+   * @param expression
+   * @return
+   */
+  def toNamed(col: Column): NamedExpression = col.named
+
+  /**
+   * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides unwrapping function
+   * @param expression
+   * @return
+   */
+  def expression(column: Column): Expression = column.expr
+
 }

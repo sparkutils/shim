@@ -2,16 +2,16 @@ package org.apache.spark.sql
 
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
-import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If}
+import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
 import org.apache.spark.sql.catalyst.parser.ParseException
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.catalyst.rules.Rule
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
+import org.apache.spark.sql.internal.{ColumnNodeToExpressionConverter, ExpressionUtils}
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
@@ -187,9 +187,19 @@ object ShimUtils {
     }
 
     new ExpressionEncoder[T](
+      new AgnosticEncoder[T] {
+        override def isPrimitive: Boolean = ShimUtils.isPrimitive(dataType)
+
+        override def nullable: Boolean = serializer.nullable
+
+        override def dataType: DataType = serializer.dataType
+
+        override def clsTag: ClassTag[T] = implicitly[ClassTag[T]]
+
+        override def isStruct: Boolean = dataType.isInstanceOf[StructType]
+      },
       objSerializer = serializer,
-      objDeserializer = fromCatalyst(out),
-      clsTag = implicitly[ClassTag[T]]
+      objDeserializer = fromCatalyst(out)
     )
   }
   def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
@@ -197,4 +207,25 @@ object ShimUtils {
 
   def executePlan(ds: Dataset[_], plan: LogicalPlan): QueryExecution =
     ds.sparkSession.sessionState.executePlan(plan)
+
+  /**
+   * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides wrapping function
+   * @param expression
+   * @return
+   */
+  def column(expression: Expression): Column = ExpressionUtils.column(expression)
+
+  /**
+   * 4 preview2 moves named to ExpressionUtils
+   * @param expression
+   * @return
+   */
+  def toNamed(col: Column): NamedExpression = ExpressionUtils.toNamed(ExpressionUtils.expression(col))
+
+  /**
+   * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides unwrapping function
+   * @param expression
+   * @return
+   */
+  def expression(column: Column): Expression = ColumnNodeToExpressionConverter(column.node)
 }

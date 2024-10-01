@@ -6,7 +6,7 @@
     <artifactId>shim_root_${dbrCompatVersion}${sparkCompatVersion}_${scalaCompatVersion}</artifactId>
 
     <packaging>pom</packaging>
-    <version>0.0.1-RC4</version>
+    <version>0.0.1-RC5-SNAPSHOT</version>
     <name>Shim Root</name>
     <description>A Spark library for managing in-process data quality rules via Spark SQL</description>
     <url>https://sparkutils.github.io/shim/</url>
@@ -303,7 +303,7 @@
             <properties>
                 <dbrCompatVersion>4.0.0.oss_</dbrCompatVersion>
                 <framelessVersion>0.16.0</framelessVersion>
-                <sparkVersion>4.0.0-SNAPSHOT</sparkVersion>
+                <sparkVersion>4.0.0-preview2</sparkVersion>
                 <sparkCompatVersion>4.0</sparkCompatVersion>
                 <profileDir>4.0.0</profileDir>
                 <jacksonVersion>2.15.2</jacksonVersion> <!-- scalameter dependency is 2.9.10 so perf tests runs need to change it -->

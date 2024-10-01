@@ -1,9 +1,10 @@
 package org.apache.spark.sql.shim
 
 import com.sparkutils.shim.ShowParams
-import org.apache.spark.sql.catalyst.expressions.{LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
+import org.apache.spark.sql.ShimUtils.{column, expression}
+import org.apache.spark.sql.catalyst.expressions.{Expression, LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.{Column, DataFrame, Dataset, SparkSession}
+import org.apache.spark.sql.{Column, DataFrame, Dataset, ShimUtils, SparkSession}
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -12,19 +13,25 @@ object utils {
   def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
     dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
 
-  def named(col: Column): NamedExpression = col.named
+  /**
+   * 4 preview2 moves named to ExpressionUtils, as such this forwards to ShimUtils.toNamed
+   * @param expression
+   * @return
+   */
+  @deprecated(since = "0.0.1-RC5",message = "Use ShimUtils.toNamed directly")
+  def named(col: Column): NamedExpression = ShimUtils.toNamed(col)
 
   // taken from functions, where they are private
   def createLambda(f: Column => Column) = {
     val x = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("x")))
-    val function = f(Column(x)).expr
+    val function = expression(f(column(x)))
     LambdaFunction(function, Seq(x))
   }
 
   def createLambda(f: (Column, Column) => Column) = {
     val x = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("x")))
     val y = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("y")))
-    val function = f(Column(x), Column(y)).expr
+    val function = expression(f(column(x), column(y)))
     LambdaFunction(function, Seq(x, y))
   }
 
@@ -32,7 +39,7 @@ object utils {
     val x = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("x")))
     val y = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("y")))
     val z = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("z")))
-    val function = f(Column(x), Column(y), Column(z)).expr
+    val function = expression(f(column(x), column(y), column(z)))
     LambdaFunction(function, Seq(x, y, z))
   }
 
