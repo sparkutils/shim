@@ -7,7 +7,8 @@ import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
 import org.apache.spark.sql.catalyst.parser.ParseException
-import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+import org.apache.spark.sql.catalyst.plans.JoinType
+import org.apache.spark.sql.catalyst.plans.logical.{Join, JoinHint, JoinWith, LogicalPlan}
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
@@ -217,15 +218,63 @@ object ShimUtils {
 
   /**
    * 4 preview2 moves named to ExpressionUtils
-   * @param expression
+   * @param col
    * @return
    */
   def toNamed(col: Column): NamedExpression = ExpressionUtils.toNamed(ExpressionUtils.expression(col))
 
   /**
    * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides unwrapping function
-   * @param expression
+   * @param column
    * @return
    */
   def expression(column: Column): Expression = ColumnNodeToExpressionConverter(column.node)
+
+  /**
+   * Agnostic encoders in 4 preview2 are used which forces new serializers to be created instead of using those in the encoders
+   * This version introduces the same functionality using a provided encoder (e.g. one from frameless which doesn't do this).
+   *
+   * @param current
+   * @param other
+   * @param condition
+   * @param joinType
+   * @param enc
+   * @tparam T
+   * @tparam U
+   * @return
+   */
+  def joinWith[T, U](current: Dataset[T], other: Dataset[U], condition: Column, joinType: String)(implicit enc: Encoder[(T,U)]): Dataset[(T, U)] = {
+
+    /**
+     * Porting of the <4 logic but uses knowledge of _1 or value as single
+     * @return
+     */
+    def isSerializedAsStruct[T](encoder: Encoder[T]): Boolean = encoder.schema.fields.length > 0
+
+    /**
+     * Porting of the <4 logic
+     * @return
+     */
+    def isSerializedAsStructForTopLevel[T](encoder: Encoder[T]): Boolean =
+      isSerializedAsStruct(encoder) && !classOf[Option[_]].isAssignableFrom(encoder.clsTag.runtimeClass)
+
+    val sparkSession: SparkSession = current.sparkSession
+    // Creates a Join node and resolve it first, to get join condition resolved, self-join resolved,
+    // etc.
+    val joined = sparkSession.sessionState.executePlan(
+      Join(
+        current.logicalPlan,
+        other.logicalPlan,
+        JoinType(joinType),
+        Some(expression(condition)),
+        JoinHint.NONE)).analyzed.asInstanceOf[Join]
+
+    val joinWith = JoinWith.typedJoinWith(
+      joined,
+      sparkSession.sessionState.conf.dataFrameSelfJoinAutoResolveAmbiguity,
+      sparkSession.sessionState.analyzer.resolver,
+      isSerializedAsStructForTopLevel(current.encoder),
+      isSerializedAsStructForTopLevel(other.encoder))
+    new Dataset(sparkSession, joinWith, enc)
+  }
 }
