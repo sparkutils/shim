@@ -1,0 +1,93 @@
+<html>
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title id="title">
+          com/sparkutils/shim/expressions/MapObjects.scala.html
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/css/theme.default.min.css" type="text/css"/><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/js/jquery.tablesorter.min.js"></script><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/><script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script><script type="text/javascript">
+        $(document).ready(function() {$(".tablesorter").tablesorter();});
+      </script>
+        <style>
+          table.codegrid { font-family: monospace; font-size: 12px; width: auto!important; }table.statementlist { width: auto!important; font-size: 13px; } table.codegrid td { padding: 0!important; border: 0!important } table td.linenumber { width: 40px!important; } 
+        </style>
+      </head>
+      <body style="font-family: monospace;">
+        <ul class="nav nav-tabs">
+          <li>
+            <a href="#codegrid" data-toggle="tab">Codegrid</a>
+          </li>
+          <li>
+            <a href="#statementlist" data-toggle="tab">Statement List</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="codegrid">
+            <pre style='font-size: 12pt; font-family: courier, monospace;'>1 <span style=''>package com.sparkutils.shim.expressions
+</span>2 <span style=''>
+</span>3 <span style=''>import org.apache.spark.sql.catalyst.expressions.Expression
+</span>4 <span style=''>import org.apache.spark.sql.catalyst.expressions.objects.MapObjects
+</span>5 <span style=''>import org.apache.spark.sql.types.DataType
+</span>6 <span style=''>
+</span>7 <span style=''>// stable from 2.4 through to 3.5
+</span>8 <span style=''>object MapObjects5 {
+</span>9 <span style=''>  /**
+</span>10 <span style=''>   * Construct an instance of MapObjects case class.
+</span>11 <span style=''>   *
+</span>12 <span style=''>   * @param function The function applied on the collection elements.
+</span>13 <span style=''>   * @param inputData An expression that when evaluated returns a collection object.
+</span>14 <span style=''>   * @param elementType The data type of elements in the collection.
+</span>15 <span style=''>   * @param elementNullable When false, indicating elements in the collection are always
+</span>16 <span style=''>   *                        non-null value.
+</span>17 <span style=''>   * @param customCollectionCls Class of the resulting collection (returning ObjectType)
+</span>18 <span style=''>   *                            or None (returning ArrayType)
+</span>19 <span style=''>   */
+</span>20 <span style=''>  def apply(
+</span>21 <span style=''>             function: Expression =&gt; Expression,
+</span>22 <span style=''>             inputData: Expression,
+</span>23 <span style=''>             elementType: DataType,
+</span>24 <span style=''>             elementNullable: Boolean = true,
+</span>25 <span style=''>             customCollectionCls: Option[Class[_]] = None): MapObjects =
+</span>26 <span style=''>    </span><span style='background: #F0ADAD'>MapObjects(function, inputData, elementType, elementNullable, customCollectionCls)</span><span style=''>
+</span>27 <span style=''>}
+</span></pre>
+          </div>
+          <div class="tab-pane" id="statementlist">
+            <table cellspacing="0" cellpadding="0" class="table statementlist">
+      <tr>
+        <th>Line</th>
+        <th>Stmt Id</th>
+        <th>Pos</th>
+        <th>Tree</th>
+        <th>Symbol</th>
+        <th>Tests</th>
+        <th>Code</th>
+      </tr><tr>
+        <td>
+          26
+        </td>
+        <td>
+          464
+        </td>
+        <td>
+          1103
+          -
+          1185
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.MapObjects.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.MapObjects.apply(function, inputData, elementType, elementNullable, customCollectionCls)
+        </td>
+      </tr>
+    </table>
+          </div>
+        </div>
+      </body>
+    </html>
