@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://sparkutils.github.io/shim/0.0.1/</loc>
+         <lastmod>2024-10-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://sparkutils.github.io/shim/0.0.1/reference_material/</loc>
+         <lastmod>2024-10-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://sparkutils.github.io/shim/0.0.1/background/about/</loc>
+         <lastmod>2024-10-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://sparkutils.github.io/shim/0.0.1/background/changelog/</loc>
+         <lastmod>2024-10-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://sparkutils.github.io/shim/0.0.1/getting_started/</loc>
+         <lastmod>2024-10-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://sparkutils.github.io/shim/0.0.1/getting_started/running_on_databricks/</loc>
+         <lastmod>2024-10-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
