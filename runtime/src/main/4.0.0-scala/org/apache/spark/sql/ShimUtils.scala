@@ -2,7 +2,7 @@ package org.apache.spark.sql
 
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.encoders.{AgnosticExpressionPathEncoder, ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
@@ -171,6 +171,30 @@ object ShimUtils {
     }
 
   def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = {
+    val isNullable = nullable
+    val iFromCatalyst = fromCatalyst
+    val iToCatalyst = toCatalyst
+
+    val ag = new AgnosticExpressionPathEncoder[T] {
+      override def isPrimitive: Boolean = ShimUtils.isPrimitive(dataType)
+
+      override def nullable: Boolean = isNullable
+
+      override def dataType: DataType = catalystRepr
+
+      override def clsTag: ClassTag[T] = implicitly[ClassTag[T]]
+
+      override def isStruct: Boolean =
+        dataType match {
+          case t: StructType if t.fields.length > 0 => true
+          case _ => !classOf[Option[_]].isAssignableFrom(clsTag.runtimeClass)
+        }
+
+      override def toCatalyst(input: Expression): Expression = iToCatalyst(input)
+
+      override def fromCatalyst(inputPath: Expression): Expression = iFromCatalyst(inputPath)
+    }
+
     val in = BoundReference(0, jvmRepr, nullable)
 
     val (out, serializer) = toCatalyst(in) match {
@@ -188,17 +212,7 @@ object ShimUtils {
     }
 
     new ExpressionEncoder[T](
-      new AgnosticEncoder[T] {
-        override def isPrimitive: Boolean = ShimUtils.isPrimitive(dataType)
-
-        override def nullable: Boolean = serializer.nullable
-
-        override def dataType: DataType = serializer.dataType
-
-        override def clsTag: ClassTag[T] = implicitly[ClassTag[T]]
-
-        override def isStruct: Boolean = dataType.isInstanceOf[StructType]
-      },
+      ag,
       objSerializer = serializer,
       objDeserializer = fromCatalyst(out)
     )
