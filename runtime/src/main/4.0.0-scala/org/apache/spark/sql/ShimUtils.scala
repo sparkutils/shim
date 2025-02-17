@@ -2,7 +2,7 @@ package org.apache.spark.sql
 
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.{AgnosticExpressionPathEncoder, ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.encoders.{/*AgnosticExpressionPathEncoder, */ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
@@ -12,7 +12,7 @@ import org.apache.spark.sql.catalyst.plans.logical.{Join, JoinHint, JoinWith, Lo
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
-import org.apache.spark.sql.internal.{ColumnNodeToExpressionConverter, ExpressionUtils}
+import org.apache.spark.sql.classic.{ColumnNodeToExpressionConverter, ExpressionUtils}
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
@@ -170,7 +170,7 @@ object ShimUtils {
       case dt => new StructType().add("value", dt, nullable = nullable)
     }
 
-  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = {
+  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = ???/*{
     val isNullable = nullable
     val iFromCatalyst = fromCatalyst
     val iToCatalyst = toCatalyst
@@ -216,7 +216,7 @@ object ShimUtils {
       objSerializer = serializer,
       objDeserializer = fromCatalyst(out)
     )
-  }
+  }*/
   def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
     new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""", messageParameters = Map.empty )
 
@@ -277,8 +277,8 @@ object ShimUtils {
     // etc.
     val joined = sparkSession.sessionState.executePlan(
       Join(
-        current.logicalPlan,
-        other.logicalPlan,
+        current.asInstanceOf[classic.Dataset[T]].logicalPlan, // TODO figure this out
+        other.asInstanceOf[classic.Dataset[T]].logicalPlan,
         JoinType(joinType),
         Some(expression(condition)),
         JoinHint.NONE)).analyzed.asInstanceOf[Join]
@@ -289,6 +289,6 @@ object ShimUtils {
       sparkSession.sessionState.analyzer.resolver,
       isSerializedAsStructForTopLevel(current.encoder),
       isSerializedAsStructForTopLevel(other.encoder))
-    new Dataset(sparkSession, joinWith, enc)
+    new classic.Dataset(sparkSession.asInstanceOf[classic.SparkSession], joinWith, enc)
   }
 }

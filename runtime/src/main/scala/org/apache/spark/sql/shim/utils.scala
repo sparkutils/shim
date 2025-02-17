@@ -4,7 +4,8 @@ import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.ShimUtils.{column, expression}
 import org.apache.spark.sql.catalyst.expressions.{Expression, LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.{Column, DataFrame, Dataset, ShimUtils, SparkSession}
+import org.apache.spark.sql.classic.ClassicConversions.castToImpl
+import org.apache.spark.sql.{Column, DataFrame, Dataset, ShimUtils, SparkSession, classic}
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -47,7 +48,7 @@ object utils {
   def logicalPlan(ds: Dataset[_]): LogicalPlan = ds.logicalPlan
 
   def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
-    Dataset.ofRows(sparkSession, logicalPlan)
+    classic.Dataset.ofRows(sparkSession, logicalPlan)
 
 }
 
