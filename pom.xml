@@ -304,7 +304,7 @@
                 <dbrCompatVersion>4.0.0.oss_</dbrCompatVersion>
                 <framelessVersion>0.16.0</framelessVersion>
                 <sparkVersion>4.1.0-SNAPSHOT</sparkVersion>
-                <sparkCompatVersion>4.0</sparkCompatVersion>
+                <sparkCompatVersion>4.1</sparkCompatVersion>
                 <profileDir>4.0.0</profileDir>
                 <jacksonVersion>2.15.2</jacksonVersion> <!-- scalameter dependency is 2.9.10 so perf tests runs need to change it -->
                 <guavaVersion>15.0</guavaVersion> <!-- databricks runtime version -->

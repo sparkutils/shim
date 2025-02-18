@@ -2,7 +2,7 @@ package org.apache.spark.sql
 
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.{/*AgnosticExpressionPathEncoder, */ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
@@ -291,4 +291,13 @@ object ShimUtils {
       isSerializedAsStructForTopLevel(other.encoder))
     new classic.Dataset(sparkSession.asInstanceOf[classic.SparkSession], joinWith, enc)
   }
+
+  /**
+   * Spark4 unifies
+   */
+  def expressionEncoder[T](encoder: Encoder[T]): ExpressionEncoder[T] =
+    encoder match {
+      case e: ExpressionEncoder[T] => e
+      case a: AgnosticEncoder[T] => ExpressionEncoder(a)
+    }
 }
