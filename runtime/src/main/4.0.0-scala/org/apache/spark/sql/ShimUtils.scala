@@ -1,5 +1,6 @@
 package org.apache.spark.sql
 
+import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
@@ -16,6 +17,7 @@ import org.apache.spark.sql.classic.{ColumnNodeToExpressionConverter, Expression
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
+import org.apache.spark.sql.classic.ClassicConversions.castToImpl
 
 import scala.reflect.ClassTag
 
@@ -300,4 +302,11 @@ object ShimUtils {
       case e: ExpressionEncoder[T] => e
       case a: AgnosticEncoder[T] => ExpressionEncoder(a)
     }
+
+  def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
+    classic.Dataset.ofRows(sparkSession, logicalPlan)
+
+  def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
+    dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
+
 }

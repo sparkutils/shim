@@ -260,4 +260,13 @@ object ShimUtils {
    */
   def joinWith[T, U](current: Dataset[T], other: Dataset[U], condition: Column, joinType: String)(implicit enc: Encoder[(T,U)]): Dataset[(T, U)] =
     current.joinWith(other, condition, joinType)
+
+
+
+  def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
+    Dataset.ofRows(sparkSession, logicalPlan)
+
+  def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
+    dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
+
 }

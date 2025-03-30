@@ -2,17 +2,16 @@ package org.apache.spark.sql.shim
 
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.ShimUtils.{column, expression}
-import org.apache.spark.sql.catalyst.expressions.{Expression, LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
+import org.apache.spark.sql.catalyst.expressions.{LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.classic.ClassicConversions.castToImpl
-import org.apache.spark.sql.{Column, DataFrame, Dataset, ShimUtils, SparkSession, classic}
+import org.apache.spark.sql.{Column, DataFrame, Dataset, ShimUtils, SparkSession}
 
 import java.util.concurrent.atomic.AtomicInteger
 
 object utils {
 
   def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
-    dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
+    ShimUtils.toString(dataFrame, showParams)
 
   /**
    * 4 preview2 moves named to ExpressionUtils, as such this forwards to ShimUtils.toNamed
@@ -48,7 +47,7 @@ object utils {
   def logicalPlan(ds: Dataset[_]): LogicalPlan = ds.logicalPlan
 
   def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
-    classic.Dataset.ofRows(sparkSession, logicalPlan)
+    ShimUtils.ofRows(sparkSession, logicalPlan)
 
 }
 

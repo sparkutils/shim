@@ -1,8 +1,9 @@
 package org.apache.spark.sql
 
+import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, GetArrayStructFields, GetStructField, If, Literal, NamedExpression, PrettyAttribute}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
 import org.apache.spark.sql.internal.SQLConf
@@ -283,4 +284,12 @@ object ShimUtils {
    */
   def expressionEncoder[T](encoder: Encoder[T]): ExpressionEncoder[T] =
     encoder.asInstanceOf[ExpressionEncoder[T]]
+
+
+  def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
+    Dataset.ofRows(sparkSession, logicalPlan)
+
+  def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
+    dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
+
 }
