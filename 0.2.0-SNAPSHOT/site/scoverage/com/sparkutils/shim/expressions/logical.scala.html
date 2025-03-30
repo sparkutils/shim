@@ -1,0 +1,441 @@
+<html>
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title id="title">
+          com/sparkutils/shim/expressions/logical.scala.html
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/css/theme.default.min.css" type="text/css"/><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/js/jquery.tablesorter.min.js"></script><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/><script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script><script type="text/javascript">
+        $(document).ready(function() {$(".tablesorter").tablesorter();});
+      </script>
+        <style>
+          table.codegrid { font-family: monospace; font-size: 12px; width: auto!important; }table.statementlist { width: auto!important; font-size: 13px; } table.codegrid td { padding: 0!important; border: 0!important } table td.linenumber { width: 40px!important; } 
+        </style>
+      </head>
+      <body style="font-family: monospace;">
+        <ul class="nav nav-tabs">
+          <li>
+            <a href="#codegrid" data-toggle="tab">Codegrid</a>
+          </li>
+          <li>
+            <a href="#statementlist" data-toggle="tab">Statement List</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="codegrid">
+            <pre style='font-size: 12pt; font-family: courier, monospace;'>1 <span style=''>package com.sparkutils.shim.expressions
+</span>2 <span style=''>
+</span>3 <span style=''>/*
+</span>4 <span style=''> * Collection of shims on really stable interfaces for logical expressions
+</span>5 <span style=''> */
+</span>6 <span style=''>
+</span>7 <span style=''>import org.apache.spark.sql.catalyst.expressions.{And, Expression, Or, EqualNullSafe, EqualTo, Not, IsNull, IsNotNull}
+</span>8 <span style=''>
+</span>9 <span style=''>object And2 {
+</span>10 <span style=''>  def apply(left: Expression, right: Expression): And =
+</span>11 <span style=''>    </span><span style='background: #F0ADAD'>And(left, right)</span><span style=''>
+</span>12 <span style=''>
+</span>13 <span style=''>  def unapply(and: And): Option[(Expression, Expression)] =
+</span>14 <span style=''>    </span><span style='background: #F0ADAD'>And.unapply(and)</span><span style=''>
+</span>15 <span style=''>}
+</span>16 <span style=''>
+</span>17 <span style=''>object Or2 {
+</span>18 <span style=''>  def apply(left: Expression, right: Expression): Or =
+</span>19 <span style=''>    </span><span style='background: #F0ADAD'>Or(left, right)</span><span style=''>
+</span>20 <span style=''>
+</span>21 <span style=''>  def unapply(or: Or): Option[(Expression, Expression)] =
+</span>22 <span style=''>    </span><span style='background: #F0ADAD'>Or.unapply(or)</span><span style=''>
+</span>23 <span style=''>}
+</span>24 <span style=''>
+</span>25 <span style=''>object EqualNullSafe2 {
+</span>26 <span style=''>  def apply(left: Expression, right: Expression): EqualNullSafe =
+</span>27 <span style=''>    </span><span style='background: #F0ADAD'>EqualNullSafe(left, right)</span><span style=''>
+</span>28 <span style=''>
+</span>29 <span style=''>  def unapply(equalNullSafe: EqualNullSafe): Option[(Expression, Expression)] =
+</span>30 <span style=''>    </span><span style='background: #F0ADAD'>EqualNullSafe.unapply(equalNullSafe)</span><span style=''>
+</span>31 <span style=''>}
+</span>32 <span style=''>
+</span>33 <span style=''>object EqualTo2 {
+</span>34 <span style=''>  def apply(left: Expression, right: Expression): EqualTo =
+</span>35 <span style=''>    </span><span style='background: #F0ADAD'>EqualTo(left, right)</span><span style=''>
+</span>36 <span style=''>
+</span>37 <span style=''>  def unapply(equalTo: EqualTo): Option[(Expression, Expression)] =
+</span>38 <span style=''>    </span><span style='background: #F0ADAD'>EqualTo.unapply(equalTo)</span><span style=''>
+</span>39 <span style=''>}
+</span>40 <span style=''>
+</span>41 <span style=''>object Not1 {
+</span>42 <span style=''>  def apply(child: Expression): Not =
+</span>43 <span style=''>    </span><span style='background: #F0ADAD'>Not(child)</span><span style=''>
+</span>44 <span style=''>
+</span>45 <span style=''>  def unapply(not: Not): Option[Expression] =
+</span>46 <span style=''>    </span><span style='background: #F0ADAD'>Not.unapply(not)</span><span style=''>
+</span>47 <span style=''>}
+</span>48 <span style=''>
+</span>49 <span style=''>object IsNull1 {
+</span>50 <span style=''>  def apply(child: Expression): IsNull =
+</span>51 <span style=''>    </span><span style='background: #F0ADAD'>IsNull(child)</span><span style=''>
+</span>52 <span style=''>
+</span>53 <span style=''>  def unapply(isNull: IsNull): Option[Expression] =
+</span>54 <span style=''>    </span><span style='background: #F0ADAD'>IsNull.unapply(isNull)</span><span style=''>
+</span>55 <span style=''>}
+</span>56 <span style=''>
+</span>57 <span style=''>object IsNotNull1 {
+</span>58 <span style=''>  def apply(child: Expression): IsNotNull =
+</span>59 <span style=''>    </span><span style='background: #F0ADAD'>IsNotNull(child)</span><span style=''>
+</span>60 <span style=''>
+</span>61 <span style=''>  def unapply(isNotNull: IsNotNull): Option[Expression] =
+</span>62 <span style=''>    </span><span style='background: #F0ADAD'>IsNotNull.unapply(isNotNull)</span><span style=''>
+</span>63 <span style=''>}
+</span></pre>
+          </div>
+          <div class="tab-pane" id="statementlist">
+            <table cellspacing="0" cellpadding="0" class="table statementlist">
+      <tr>
+        <th>Line</th>
+        <th>Stmt Id</th>
+        <th>Pos</th>
+        <th>Tree</th>
+        <th>Symbol</th>
+        <th>Tests</th>
+        <th>Code</th>
+      </tr><tr>
+        <td>
+          11
+        </td>
+        <td>
+          365
+        </td>
+        <td>
+          318
+          -
+          334
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.And.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.And.apply(left, right)
+        </td>
+      </tr><tr>
+        <td>
+          14
+        </td>
+        <td>
+          280
+        </td>
+        <td>
+          400
+          -
+          416
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.And.unapply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.And.unapply(and)
+        </td>
+      </tr><tr>
+        <td>
+          19
+        </td>
+        <td>
+          77
+        </td>
+        <td>
+          492
+          -
+          507
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.Or.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.Or.apply(left, right)
+        </td>
+      </tr><tr>
+        <td>
+          22
+        </td>
+        <td>
+          412
+        </td>
+        <td>
+          571
+          -
+          585
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.Or.unapply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.Or.unapply(or)
+        </td>
+      </tr><tr>
+        <td>
+          27
+        </td>
+        <td>
+          186
+        </td>
+        <td>
+          683
+          -
+          709
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.EqualNullSafe.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.EqualNullSafe.apply(left, right)
+        </td>
+      </tr><tr>
+        <td>
+          30
+        </td>
+        <td>
+          546
+        </td>
+        <td>
+          795
+          -
+          831
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.EqualNullSafe.unapply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.EqualNullSafe.unapply(equalNullSafe)
+        </td>
+      </tr><tr>
+        <td>
+          35
+        </td>
+        <td>
+          458
+        </td>
+        <td>
+          917
+          -
+          937
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.EqualTo.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.EqualTo.apply(left, right)
+        </td>
+      </tr><tr>
+        <td>
+          38
+        </td>
+        <td>
+          256
+        </td>
+        <td>
+          1011
+          -
+          1035
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.EqualTo.unapply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.EqualTo.unapply(equalTo)
+        </td>
+      </tr><tr>
+        <td>
+          43
+        </td>
+        <td>
+          24
+        </td>
+        <td>
+          1095
+          -
+          1105
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.Not.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.Not.apply(child)
+        </td>
+      </tr><tr>
+        <td>
+          46
+        </td>
+        <td>
+          368
+        </td>
+        <td>
+          1157
+          -
+          1173
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.Not.unapply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.Not.unapply(not)
+        </td>
+      </tr><tr>
+        <td>
+          51
+        </td>
+        <td>
+          283
+        </td>
+        <td>
+          1239
+          -
+          1252
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.IsNull.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.IsNull.apply(child)
+        </td>
+      </tr><tr>
+        <td>
+          54
+        </td>
+        <td>
+          62
+        </td>
+        <td>
+          1310
+          -
+          1332
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.IsNull.unapply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.IsNull.unapply(isNull)
+        </td>
+      </tr><tr>
+        <td>
+          59
+        </td>
+        <td>
+          415
+        </td>
+        <td>
+          1404
+          -
+          1420
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.IsNotNull.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.IsNotNull.apply(child)
+        </td>
+      </tr><tr>
+        <td>
+          62
+        </td>
+        <td>
+          207
+        </td>
+        <td>
+          1484
+          -
+          1512
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.IsNotNull.unapply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.IsNotNull.unapply(isNotNull)
+        </td>
+      </tr>
+    </table>
+          </div>
+        </div>
+      </body>
+    </html>

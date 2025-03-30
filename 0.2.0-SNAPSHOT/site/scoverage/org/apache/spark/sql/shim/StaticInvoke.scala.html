@@ -1,0 +1,913 @@
+<html>
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title id="title">
+          org/apache/spark/sql/shim/StaticInvoke.scala.html
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/css/theme.default.min.css" type="text/css"/><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/js/jquery.tablesorter.min.js"></script><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/><script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script><script type="text/javascript">
+        $(document).ready(function() {$(".tablesorter").tablesorter();});
+      </script>
+        <style>
+          table.codegrid { font-family: monospace; font-size: 12px; width: auto!important; }table.statementlist { width: auto!important; font-size: 13px; } table.codegrid td { padding: 0!important; border: 0!important } table td.linenumber { width: 40px!important; } 
+        </style>
+      </head>
+      <body style="font-family: monospace;">
+        <ul class="nav nav-tabs">
+          <li>
+            <a href="#codegrid" data-toggle="tab">Codegrid</a>
+          </li>
+          <li>
+            <a href="#statementlist" data-toggle="tab">Statement List</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="codegrid">
+            <pre style='font-size: 12pt; font-family: courier, monospace;'>1 <span style=''>package org.apache.spark.sql.shim
+</span>2 <span style=''>
+</span>3 <span style=''>import org.apache.spark.sql.catalyst.expressions.Expression
+</span>4 <span style=''>import org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke
+</span>5 <span style=''>import org.apache.spark.sql.types.{AbstractDataType, DataType}
+</span>6 <span style=''>
+</span>7 <span style=''>object StaticInvoke4 {
+</span>8 <span style=''>/* on 3.x, 4.0 adds more
+</span>9 <span style=''>  def apply(
+</span>10 <span style=''>                           staticObject: Class[_],
+</span>11 <span style=''>                           dataType: DataType,
+</span>12 <span style=''>                           functionName: String,
+</span>13 <span style=''>                           arguments: Seq[Expression] = Nil,
+</span>14 <span style=''>                           inputTypes: Seq[AbstractDataType] = Nil,
+</span>15 <span style=''>                           propagateNull: Boolean = true,
+</span>16 <span style=''>                           returnNullable: Boolean = true,
+</span>17 <span style=''>                           isDeterministic: Boolean = true): StaticInvoke
+</span>18 <span style=''>*/
+</span>19 <span style=''>  def apply(
+</span>20 <span style=''>             staticObject: Class[_],
+</span>21 <span style=''>             dataType: DataType,
+</span>22 <span style=''>             functionName: String,
+</span>23 <span style=''>             arguments: Seq[Expression],
+</span>24 <span style=''>             inputTypes: Seq[AbstractDataType] = Nil,
+</span>25 <span style=''>             propagateNull: Boolean = true,
+</span>26 <span style=''>             returnNullable: Boolean = true,
+</span>27 <span style=''>             isDeterministic: Boolean = true
+</span>28 <span style=''>             ) = </span><span style='background: #F0ADAD'>StaticInvoke(staticObject, dataType, functionName, arguments)</span><span style=''>
+</span>29 <span style=''>
+</span>30 <span style=''>  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression])] =
+</span>31 <span style=''>    exp match {
+</span>32 <span style=''>      case StaticInvoke(staticObject,
+</span>33 <span style=''>        dataType,
+</span>34 <span style=''>        functionName,
+</span>35 <span style=''>        arguments,
+</span>36 <span style=''>        inputTypes,
+</span>37 <span style=''>        propagateNull,
+</span>38 <span style=''>        returnNullable,
+</span>39 <span style=''>        isDeterministic) =&gt; </span><span style='background: #F0ADAD'>Some((staticObject, dataType, functionName, arguments))</span><span style=''>
+</span>40 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>41 <span style=''>    }
+</span>42 <span style=''>}
+</span>43 <span style=''>
+</span>44 <span style=''>object StaticInvoke5 {
+</span>45 <span style=''>
+</span>46 <span style=''>  def apply(
+</span>47 <span style=''>             staticObject: Class[_],
+</span>48 <span style=''>             dataType: DataType,
+</span>49 <span style=''>             functionName: String,
+</span>50 <span style=''>             arguments: Seq[Expression],
+</span>51 <span style=''>             inputTypes: Seq[AbstractDataType],
+</span>52 <span style=''>             propagateNull: Boolean = true,
+</span>53 <span style=''>             returnNullable: Boolean = true,
+</span>54 <span style=''>             isDeterministic: Boolean = true
+</span>55 <span style=''>           ) = </span><span style='background: #F0ADAD'>StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes)</span><span style=''>
+</span>56 <span style=''>
+</span>57 <span style=''>  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType])] =
+</span>58 <span style=''>    exp match {
+</span>59 <span style=''>      case StaticInvoke(staticObject,
+</span>60 <span style=''>      dataType,
+</span>61 <span style=''>      functionName,
+</span>62 <span style=''>      arguments,
+</span>63 <span style=''>      inputTypes,
+</span>64 <span style=''>      propagateNull,
+</span>65 <span style=''>      returnNullable,
+</span>66 <span style=''>      isDeterministic) =&gt; </span><span style='background: #F0ADAD'>Some((staticObject, dataType, functionName, arguments, inputTypes))</span><span style=''>
+</span>67 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>68 <span style=''>    }
+</span>69 <span style=''>}
+</span>70 <span style=''>
+</span>71 <span style=''>object StaticInvoke6 {
+</span>72 <span style=''>
+</span>73 <span style=''>  def apply(
+</span>74 <span style=''>             staticObject: Class[_],
+</span>75 <span style=''>             dataType: DataType,
+</span>76 <span style=''>             functionName: String,
+</span>77 <span style=''>             arguments: Seq[Expression],
+</span>78 <span style=''>             inputTypes: Seq[AbstractDataType],
+</span>79 <span style=''>             propagateNull: Boolean,
+</span>80 <span style=''>             returnNullable: Boolean = true,
+</span>81 <span style=''>             isDeterministic: Boolean = true
+</span>82 <span style=''>           ) = </span><span style='background: #F0ADAD'>StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull)</span><span style=''>
+</span>83 <span style=''>
+</span>84 <span style=''>  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean)] =
+</span>85 <span style=''>    exp match {
+</span>86 <span style=''>      case StaticInvoke(staticObject,
+</span>87 <span style=''>      dataType,
+</span>88 <span style=''>      functionName,
+</span>89 <span style=''>      arguments,
+</span>90 <span style=''>      inputTypes,
+</span>91 <span style=''>      propagateNull,
+</span>92 <span style=''>      returnNullable,
+</span>93 <span style=''>      isDeterministic) =&gt; </span><span style='background: #F0ADAD'>Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull))</span><span style=''>
+</span>94 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>95 <span style=''>    }
+</span>96 <span style=''>}
+</span>97 <span style=''>
+</span>98 <span style=''>object StaticInvoke7 {
+</span>99 <span style=''>
+</span>100 <span style=''>  def apply(
+</span>101 <span style=''>             staticObject: Class[_],
+</span>102 <span style=''>             dataType: DataType,
+</span>103 <span style=''>             functionName: String,
+</span>104 <span style=''>             arguments: Seq[Expression],
+</span>105 <span style=''>             inputTypes: Seq[AbstractDataType],
+</span>106 <span style=''>             propagateNull: Boolean,
+</span>107 <span style=''>             returnNullable: Boolean,
+</span>108 <span style=''>             isDeterministic: Boolean = true
+</span>109 <span style=''>           ) = </span><span style='background: #F0ADAD'>StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable)</span><span style=''>
+</span>110 <span style=''>
+</span>111 <span style=''>  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean, Boolean)] =
+</span>112 <span style=''>    exp match {
+</span>113 <span style=''>      case StaticInvoke(staticObject,
+</span>114 <span style=''>      dataType,
+</span>115 <span style=''>      functionName,
+</span>116 <span style=''>      arguments,
+</span>117 <span style=''>      inputTypes,
+</span>118 <span style=''>      propagateNull,
+</span>119 <span style=''>      returnNullable,
+</span>120 <span style=''>      isDeterministic) =&gt; </span><span style='background: #F0ADAD'>Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable))</span><span style=''>
+</span>121 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>122 <span style=''>    }
+</span>123 <span style=''>}
+</span>124 <span style=''>
+</span>125 <span style=''>object StaticInvoke8 {
+</span>126 <span style=''>
+</span>127 <span style=''>  def apply(
+</span>128 <span style=''>             staticObject: Class[_],
+</span>129 <span style=''>             dataType: DataType,
+</span>130 <span style=''>             functionName: String,
+</span>131 <span style=''>             arguments: Seq[Expression],
+</span>132 <span style=''>             inputTypes: Seq[AbstractDataType],
+</span>133 <span style=''>             propagateNull: Boolean,
+</span>134 <span style=''>             returnNullable: Boolean,
+</span>135 <span style=''>             isDeterministic: Boolean
+</span>136 <span style=''>           ) = </span><span style='background: #F0ADAD'>StaticInvoke(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic)</span><span style=''>
+</span>137 <span style=''>
+</span>138 <span style=''>  def unapply(exp: Expression): Option[(Class[_], DataType, String, Seq[Expression], Seq[AbstractDataType], Boolean, Boolean, Boolean)] =
+</span>139 <span style=''>    exp match {
+</span>140 <span style=''>      case StaticInvoke(staticObject,
+</span>141 <span style=''>      dataType,
+</span>142 <span style=''>      functionName,
+</span>143 <span style=''>      arguments,
+</span>144 <span style=''>      inputTypes,
+</span>145 <span style=''>      propagateNull,
+</span>146 <span style=''>      returnNullable,
+</span>147 <span style=''>      isDeterministic) =&gt; </span><span style='background: #F0ADAD'>Some((staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic))</span><span style=''>
+</span>148 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>None</span><span style=''>
+</span>149 <span style=''>    }
+</span>150 <span style=''>
+</span>151 <span style=''>}
+</span></pre>
+          </div>
+          <div class="tab-pane" id="statementlist">
+            <table cellspacing="0" cellpadding="0" class="table statementlist">
+      <tr>
+        <th>Line</th>
+        <th>Stmt Id</th>
+        <th>Pos</th>
+        <th>Tree</th>
+        <th>Symbol</th>
+        <th>Tests</th>
+        <th>Code</th>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          505
+        </td>
+        <td>
+          1124
+          -
+          1124
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$7
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$7
+        </td>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          292
+        </td>
+        <td>
+          1124
+          -
+          1124
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8
+        </td>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          76
+        </td>
+        <td>
+          1124
+          -
+          1185
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply(staticObject, dataType, functionName, arguments, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$5, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$6, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$7, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8)
+        </td>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          240
+        </td>
+        <td>
+          1124
+          -
+          1124
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$5
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$5
+        </td>
+      </tr><tr>
+        <td>
+          28
+        </td>
+        <td>
+          30
+        </td>
+        <td>
+          1124
+          -
+          1124
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$6
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$6
+        </td>
+      </tr><tr>
+        <td>
+          39
+        </td>
+        <td>
+          213
+        </td>
+        <td>
+          1483
+          -
+          1538
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression])](scala.Tuple4.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression]](staticObject, dataType, functionName, arguments))
+        </td>
+      </tr><tr>
+        <td>
+          39
+        </td>
+        <td>
+          425
+        </td>
+        <td>
+          1488
+          -
+          1537
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple4.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple4.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression]](staticObject, dataType, functionName, arguments)
+        </td>
+      </tr><tr>
+        <td>
+          40
+        </td>
+        <td>
+          106
+        </td>
+        <td>
+          1555
+          -
+          1559
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr><tr>
+        <td>
+          55
+        </td>
+        <td>
+          32
+        </td>
+        <td>
+          1949
+          -
+          1949
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8
+        </td>
+      </tr><tr>
+        <td>
+          55
+        </td>
+        <td>
+          229
+        </td>
+        <td>
+          1949
+          -
+          1949
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$7
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$7
+        </td>
+      </tr><tr>
+        <td>
+          55
+        </td>
+        <td>
+          471
+        </td>
+        <td>
+          1949
+          -
+          1949
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$6
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$6
+        </td>
+      </tr><tr>
+        <td>
+          55
+        </td>
+        <td>
+          386
+        </td>
+        <td>
+          1949
+          -
+          2022
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply(staticObject, dataType, functionName, arguments, inputTypes, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$6, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$7, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8)
+        </td>
+      </tr><tr>
+        <td>
+          66
+        </td>
+        <td>
+          282
+        </td>
+        <td>
+          2334
+          -
+          2395
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple5.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple5.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType]](staticObject, dataType, functionName, arguments, inputTypes)
+        </td>
+      </tr><tr>
+        <td>
+          66
+        </td>
+        <td>
+          51
+        </td>
+        <td>
+          2329
+          -
+          2396
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType])](scala.Tuple5.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType]](staticObject, dataType, functionName, arguments, inputTypes))
+        </td>
+      </tr><tr>
+        <td>
+          67
+        </td>
+        <td>
+          427
+        </td>
+        <td>
+          2413
+          -
+          2417
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr><tr>
+        <td>
+          82
+        </td>
+        <td>
+          95
+        </td>
+        <td>
+          2800
+          -
+          2800
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8
+        </td>
+      </tr><tr>
+        <td>
+          82
+        </td>
+        <td>
+          193
+        </td>
+        <td>
+          2800
+          -
+          2800
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$7
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$7
+        </td>
+      </tr><tr>
+        <td>
+          82
+        </td>
+        <td>
+          459
+        </td>
+        <td>
+          2800
+          -
+          2888
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$7, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8)
+        </td>
+      </tr><tr>
+        <td>
+          93
+        </td>
+        <td>
+          34
+        </td>
+        <td>
+          3204
+          -
+          3286
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean)](scala.Tuple6.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean](staticObject, dataType, functionName, arguments, inputTypes, propagateNull))
+        </td>
+      </tr><tr>
+        <td>
+          93
+        </td>
+        <td>
+          231
+        </td>
+        <td>
+          3209
+          -
+          3285
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple6.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple6.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean](staticObject, dataType, functionName, arguments, inputTypes, propagateNull)
+        </td>
+      </tr><tr>
+        <td>
+          94
+        </td>
+        <td>
+          376
+        </td>
+        <td>
+          3303
+          -
+          3307
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr><tr>
+        <td>
+          109
+        </td>
+        <td>
+          273
+        </td>
+        <td>
+          3683
+          -
+          3683
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8
+        </td>
+      </tr><tr>
+        <td>
+          109
+        </td>
+        <td>
+          48
+        </td>
+        <td>
+          3683
+          -
+          3787
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply$default$8)
+        </td>
+      </tr><tr>
+        <td>
+          120
+        </td>
+        <td>
+          196
+        </td>
+        <td>
+          4112
+          -
+          4210
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean)](scala.Tuple7.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean](staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable))
+        </td>
+      </tr><tr>
+        <td>
+          120
+        </td>
+        <td>
+          416
+        </td>
+        <td>
+          4117
+          -
+          4209
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple7.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple7.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean](staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable)
+        </td>
+      </tr><tr>
+        <td>
+          121
+        </td>
+        <td>
+          85
+        </td>
+        <td>
+          4227
+          -
+          4231
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr><tr>
+        <td>
+          136
+        </td>
+        <td>
+          468
+        </td>
+        <td>
+          4600
+          -
+          4721
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          org.apache.spark.sql.catalyst.expressions.objects.StaticInvoke.apply(staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic)
+        </td>
+      </tr><tr>
+        <td>
+          147
+        </td>
+        <td>
+          232
+        </td>
+        <td>
+          5060
+          -
+          5169
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Tuple8.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Tuple8.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean, Boolean](staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic)
+        </td>
+      </tr><tr>
+        <td>
+          147
+        </td>
+        <td>
+          1
+        </td>
+        <td>
+          5055
+          -
+          5170
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.Some.apply
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.Some.apply[(Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean, Boolean)](scala.Tuple8.apply[Class[_$3], org.apache.spark.sql.types.DataType, String, Seq[org.apache.spark.sql.catalyst.expressions.Expression], Seq[org.apache.spark.sql.types.AbstractDataType], Boolean, Boolean, Boolean](staticObject, dataType, functionName, arguments, inputTypes, propagateNull, returnNullable, isDeterministic))
+        </td>
+      </tr><tr>
+        <td>
+          148
+        </td>
+        <td>
+          380
+        </td>
+        <td>
+          5187
+          -
+          5191
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          scala.None
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          scala.None
+        </td>
+      </tr>
+    </table>
+          </div>
+        </div>
+      </body>
+    </html>

@@ -1,0 +1,308 @@
+<html>
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title id="title">
+          com/sparkutils/shim/expressions/Names.scala.html
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/css/theme.default.min.css" type="text/css"/><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.20.1/js/jquery.tablesorter.min.js"></script><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/><script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script><script type="text/javascript">
+        $(document).ready(function() {$(".tablesorter").tablesorter();});
+      </script>
+        <style>
+          table.codegrid { font-family: monospace; font-size: 12px; width: auto!important; }table.statementlist { width: auto!important; font-size: 13px; } table.codegrid td { padding: 0!important; border: 0!important } table td.linenumber { width: 40px!important; } 
+        </style>
+      </head>
+      <body style="font-family: monospace;">
+        <ul class="nav nav-tabs">
+          <li>
+            <a href="#codegrid" data-toggle="tab">Codegrid</a>
+          </li>
+          <li>
+            <a href="#statementlist" data-toggle="tab">Statement List</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="codegrid">
+            <pre style='font-size: 12pt; font-family: courier, monospace;'>1 <span style=''>package com.sparkutils.shim.expressions
+</span>2 <span style=''>
+</span>3 <span style=''>import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
+</span>4 <span style=''>import org.apache.spark.sql.catalyst.expressions.{NamedExpression, UnresolvedNamedLambdaVariable}
+</span>5 <span style=''>
+</span>6 <span style=''>/**
+</span>7 <span style=''> * Hides differences in name usage
+</span>8 <span style=''> */
+</span>9 <span style=''>object Names {
+</span>10 <span style=''>
+</span>11 <span style=''>  def toName(ne: NamedExpression): String =
+</span>12 <span style=''>    ne match {
+</span>13 <span style=''>      case nv: UnresolvedNamedLambdaVariable =&gt; </span><span style='background: #F0ADAD'>toName(nv)</span><span style=''>
+</span>14 <span style=''>      case _ =&gt; </span><span style='background: #F0ADAD'>toName(ne.qualifier :+ ne.name)</span><span style=''>
+</span>15 <span style=''>    }
+</span>16 <span style=''>
+</span>17 <span style=''>  def toName(nv: UnresolvedNamedLambdaVariable): String =
+</span>18 <span style=''>    </span><span style='background: #F0ADAD'>toName(nv.nameParts)</span><span style=''>
+</span>19 <span style=''>
+</span>20 <span style=''>  def toName(parts: Seq[String]): String =
+</span>21 <span style=''>    </span><span style='background: #F0ADAD'>parts.mkString(&quot;.&quot;)</span><span style=''>
+</span>22 <span style=''>
+</span>23 <span style=''>  def toName(unresolvedFunction: UnresolvedFunction): String =
+</span>24 <span style=''>    </span><span style='background: #F0ADAD'>toName(unresolvedFunction.nameParts)</span><span style=''>
+</span>25 <span style=''>
+</span>26 <span style=''>}
+</span></pre>
+          </div>
+          <div class="tab-pane" id="statementlist">
+            <table cellspacing="0" cellpadding="0" class="table statementlist">
+      <tr>
+        <th>Line</th>
+        <th>Stmt Id</th>
+        <th>Pos</th>
+        <th>Tree</th>
+        <th>Symbol</th>
+        <th>Tests</th>
+        <th>Code</th>
+      </tr><tr>
+        <td>
+          13
+        </td>
+        <td>
+          356
+        </td>
+        <td>
+          371
+          -
+          381
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.expressions.Names.toName
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          Names.this.toName(nv)
+        </td>
+      </tr><tr>
+        <td>
+          14
+        </td>
+        <td>
+          125
+        </td>
+        <td>
+          421
+          -
+          428
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.NamedExpression.name
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          ne.name
+        </td>
+      </tr><tr>
+        <td>
+          14
+        </td>
+        <td>
+          69
+        </td>
+        <td>
+          398
+          -
+          429
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.expressions.Names.toName
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          Names.this.toName(ne.qualifier.:+[String, Seq[String]](ne.name)(collection.this.Seq.canBuildFrom[String]))
+        </td>
+      </tr><tr>
+        <td>
+          14
+        </td>
+        <td>
+          502
+        </td>
+        <td>
+          418
+          -
+          418
+        </td>
+        <td>
+          TypeApply
+        </td>
+        <td>
+          scala.collection.Seq.canBuildFrom
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          collection.this.Seq.canBuildFrom[String]
+        </td>
+      </tr><tr>
+        <td>
+          14
+        </td>
+        <td>
+          287
+        </td>
+        <td>
+          405
+          -
+          428
+        </td>
+        <td>
+          ApplyToImplicitArgs
+        </td>
+        <td>
+          scala.collection.SeqLike.:+
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          ne.qualifier.:+[String, Seq[String]](ne.name)(collection.this.Seq.canBuildFrom[String])
+        </td>
+      </tr><tr>
+        <td>
+          18
+        </td>
+        <td>
+          324
+        </td>
+        <td>
+          499
+          -
+          519
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.expressions.Names.toName
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          Names.this.toName(nv.nameParts)
+        </td>
+      </tr><tr>
+        <td>
+          18
+        </td>
+        <td>
+          518
+        </td>
+        <td>
+          506
+          -
+          518
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.expressions.UnresolvedNamedLambdaVariable.nameParts
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          nv.nameParts
+        </td>
+      </tr><tr>
+        <td>
+          21
+        </td>
+        <td>
+          86
+        </td>
+        <td>
+          568
+          -
+          587
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          scala.collection.TraversableOnce.mkString
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          parts.mkString(&quot;.&quot;)
+        </td>
+      </tr><tr>
+        <td>
+          24
+        </td>
+        <td>
+          337
+        </td>
+        <td>
+          656
+          -
+          692
+        </td>
+        <td>
+          Apply
+        </td>
+        <td>
+          com.sparkutils.shim.expressions.Names.toName
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          Names.this.toName(unresolvedFunction.nameParts)
+        </td>
+      </tr><tr>
+        <td>
+          24
+        </td>
+        <td>
+          465
+        </td>
+        <td>
+          663
+          -
+          691
+        </td>
+        <td>
+          Select
+        </td>
+        <td>
+          org.apache.spark.sql.catalyst.analysis.UnresolvedFunction.nameParts
+        </td>
+        <td>
+          
+        </td>
+        <td style="background: #F0ADAD">
+          unresolvedFunction.nameParts
+        </td>
+      </tr>
+    </table>
+          </div>
+        </div>
+      </body>
+    </html>
