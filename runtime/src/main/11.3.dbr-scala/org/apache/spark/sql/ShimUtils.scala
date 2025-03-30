@@ -1,5 +1,6 @@
 package org.apache.spark.sql
 
+import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
