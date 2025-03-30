@@ -237,6 +237,11 @@ object ShimUtils {
   def joinWith[T, U](current: Dataset[T], other: Dataset[U], condition: Column, joinType: String)(implicit enc: Encoder[(T,U)]): Dataset[(T, U)] =
     current.joinWith(other, condition, joinType)
 
+  /**
+   * Spark4 unifies
+   */
+  def expressionEncoder[T](encoder: Encoder[T]): ExpressionEncoder[T] =
+    encoder.asInstanceOf[ExpressionEncoder[T]]
 
   def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
     Dataset.ofRows(sparkSession, logicalPlan)
