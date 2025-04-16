@@ -25,6 +25,9 @@ jobs:
           "profile": ["Spark2"],
           "scala": ["scala_2.11"]
         }
+      sparkVersion: 2.4.2
+      hadoopVersion: 3
+      jdk: 8
     secrets: inherit
 
   testBuilds_2_12_10:
@@ -36,6 +39,9 @@ jobs:
           "profile": ["Spark3", "Spark313"],
           "scala": ["scala_2.12.10"]
         }  
+      sparkVersion: 3.5.5
+      hadoopVersion: 3
+      jdk: 21
     secrets: inherit
 
   testBuilds_2_12_15_and_13_5:
@@ -47,6 +53,9 @@ jobs:
           "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350" ],
           "scala": [ "scala_2.12.15", "scala_2.13.5" ]
         }
+      sparkVersion: 3.5.5
+      hadoopVersion: 3
+      jdk: 21
     secrets: inherit
 
   noTestBuilds_2_12_10:
@@ -58,6 +67,9 @@ jobs:
           "profile": ["9.1.dbr"],
           "scala": ["scala_2.12.10"]
         }
+      sparkVersion: 3.5.5
+      hadoopVersion: 3
+      jdk: 21
     secrets: inherit
 
   noTestBuilds_2_12_15:
@@ -69,6 +81,9 @@ jobs:
           "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
+      sparkVersion: 3.5.5
+      hadoopVersion: 3
+      jdk: 21
     secrets: inherit
 
   # prove tests run with single thread, ensures compilation issues aren't hidden by being run on multiple threads instead of re-used in the same thread (e.g. state resetting etc.)
@@ -142,6 +157,9 @@ jobs:
           "profile": ["Spark2"],
           "scala": ["scala_2.11"]
         }
+      sparkVersion: 3.5.5
+      hadoopVersion: 3
+      jdk: 21
     secrets: inherit
 
   publish_2_12_10:
@@ -153,6 +171,9 @@ jobs:
           "profile": ["Spark3", "Spark313", "9.1.dbr"],
           "scala": ["scala_2.12.10"]
         }  
+      sparkVersion: 3.5.5
+      hadoopVersion: 3
+      jdk: 21
     secrets: inherit
 
   publish_2_12_15_and_13_5:
@@ -164,6 +185,9 @@ jobs:
           "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350" ],
           "scala": [ "scala_2.12.15", "scala_2.13.5" ]
         }
+      sparkVersion: 3.5.5
+      hadoopVersion: 3
+      jdk: 21
     secrets: inherit
 
   publish_2_12_15:
@@ -175,6 +199,9 @@ jobs:
           "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr", "16.3.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
+      sparkVersion: 3.5.5
+      hadoopVersion: 3
+      jdk: 21
     secrets: inherit
 
   site:
