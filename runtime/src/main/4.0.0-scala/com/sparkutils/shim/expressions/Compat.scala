@@ -8,6 +8,7 @@ trait StatefulLike extends Nondeterministic {
    */
   def freshCopy(): StatefulLike
 
+  def stateful: Boolean = true
 }
 
 trait HigherOrderFunctionLike extends HigherOrderFunction {}
