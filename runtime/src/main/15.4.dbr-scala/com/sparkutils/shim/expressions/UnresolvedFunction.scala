@@ -27,7 +27,7 @@ object UnresolvedFunction5 {
 
   def unapply(unresolvedFunction: UnresolvedFunction): Option[(String, Seq[Expression], Boolean, Option[Expression], Boolean)] =
     unresolvedFunction match {
-      case u@UnresolvedFunction(_, argumentExpressions, is, filter, ignoreNulls, _, _) =>
+      case u@UnresolvedFunction(_, argumentExpressions, is, filter, ignoreNulls, _) =>
         Some((Names.toName(u), argumentExpressions, is, filter, ignoreNulls))
       case _ => None
     }
@@ -53,7 +53,7 @@ object UnresolvedFunction4 {
 
   def unapply(unresolvedFunction: UnresolvedFunction): Option[(String, Seq[Expression], Boolean, Option[Expression])] =
     unresolvedFunction match {
-      case u@UnresolvedFunction(_, argumentExpressions, is, filter, _, _, _) =>
+      case u@UnresolvedFunction(_, argumentExpressions, is, filter, _, _) =>
         Some((Names.toName(u), argumentExpressions, is, filter))
       case _ => None
     }
