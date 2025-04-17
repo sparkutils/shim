@@ -10,7 +10,7 @@ trait StatefulLike extends Nondeterministic {
    * Return a fresh uninitialized copy of the stateful expression.
    */
   def freshCopy(): StatefulLike
-  def stateful: Boolean = true
+  override def stateful: Boolean = true
 
 }
 
