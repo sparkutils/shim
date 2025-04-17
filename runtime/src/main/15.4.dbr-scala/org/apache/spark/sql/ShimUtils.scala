@@ -114,8 +114,7 @@ object ShimUtils {
    * @return
    */
   def newParser() = {
-    // regression? no args was removed, public org.apache.spark.sql.execution.SparkSqlParser(org.apache.spark.sql.internal.SQLConf)
-    new SparkSqlParser(new SQLConf)
+    new SparkSqlParser()
   }
 
   /**
