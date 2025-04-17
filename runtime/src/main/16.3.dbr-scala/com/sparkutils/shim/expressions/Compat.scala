@@ -11,6 +11,7 @@ trait StatefulLike extends Nondeterministic {
    */
   def freshCopy(): StatefulLike
   override def stateful: Boolean = true
+  override def nonVolatile: Boolean = false
 
 }
 

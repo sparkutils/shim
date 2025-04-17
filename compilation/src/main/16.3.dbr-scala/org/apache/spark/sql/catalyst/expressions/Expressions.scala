@@ -19,6 +19,8 @@ abstract class Expression extends TreeNode[Expression] {
 
  def stateful: Boolean = false
 
+  // dbr 15.3 added
+  def nonVolatile: Boolean = true
   /**
    * Returns true when an expression is a candidate for static evaluation before the query is
    * executed. A typical use case: [[org.apache.spark.sql.catalyst.optimizer.ConstantFolding]]
