@@ -1856,7 +1856,7 @@ class Analyzer(override val catalogManager: CatalogManager) extends RuleExecutor
       val externalFunctionNameSet = new mutable.HashSet[Seq[String]]()
 
       plan.resolveExpressionsWithPruning(_.containsAnyPattern(UNRESOLVED_FUNCTION)) {
-        case f @ UnresolvedFunction(nameParts, _, _, _, _, _, _) =>
+        case f @ UnresolvedFunction(nameParts, _, _, _, _, _) =>
           if (ResolveFunctions.lookupBuiltinOrTempFunction(nameParts).isDefined) {
             f
           } else {
@@ -1985,7 +1985,7 @@ class Analyzer(override val catalogManager: CatalogManager) extends RuleExecutor
         q.transformExpressionsWithPruning(
           _.containsAnyPattern(UNRESOLVED_FUNCTION, GENERATOR),
           ruleId) {
-          case u @ UnresolvedFunction(nameParts, arguments, _, _, _, _, _)
+          case u @ UnresolvedFunction(nameParts, arguments, _, _, _, _)
             if hasLambdaAndResolvedArguments(arguments) => withPosition(u) {
             resolveBuiltinOrTempFunction(nameParts, arguments, Some(u)).map {
               case func: HigherOrderFunction => func
@@ -2014,7 +2014,7 @@ class Analyzer(override val catalogManager: CatalogManager) extends RuleExecutor
             }
           }
 
-          case u @ UnresolvedFunction(nameParts, arguments, _, _, _, _, _) => withPosition(u) {
+          case u @ UnresolvedFunction(nameParts, arguments, _, _, _, _) => withPosition(u) {
             resolveBuiltinOrTempFunction(nameParts, arguments, Some(u)).getOrElse {
               val CatalogAndIdentifier(catalog, ident) = expandIdentifier(nameParts)
               if (CatalogV2Util.isSessionCatalog(catalog)) {

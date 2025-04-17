@@ -16,9 +16,7 @@ case class UnresolvedFunction(
                                isDistinct: Boolean,
                                filter: Option[Expression] = None,
                                ignoreNulls: Boolean = false,
-                               orderingWithinGroup: Seq[SortOrder] = Seq.empty,
-                               unknownField: Boolean = false // can't find name
-                             )
+                               orderingWithinGroup: Seq[SortOrder] = Seq.empty)
   extends Expression with Unevaluable {
   import org.apache.spark.sql.connector.catalog.CatalogV2Implicits._
 // Array[java.lang.reflect.Constructor[_]] = Array(public org.apache.spark.sql.catalyst.analysis.UnresolvedFunction(scala.collection.Seq,scala.collection.Seq,boolean,scala.Option,boolean,scala.collection.Seq,boolean))
