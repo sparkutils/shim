@@ -2,7 +2,10 @@ package com.sparkutils.shim.expressions
 
 import org.apache.spark.sql.catalyst.expressions.{Expression, HigherOrderFunction, Stateful, Unevaluable, LambdaFunction => SLambdaFunction}
 import org.apache.spark.sql.types.DataType
+// DBR 15.4 added nonVolatile
+trait NondeterministicLike extends Nondeterministic {
 
+}
 trait StatefulLike extends Stateful {
 }
 
