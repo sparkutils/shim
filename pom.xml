@@ -367,9 +367,9 @@
             </properties>
         </profile>
         <profile>
-            <id>16.3.dbr</id>
+            <id>16.4.dbr</id>
             <properties>
-                <dbrCompatVersion>16.3.dbr_</dbrCompatVersion>
+                <dbrCompatVersion>16.4.dbr_</dbrCompatVersion>
                 <framelessVersion>0.16.0</framelessVersion>
                 <sparkVersion>3.5.0</sparkVersion>
                 <sparkCompatVersion>3.5</sparkCompatVersion>
@@ -390,7 +390,7 @@
     </modules>
 
     <properties>
-        <revision>0.2.0-RC1</revision>
+        <revision>0.2.0-RC2-SNAPSHOT</revision>
 
         <mavenFlattenPluginVersion>1.2.7</mavenFlattenPluginVersion>
         <mavenProjectInfoReportsPluginVersion>3.4.5</mavenProjectInfoReportsPluginVersion>
