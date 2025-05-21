@@ -280,4 +280,8 @@ object ShimUtils {
 
   def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
     dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
+
+  def isStateful(expression: Expression) =
+    expression.stateful
+
 }

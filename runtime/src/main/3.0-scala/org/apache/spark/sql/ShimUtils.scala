@@ -4,7 +4,7 @@ import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, FunctionIdentifier}
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute, NamedExpression, Stateful}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
 import org.apache.spark.sql.internal.SQLConf
@@ -274,4 +274,10 @@ object ShimUtils {
   def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
     dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
 
+  def isStateful(expression: Expression) = {
+    expression match {
+      case s: Stateful => true
+      case _ => false
+    }
+  }
 }
