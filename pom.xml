@@ -373,7 +373,7 @@
                 <framelessVersion>0.16.0</framelessVersion>
                 <sparkVersion>3.5.0</sparkVersion>
                 <sparkCompatVersion>3.5</sparkCompatVersion>
-                <profileDir>16.3.dbr</profileDir>
+                <profileDir>16.4.dbr</profileDir>
                 <jacksonVersion>2.14.2</jacksonVersion> <!-- scalameter dependency is 2.9.10 so perf tests runs need to change it -->
                 <guavaVersion>15.0</guavaVersion> <!-- databricks runtime version -->
                 <parserCombinatorVersion>1.1.2</parserCombinatorVersion> <!-- databricks runtime version -->

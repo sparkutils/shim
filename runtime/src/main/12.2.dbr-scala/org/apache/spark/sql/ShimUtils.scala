@@ -5,7 +5,7 @@ import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, NamedExpression, PrettyAttribute, Stateful}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.util.TypeUtils
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, FunctionIdentifier}
