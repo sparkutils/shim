@@ -2,8 +2,8 @@ package org.apache.spark.sql
 
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute, NamedExpression}
+import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, NamedExpression, PrettyAttribute}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, FunctionIdentifier}
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
@@ -268,7 +268,10 @@ object ShimUtils {
    * Spark4 unifies
    */
   def expressionEncoder[T](encoder: Encoder[T]): ExpressionEncoder[T] =
-    encoder.asInstanceOf[ExpressionEncoder[T]]
+    encoder match {
+      case e: ExpressionEncoder[T] => e
+      case a: AgnosticEncoder[T] => ExpressionEncoder(a)
+    }
 
   def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
     Dataset.ofRows(sparkSession, logicalPlan)
