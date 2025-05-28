@@ -6,7 +6,7 @@
     <parent>
         <artifactId>shim_root_${dbrCompatVersion}${sparkCompatVersion}_${scalaCompatVersion}</artifactId>
         <groupId>com.sparkutils</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <version>${project.parent.version}</version>
     <name>Shim Runtime</name>
@@ -20,6 +20,13 @@
             <version>${sparkVersion}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib_${scalaCompatVersion}</artifactId>
+            <version>${sparkVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

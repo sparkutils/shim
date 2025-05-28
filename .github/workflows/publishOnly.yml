@@ -13,16 +13,6 @@ env:
 
 jobs:
 
-  publish_Spark2:
-    uses: sparkutils/building/.github/workflows/publish_build.yml@main
-    with:
-      theMatrix: |
-        {
-          "profile": ["Spark2"],
-          "scala": ["scala_2.11"]
-        }
-    secrets: inherit
-
   publish_2_12_10:
     uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
@@ -30,5 +20,14 @@ jobs:
         {
           "profile": ["Spark3", "Spark313", "9.1.dbr"],
           "scala": ["scala_2.12.10"]
-        }  
+        }
+
+  publish_2_12_15:
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
+    with:
+      theMatrix: |
+        {
+          "profile": [ "12.2.dbr" ],
+          "scala": [ "scala_2.12.15" ]
+        }
     secrets: inherit

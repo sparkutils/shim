@@ -3,13 +3,17 @@ package com.sparkutils.shim.expressions
 import org.apache.spark.sql.catalyst.expressions.{Expression, HigherOrderFunction, Nondeterministic, Unevaluable, LambdaFunction => SLambdaFunction}
 import org.apache.spark.sql.types.DataType
 
+// DBR 15.4 added nonVolatile
+trait NondeterministicLike extends Nondeterministic {
 
+}
 // SPARK-41049 is backported
 trait StatefulLike extends Nondeterministic {
   /**
    * Return a fresh uninitialized copy of the stateful expression.
    */
   def freshCopy(): StatefulLike
+  override def stateful: Boolean = true
 
 }
 
@@ -25,3 +29,6 @@ trait HigherOrderFunctionLike extends HigherOrderFunction {
  */
 trait FoldableUnevaluable extends Unevaluable {
 }
+
+// dropped in 4.0
+trait NullIntolerant extends org.apache.spark.sql.catalyst.expressions.NullIntolerant

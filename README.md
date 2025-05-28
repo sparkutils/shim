@@ -21,6 +21,12 @@ The 4.x StaticInvoke interface, for example, adds a new default parameter to the
 
 Shim treats this as a new runtime version **not** a new compile time dependency and, as such, should not require dependent libraries to publish new versions.
 
+### Version 0.2.0
+
+The interfaces have been modified a bit to allow for Spark 4.0 support, expressionEncoder will use AgnosticExpressionPathEncoder (which will be removed in 4.1).  
+
+Spark 0.3.0 will migrate this to 4.x support and this function will throw NotImplementedError. 
+
 ## What it is not
 
 Shim isn't a wrapper around all the Spark internal apis, it only supports the functionality needed by Quality and Frameless.
