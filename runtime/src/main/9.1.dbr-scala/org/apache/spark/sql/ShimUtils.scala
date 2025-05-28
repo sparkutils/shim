@@ -282,6 +282,9 @@ object ShimUtils {
     }
   }
 
+  def logicalPlan[T](dataSet: Dataset[T]): LogicalPlan =
+    dataSet.logicalPlan
+
   def context[T](dataSet: Dataset[T]): SQLContext =
     dataSet.sqlContext
 
