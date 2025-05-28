@@ -281,4 +281,16 @@ object ShimUtils {
 
   def isStateful(expression: Expression) =
     expression.stateful
+
+  def logicalPlan[T](dataSet: Dataset[T]): LogicalPlan =
+    dataSet.logicalPlan
+
+  def context[T](dataSet: Dataset[T]): SQLContext =
+    dataSet.sqlContext
+
+  def mkDataset[T](
+                    sqlContext: SQLContext,
+                    plan: LogicalPlan,
+                    encoder: Encoder[T]
+                  ) = new Dataset(sqlContext, plan, encoder)
 }

@@ -22,3 +22,6 @@ trait HigherOrderFunctionLike extends HigherOrderFunction {
  */
 trait FoldableUnevaluable extends Unevaluable {
 }
+
+// dropped in 4.0
+trait NullIntolerant extends org.apache.spark.sql.catalyst.expressions.NullIntolerant

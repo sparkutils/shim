@@ -281,7 +281,19 @@ object ShimUtils {
   def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
     dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
 
+  def logicalPlan[T](dataSet: Dataset[T]): LogicalPlan =
+    dataSet.logicalPlan
+
   def isStateful(expression: Expression) =
     expression.stateful
 
+
+  def context[T](dataSet: Dataset[T]): SQLContext =
+    dataSet.sqlContext
+
+  def mkDataset[T](
+                    sqlContext: SQLContext,
+                    plan: LogicalPlan,
+                    encoder: Encoder[T]
+                  ) = new Dataset(sqlContext, plan, encoder)
 }

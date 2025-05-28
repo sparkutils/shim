@@ -38,7 +38,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350" ],
+          "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350", "16.4.dbr" ],
           "scala": [ "scala_2.12.15", "scala_2.13.5" ]
         }
     secrets: inherit
@@ -48,17 +48,17 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr", "15.4.dbr", "16.3.dbr" ],
+          "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr", "15.4.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
     secrets: inherit
 
-  publish_2_12_18_and_2_13_12:
+  publish_2_13_16:
     uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
-          "profile": ["Spark4"],
-          "scala": ["scala_2.13.12"]
+          "profile": [ "17.0.dbr", "Spark4" ],
+          "scala": [ "scala_2.13.16" ]
         }
     secrets: inherit

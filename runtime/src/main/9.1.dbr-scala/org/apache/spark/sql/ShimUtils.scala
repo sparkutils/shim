@@ -281,4 +281,13 @@ object ShimUtils {
       case _ => false
     }
   }
+
+  def context[T](dataSet: Dataset[T]): SQLContext =
+    dataSet.sqlContext
+
+  def mkDataset[T](
+                    sqlContext: SQLContext,
+                    plan: LogicalPlan,
+                    encoder: Encoder[T]
+                  ) = new Dataset(sqlContext, plan, encoder)
 }

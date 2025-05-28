@@ -44,7 +44,7 @@ object utils {
   }
 
   // below support moving FramelessInternals to frameless
-  def logicalPlan(ds: Dataset[_]): LogicalPlan = ds.logicalPlan
+  def logicalPlan(ds: Dataset[_]): LogicalPlan = ShimUtils.logicalPlan(ds)
 
   def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
     ShimUtils.ofRows(sparkSession, logicalPlan)

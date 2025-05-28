@@ -3,7 +3,7 @@ package org.apache.spark.sql
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, AgnosticExpressionPathEncoder, ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
@@ -18,6 +18,7 @@ import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
 import org.apache.spark.sql.classic.ClassicConversions.castToImpl
+import org.apache.spark.sql.SQLContext
 
 import scala.reflect.ClassTag
 
@@ -172,7 +173,7 @@ object ShimUtils {
       case dt => new StructType().add("value", dt, nullable = nullable)
     }
 
-  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = ???/*{
+  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = {
     val isNullable = nullable
     val iFromCatalyst = fromCatalyst
     val iToCatalyst = toCatalyst
@@ -218,7 +219,7 @@ object ShimUtils {
       objSerializer = serializer,
       objDeserializer = fromCatalyst(out)
     )
-  }*/
+  }
   def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
     new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""", messageParameters = Map.empty )
 
@@ -312,4 +313,15 @@ object ShimUtils {
   def isStateful(expression: Expression) =
     expression.stateful
 
+  def logicalPlan[T](dataSet: Dataset[T]): LogicalPlan =
+    dataSet.asInstanceOf[classic.Dataset[T]].logicalPlan
+
+  def context[T](dataSet: Dataset[T]): SQLContext =
+    dataSet.asInstanceOf[classic.Dataset[T]].sqlContext
+
+  def mkDataset[T](
+    sqlContext: SQLContext,
+    plan: LogicalPlan,
+    encoder: Encoder[T]
+  ) = new classic.Dataset(sqlContext, plan, encoder)
 }
