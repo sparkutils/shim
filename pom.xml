@@ -748,6 +748,7 @@
                     <version>${mavenFlattenPluginVersion}</version>
                     <configuration>
                         <flattenMode>oss</flattenMode>
+                        <updatePomFile>true</updatePomFile>
                     </configuration>
                     <executions>
                         <!-- enable flattening -->
