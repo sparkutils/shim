@@ -414,7 +414,7 @@
     </modules>
 
     <properties>
-        <revision>0.2.0-RC5</revision>
+        <revision>0.2.0-RC6</revision> 
 
         <mavenFlattenPluginVersion>1.2.7</mavenFlattenPluginVersion>
         <mavenProjectInfoReportsPluginVersion>3.4.5</mavenProjectInfoReportsPluginVersion>
@@ -810,15 +810,14 @@
                 <artifactId>scala-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.13</version>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.7.0</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                    <stagingProgressTimeoutMinutes>15</stagingProgressTimeoutMinutes>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                    <waitUntil>published</waitUntil>
                 </configuration>
             </plugin>
             <plugin>

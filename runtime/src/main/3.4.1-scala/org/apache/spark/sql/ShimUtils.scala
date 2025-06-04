@@ -293,4 +293,15 @@ object ShimUtils {
                     plan: LogicalPlan,
                     encoder: Encoder[T]
                   ) = new Dataset(sqlContext, plan, encoder)
+
+  /**
+   * Copies trees with any nested Statefuls getting fresh copies
+   * @param expressions
+   * @return
+   */
+  def copyStateful(expressions: Seq[Expression]): Seq[Expression] =
+    /* expressions.map(e => e.transformUp {
+      case t: StatefulLike => t.freshCopy()
+    }) */
+    expressions.map(e => e.freshCopyIfContainsStatefulExpression())
 }
