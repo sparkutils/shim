@@ -18,6 +18,7 @@ import org.apache.spark.sql.types._
 abstract class Expression extends TreeNode[Expression] {
 
   def stateful: Boolean = false
+  def freshCopyIfContainsStatefulExpression(): Expression = this
 
   /**
    * Returns true when an expression is a candidate for static evaluation before the query is

@@ -17,8 +17,10 @@ import org.apache.spark.sql.types._
 // taken from OSS master https://github.com/apache/spark/commit/cd32c22c9373333d2bd3b89a4ffae1b549396658
 abstract class Expression extends TreeNode[Expression] {
 
- def stateful: Boolean = false
- // spark 4
+  def stateful: Boolean = false
+  def freshCopyIfContainsStatefulExpression(): Expression = this
+
+  // spark 4
   def nullIntolerant: Boolean = false
 
   // dbr 15.3 added

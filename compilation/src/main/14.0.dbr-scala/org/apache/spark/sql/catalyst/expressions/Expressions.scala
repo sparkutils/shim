@@ -19,6 +19,7 @@ abstract class Expression extends TreeNode[Expression] {
 
   // 3.5
   def stateful: Boolean = false
+  def freshCopyIfContainsStatefulExpression(): Expression = this
 
   /**
    * Returns true when an expression is a candidate for static evaluation before the query is

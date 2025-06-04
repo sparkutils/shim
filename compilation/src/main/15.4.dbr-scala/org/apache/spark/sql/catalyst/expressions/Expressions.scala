@@ -18,6 +18,7 @@ import org.apache.spark.sql.types._
 abstract class Expression extends TreeNode[Expression] {
 
  def stateful: Boolean = false
+  def freshCopyIfContainsStatefulExpression(): Expression = this
 
   // dbr 15.3 added
   def nonVolatile: Boolean = true
