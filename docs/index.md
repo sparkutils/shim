@@ -16,3 +16,5 @@
 Using the private Spark APIs can allow for improved functionality (e.g. Frameless encoder derivation) and performance (e.g. Quality HOF compilation or Plan rules) but it comes at a cost: lots of workarounds to support different runtimes.
 
 Shim aims to bring those workarounds in a separate runtime library shim and let the library authors focus on useful functionality.
+
+* :new:{.pulseABit} Support for Spark 4 and DBR 17.0

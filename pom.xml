@@ -414,7 +414,7 @@
     </modules>
 
     <properties>
-        <revision>0.2.0-RC6</revision> 
+        <revision>0.2.0</revision>
 
         <mavenFlattenPluginVersion>1.2.7</mavenFlattenPluginVersion>
         <mavenProjectInfoReportsPluginVersion>3.4.5</mavenProjectInfoReportsPluginVersion>
@@ -819,6 +819,7 @@
                     <publishingServerId>central</publishingServerId>
                     <autoPublish>true</autoPublish>
                     <waitUntil>published</waitUntil>
+                    <ignorePublishedComponents>true</ignorePublishedComponents>
                 </configuration>
             </plugin>
             <plugin>
