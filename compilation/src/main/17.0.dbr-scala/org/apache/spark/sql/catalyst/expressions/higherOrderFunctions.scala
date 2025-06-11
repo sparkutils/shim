@@ -11,7 +11,6 @@ import org.apache.spark.sql.types.{AbstractDataType, DataType}
  * The function produces a number of variables which can be consumed by some lambda function.
  */
 trait HigherOrderFunction extends Expression with ExpectsInputTypes {
-  def checkForCancellationEnabled(v: Boolean): Unit = {}
 
   override final val nodePatterns: Seq[TreePattern] = Seq(HIGH_ORDER_FUNCTION)
 

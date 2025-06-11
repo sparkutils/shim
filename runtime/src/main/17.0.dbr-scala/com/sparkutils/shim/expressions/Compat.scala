@@ -19,7 +19,10 @@ trait StatefulLike extends NondeterministicLike {
   override def stateful: Boolean = true
 }
 
-trait HigherOrderFunctionLike extends HigherOrderFunction {}
+trait HigherOrderFunctionLike extends HigherOrderFunction {
+  def checkForCancellationEnabled(v: Boolean): Unit = {}
+
+}
 
 /**
  * 2.4 and 3.0 version doesn't have foldable as false so the optimiser tries to fold, we need Unevaluable for 14.4
