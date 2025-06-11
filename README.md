@@ -23,9 +23,9 @@ Shim treats this as a new runtime version **not** a new compile time dependency 
 
 ### Version 0.2.0
 
-The interfaces have been modified a bit to allow for Spark 4.0 support, expressionEncoder will use AgnosticExpressionPathEncoder (which will be removed in 4.1).  
+The interfaces have been modified a bit to allow for Spark 4.0 support, expressionEncoder will use AgnosticExpressionPathEncoder (which will be removed in Spark 4.1).  
 
-Spark 0.3.0 will migrate this to 4.x support and this function will throw NotImplementedError. 
+Shim 0.3.0 will migrate this to 4.x AgnosticEncoder support and this function will throw NotImplementedError. 
 
 ## What it is not
 
