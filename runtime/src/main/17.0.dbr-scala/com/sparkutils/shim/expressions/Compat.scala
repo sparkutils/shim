@@ -20,8 +20,10 @@ trait StatefulLike extends NondeterministicLike {
 }
 
 trait HigherOrderFunctionLike extends HigherOrderFunction {
-  def checkForCancellationEnabled(v: Boolean): Unit = {}
 
+  def checkForCancellationEnabled(check: Boolean): Unit = {
+
+  }
 }
 
 /**

@@ -12,6 +12,8 @@ import org.apache.spark.sql.types.{AbstractDataType, DataType}
  */
 trait HigherOrderFunction extends Expression with ExpectsInputTypes {
 
+  val checkForCancellationEnabled: Boolean = true
+
   override final val nodePatterns: Seq[TreePattern] = Seq(HIGH_ORDER_FUNCTION)
 
   override def nullable: Boolean = arguments.exists(_.nullable)
