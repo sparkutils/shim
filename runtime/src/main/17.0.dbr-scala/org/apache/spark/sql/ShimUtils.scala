@@ -11,15 +11,14 @@ import org.apache.spark.sql.catalyst.parser.ParseException
 import org.apache.spark.sql.catalyst.plans.JoinType
 import org.apache.spark.sql.catalyst.plans.logical.{Join, JoinHint, JoinWith, LogicalPlan}
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
-import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
-import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
+import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier, InternalRow}
+import org.apache.spark.sql.classic.ClassicConversions.castToImpl
 import org.apache.spark.sql.classic.{ColumnNodeToExpressionConverter, ExpressionUtils}
+import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
+import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
-import org.apache.spark.sql.classic.ClassicConversions.castToImpl
-import org.apache.spark.sql.SQLContext
-import org.apache.spark.sql.internal.SQLConf
 
 import scala.reflect.ClassTag
 
@@ -35,6 +34,11 @@ object ShimUtils {
 
     def withArguments(children: Seq[Expression]): UnresolvedFunction =
       unresolvedFunction.copy(arguments = children)
+  }
+
+  def convertInternalRowToRow(internalRow: InternalRow, schema: StructType): Row = {
+    val fromRow = ExpressionEncoder(schema).resolveAndBind().createDeserializer()
+    fromRow(internalRow)
   }
 
   def isPrimitive(dataType: DataType) = CatalystTypeConverters.isPrimitive(dataType)

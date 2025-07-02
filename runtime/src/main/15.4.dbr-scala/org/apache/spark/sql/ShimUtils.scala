@@ -4,20 +4,19 @@ import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
+import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
 import org.apache.spark.sql.catalyst.expressions.{Add, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, If, NamedExpression}
+import org.apache.spark.sql.catalyst.parser.ParseException
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.util.TypeUtils
-import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
+import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier, InternalRow}
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
-import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
-import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
-import org.apache.spark.sql.catalyst.parser.ParseException
-import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.internal.SQLConf
 
 import scala.reflect.ClassTag
 
@@ -63,6 +62,11 @@ object ShimUtils {
 
     def withArguments(children: Seq[Expression]): UnresolvedFunction =
       unresolvedFunction.copy(arguments = children)
+  }
+
+  def convertInternalRowToRow(internalRow: InternalRow, schema: StructType): Row = {
+    val fromRow = ExpressionEncoder(schema).resolveAndBind().createDeserializer()
+    fromRow(internalRow)
   }
 
   def isPrimitive(dataType: DataType) = CatalystTypeConverters.isPrimitive(dataType)

@@ -5,10 +5,10 @@ import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, NamedExpression, PrettyAttribute}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.util.TypeUtils
-import org.apache.spark.sql.catalyst.{CatalystTypeConverters, FunctionIdentifier}
+import org.apache.spark.sql.catalyst.{CatalystTypeConverters, FunctionIdentifier, InternalRow}
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
@@ -60,6 +60,11 @@ object ShimUtils {
 
     def withArguments(children: Seq[Expression]): UnresolvedFunction =
       unresolvedFunction.copy(arguments = children)
+  }
+
+  def convertInternalRowToRow(internalRow: InternalRow, schema: StructType): Row = {
+    val fromRow = ExpressionEncoder(RowEncoder.encoderFor(schema, lenient = false)).resolveAndBind().createDeserializer()
+    fromRow(internalRow)
   }
 
   def isPrimitive(dataType: DataType) = CatalystTypeConverters.isPrimitive(dataType)
