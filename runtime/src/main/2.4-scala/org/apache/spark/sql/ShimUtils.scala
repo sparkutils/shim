@@ -1,6 +1,7 @@
 package org.apache.spark.sql
 
 import com.sparkutils.shim.ShowParams
+import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, GetArrayStructFields, GetStructField, If, Literal, NamedExpression, PrettyAttribute, Stateful}
@@ -25,6 +26,12 @@ object ShimUtils {
 
     def withArguments(children: Seq[Expression]): UnresolvedFunction =
       unresolvedFunction.copy(children = children)
+  }
+
+  implicit class ExpressionEncoderOps[T](expressionEncoder: ExpressionEncoder[T]) {
+    def createDeserializer(): InternalRow => T = expressionEncoder.fromRow
+
+    def createSerializer(): T => InternalRow = expressionEncoder.toRow
   }
 
   def isPrimitive(dataType: DataType) =
