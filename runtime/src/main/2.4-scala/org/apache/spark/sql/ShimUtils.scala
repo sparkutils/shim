@@ -1,9 +1,11 @@
 package org.apache.spark.sql
 
+import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute}
-import org.apache.spark.sql.execution.SparkSqlParser
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, GetArrayStructFields, GetStructField, If, Literal, NamedExpression, PrettyAttribute, Stateful}
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.shim.hash.{Digest, InterpretedHashLongsFunction}
 import org.apache.spark.sql.types._
@@ -233,4 +235,90 @@ object ShimUtils {
       clsTag = implicitly[ClassTag[T]]
     )
   }
+
+  def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
+    new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""" )
+
+  def executePlan(ds: Dataset[_], plan: LogicalPlan): QueryExecution =
+    ds.sparkSession.sessionState.executePlan(plan)
+
+  /**
+   * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides wrapping function
+   * @param expression
+   * @return
+   */
+  def column(expression: Expression): Column = new Column(expression)
+
+  /**
+   * 4 preview2 moves named to ExpressionUtils
+   * @param expression
+   * @return
+   */
+  def toNamed(col: Column): NamedExpression = col.named
+
+  /**
+   * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides unwrapping function
+   * @param expression
+   * @return
+   */
+  def expression(column: Column): Expression = column.expr
+
+  /**
+   * Agnostic encoders in 4 preview2 are used which forces new serializers to be created instead of using those in the encoders
+   * This version introduces the same functionality using a provided encoder (e.g. one from frameless which doesn't do this).
+   *
+   * @param current
+   * @param other
+   * @param condition
+   * @param joinType
+   * @param enc
+   * @tparam T
+   * @tparam U
+   * @return
+   */
+  def joinWith[T, U](current: Dataset[T], other: Dataset[U], condition: Column, joinType: String)(implicit enc: Encoder[(T,U)]): Dataset[(T, U)] =
+    current.joinWith(other, condition, joinType)
+
+  /**
+   * Spark4 unifies
+   */
+  def expressionEncoder[T](encoder: Encoder[T]): ExpressionEncoder[T] =
+    encoder.asInstanceOf[ExpressionEncoder[T]]
+
+
+  def ofRows(sparkSession: SparkSession, logicalPlan: LogicalPlan): DataFrame =
+    Dataset.ofRows(sparkSession, logicalPlan)
+
+  def toString(dataFrame: DataFrame, showParams: ShowParams = ShowParams()) =
+    dataFrame.showString(showParams.numRows, showParams.truncate, showParams.vertical)
+
+
+  def isStateful(expression: Expression) = {
+    expression match {
+      case s: Stateful => true
+      case _ => false
+    }
+  }
+
+  def logicalPlan[T](dataSet: Dataset[T]): LogicalPlan =
+    dataSet.logicalPlan
+
+  def context[T](dataSet: Dataset[T]): SQLContext =
+    dataSet.sqlContext
+
+  def mkDataset[T](
+                    sqlContext: SQLContext,
+                    plan: LogicalPlan,
+                    encoder: Encoder[T]
+                  ) = new Dataset(sqlContext, plan, encoder)
+
+  /**
+   * Copies trees with any nested Statefuls getting fresh copies
+   * @param expressions
+   * @return
+   */
+  def copyStateful(expressions: Seq[Expression]): Seq[Expression] =
+    expressions.map(e => e.transformUp {
+      case t: Stateful => t.freshCopy()
+    })
 }

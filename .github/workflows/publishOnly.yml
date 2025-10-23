@@ -13,29 +13,12 @@ env:
 
 jobs:
 
-  # only publish snapshots on main by default, or when ~cut-release is in the commits
-  publishOnly_2_13_12:
-    strategy:
-      matrix:
-        profile: [Spark4]
-        scala: [ "scala_2.13.12" ]
-    # needs always per https://github.com/actions/runner/issues/491 very annoying
-    # only do snapshots on main by default, releases/snapshots forced with ~cut-release
-    if: |
-      (contains(github.event.head_commit.message, '~docsOnly') != true) &&
-        ( (endsWith(needs.site.outputs.version, '-SNAPSHOT') && github.ref == 'refs/heads/main') ||
-          contains(github.event.head_commit.message, '~cut-release') )
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/spark_maven
-        with:
-          title: Publishing ${{ matrix.profile }},${{ matrix.scala }}
-          script: |
-            mvn $MAVEN_CLI_OPTS -DskipTests -Dclassifiers=tests clean deploy -P ${{ matrix.profile }},${{ matrix.scala }}
-          gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+  publish_2_13_16:
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
+    with:
+      theMatrix: |
+        {
+          "profile": [ "17.3.dbr" ],
+          "scala": [ "scala_2.13.16" ]
+        }
+    secrets: inherit

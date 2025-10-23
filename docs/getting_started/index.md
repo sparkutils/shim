@@ -232,3 +232,31 @@ This, at project initialization phase, downloads and unpacks the shim_compilatio
 
 !!! info "how will I know if I need this?"
     You'll get strange errors, incompatible implementations or linkages, missing methods etc.  Hopefully they are already covered by the current code, if not raise an issue and we'll see if there is a solution to it.  
+
+## Using a library that depends on Shim
+
+If you are using, for example, Frameless or Quality, you need to understand if it has a dependency on shim_compilation or just runtime.
+
+### Runtime dependency
+
+Frameless, for example, uses runtime only, so you can possibly swap it out for other runtimes, you'll need to exclude the dependency e.g.:
+
+```xml
+<dependency>
+    <groupId>org.typelevel</groupId>
+    <artifactId>frameless-core_${scalaCompatVersion}</artifactId>
+    <version>${framelessVersion}</version>
+    <exclusions>
+        <exclusion>
+            <groupId>com.sparkutils</groupId>
+            <artifactId>*</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+You can then depend on the appropriate runtimes.
+
+### Compilation dependency
+
+Quality uses a compilation dependency with sources classifier that is not passed on to users of the library.  However, given it uses compilation, you likely __cannot__ change different shim_runtime's than provided by a particular Quality runtime.  
