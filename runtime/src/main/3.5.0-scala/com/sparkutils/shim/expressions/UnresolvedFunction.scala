@@ -42,7 +42,7 @@ object UnresolvedFunction4 {
    * @param isDistinct
    * @param filter
    * @param ignoreNulls
-   * @return
+   * @return 
    */
   def apply(
              nameParts: String,
