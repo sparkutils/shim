@@ -23,7 +23,7 @@ object UnresolvedFunction5 {
     arguments: Seq[Expression],
     isDistinct: Boolean,
     filter: Option[Expression] = None,
-    ignoreNulls: Boolean = false) = UnresolvedFunction(nameParts.split("."), arguments, isDistinct, filter)
+    ignoreNulls: Boolean = false) = UnresolvedFunction(nameParts.split('.'), arguments, isDistinct, filter)
 
   def unapply(unresolvedFunction: UnresolvedFunction): Option[(String, Seq[Expression], Boolean, Option[Expression], Boolean)] =
     unresolvedFunction match {
@@ -49,7 +49,7 @@ object UnresolvedFunction4 {
              nameParts: String,
              arguments: Seq[Expression],
              isDistinct: Boolean,
-             filter: Option[Expression] = None) = UnresolvedFunction(nameParts.split("."), arguments, isDistinct, filter)
+             filter: Option[Expression] = None) = UnresolvedFunction(nameParts.split('.'), arguments, isDistinct, filter)
 
   def unapply(unresolvedFunction: UnresolvedFunction): Option[(String, Seq[Expression], Boolean, Option[Expression])] =
     unresolvedFunction match {
