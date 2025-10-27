@@ -383,7 +383,7 @@
     </modules>
 
     <properties>
-        <revision>0.3.0-baseline</revision>
+        <revision>0.3.0-baseline2-SNAPSHOT</revision>
 
         <mavenFlattenPluginVersion>1.2.7</mavenFlattenPluginVersion>
         <mavenProjectInfoReportsPluginVersion>3.4.5</mavenProjectInfoReportsPluginVersion>

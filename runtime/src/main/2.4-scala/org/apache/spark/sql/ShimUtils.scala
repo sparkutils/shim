@@ -95,6 +95,18 @@ object ShimUtils {
   /**
    * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
    *
+   * Under 4.0.0 the session is evaluated to classic.Session
+   *
+   * @param funcReg
+   * @param name
+   * @param builder
+   */
+  def registerFunction(sparkSession: SparkSession)(name: String, builder: Seq[Expression] => Expression) =
+    sparkSession.sessionState.functionRegistry.createOrReplaceTempFunction(name, builder)
+
+  /**
+   * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
+   *
    * @param funcReg
    * @param name
    * @param builder
