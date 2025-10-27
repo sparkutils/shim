@@ -60,24 +60,13 @@ jobs:
         }
     secrets: inherit
 
-  noTestBuilds_2_12_10:
-    uses: sparkutils/building/.github/workflows/run_build.yml@main
-    with:
-      testString: -DskipTests
-      theMatrix: |
-        {
-          "profile": ["9.1.dbr"],
-          "scala": ["scala_2.12.10"]
-        }
-    secrets: inherit
-
   noTestBuilds_2_12_15:
     uses: sparkutils/building/.github/workflows/run_build.yml@main
     with:
       testString: -DskipTests
       theMatrix: |
         {
-          "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr", "15.4.dbr" ],
+          "profile": [ "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr", "15.4.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
     secrets: inherit
@@ -178,12 +167,12 @@ jobs:
     secrets: inherit
 
   publish_2_12_10:
-    needs: [ testBuilds_2_12_10, noTestBuilds_2_12_10 ]
+    needs: [ testBuilds_2_12_10 ]
     uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
-          "profile": ["Spark3", "Spark313", "9.1.dbr"],
+          "profile": ["Spark3", "Spark313"],
           "scala": ["scala_2.12.10"]
         }  
     secrets: inherit
@@ -205,7 +194,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr", "15.4.dbr" ],
+          "profile": [ "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr", "15.4.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
     secrets: inherit
