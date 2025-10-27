@@ -321,4 +321,15 @@ object ShimUtils {
     expressions.map(e => e.transformUp {
       case t: Stateful => t.freshCopy()
     })
+
+  /**
+   * Wrapper around call_function introduced in 3.5.0.  Spark 4 shims and above use internal.UnresolvedFunction
+   * and below uses analysis.UnresolvedFunction
+   * @param funcName
+   * @param cols
+   * @return
+   */
+  @scala.annotation.varargs
+  def callFunction(funcName: String, cols: Column*): Column =
+    column(com.sparkutils.shim.expressions.UnresolvedFunction4(funcName, cols.map(_.expr), false))
 }

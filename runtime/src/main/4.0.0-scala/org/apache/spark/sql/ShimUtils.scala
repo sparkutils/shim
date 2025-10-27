@@ -3,7 +3,7 @@ package org.apache.spark.sql
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, AgnosticExpressionPathEncoder, ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
@@ -173,53 +173,9 @@ object ShimUtils {
       case dt => new StructType().add("value", dt, nullable = nullable)
     }
 
-  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = {
-    val isNullable = nullable
-    val iFromCatalyst = fromCatalyst
-    val iToCatalyst = toCatalyst
+  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] =
+    throw new NotImplementedError("Shim version 0.3.0 drops ExpressionEncoder support for Spark 4 and above")
 
-    val ag = new AgnosticExpressionPathEncoder[T] {
-      override def isPrimitive: Boolean = ShimUtils.isPrimitive(dataType)
-
-      override def nullable: Boolean = isNullable
-
-      override def dataType: DataType = catalystRepr
-
-      override def clsTag: ClassTag[T] = implicitly[ClassTag[T]]
-
-      override def isStruct: Boolean =
-        dataType match {
-          case t: StructType if t.fields.length > 0 => true
-          case _ => !classOf[Option[_]].isAssignableFrom(clsTag.runtimeClass)
-        }
-
-      override def toCatalyst(input: Expression): Expression = iToCatalyst(input)
-
-      override def fromCatalyst(inputPath: Expression): Expression = iFromCatalyst(inputPath)
-    }
-
-    val in = BoundReference(0, jvmRepr, nullable)
-
-    val (out, serializer) = toCatalyst(in) match {
-      case it @ If(_, _, _: CreateNamedStruct) => {
-        val out = GetColumnByOrdinal(0, catalystRepr)
-
-        out -> it
-      }
-
-      case other => {
-        val out = GetColumnByOrdinal(0, catalystRepr)
-
-        out -> other
-      }
-    }
-
-    new ExpressionEncoder[T](
-      ag,
-      objSerializer = serializer,
-      objDeserializer = fromCatalyst(out)
-    )
-  }
   def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
     new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""", messageParameters = Map.empty )
 
@@ -335,4 +291,16 @@ object ShimUtils {
       case t: StatefulLike => t.freshCopy()
     }) */
     expressions.map(e => e.freshCopyIfContainsStatefulExpression())
+
+  /**
+   * Wrapper around call_function introduced in 3.5.0.  Spark 4 shims and above use internal.UnresolvedFunction
+   * and below uses analysis.UnresolvedFunction
+   * @param funcName
+   * @param cols
+   * @return
+   */
+  @scala.annotation.varargs
+  def callFunction(funcName: String, cols: Column*): Column =
+    Column(internal.UnresolvedFunction(funcName, cols.map(_.node), isUserDefinedFunction = true))
+
 }
