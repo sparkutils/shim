@@ -173,6 +173,13 @@ object ShimUtils {
             else
               Right(c.toSet)
         })
+      // for connect
+      case ae: AnalysisException if ae.errorClass.contains("TABLE_OR_VIEW_NOT_FOUND") =>
+        Some(ae.messageParameters.get("relationName").
+          fold[Either[Exception, Set[String]]](Left(ae))(r =>
+          // back ticks are present
+            Right(Set(r.drop(1).dropRight(1)))))
+
       case _ => None
     }
 
