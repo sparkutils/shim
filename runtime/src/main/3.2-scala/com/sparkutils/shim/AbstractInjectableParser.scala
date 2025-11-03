@@ -8,12 +8,6 @@ import org.apache.spark.sql.catalyst.parser.ParserInterface
 import org.apache.spark.sql.catalyst.plans.logical.{LeafCommand, LogicalPlan}
 import org.apache.spark.sql.types.{DataType, StructType}
 
-/**
- * Simple no op
- * @param command for logging only
- * @param parameters for logging only
- */
-case class NoOpCommand(command: String, parameters: Seq[String]) extends LeafCommand
 
 class AbstractInjectableParser(sparkSession: SparkSession, delegate: ParserInterface) extends ParserInterface with Logging {
 

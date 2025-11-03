@@ -28,13 +28,6 @@
     </scm>
     <profiles>
         <profile>
-            <id>scala_2.11</id>
-            <properties>
-                <scalaVersion>2.11.12</scalaVersion>
-                <scalaCompatVersion>2.11</scalaCompatVersion>
-            </properties>
-        </profile>
-        <profile>
             <id>scala_2.12.10</id>
             <properties>
                 <scalaVersion>2.12.15</scalaVersion>
@@ -77,22 +70,6 @@
                 <scalaVersion>2.13.16</scalaVersion>
                 <scalaCompatVersion>2.13</scalaCompatVersion>
                 <scalatestVersion>3.0.8</scalatestVersion>
-            </properties>
-        </profile>
-        <profile>
-            <id>Spark2</id> 
-            <properties>
-                <dbrCompatVersion>2.4.0.oss_</dbrCompatVersion>
-                <framelessVersion>0.8.0</framelessVersion>
-                <sparkVersion>2.4.6</sparkVersion>
-                <sparkCompatVersion>2.4</sparkCompatVersion>
-                <profileDir>2.4</profileDir>
-                <jacksonVersion>2.9.9</jacksonVersion>
-                <guavaVersion>15.0</guavaVersion> <!-- databricks runtime version -->
-                <parserCombinatorVersion>1.1.2</parserCombinatorVersion> <!-- databricks runtime version -->
-                <elidebelow>1</elidebelow>
-                <refinedVersion>0.9.12</refinedVersion>
-                <deltaCoreVersion>0.6.1</deltaCoreVersion>
             </properties>
         </profile>
         <profile>
