@@ -32,31 +32,24 @@
 </span>8 <span style=''>import org.apache.spark.sql.catalyst.plans.logical.{LeafCommand, LogicalPlan}
 </span>9 <span style=''>import org.apache.spark.sql.types.{DataType, StructType}
 </span>10 <span style=''>
-</span>11 <span style=''>/**
-</span>12 <span style=''> * Simple no op
-</span>13 <span style=''> * @param command for logging only
-</span>14 <span style=''> * @param parameters for logging only
-</span>15 <span style=''> */
-</span>16 <span style=''>case class NoOpCommand(command: String, parameters: Seq[String]) extends LeafCommand
-</span>17 <span style=''>
-</span>18 <span style=''>class AbstractInjectableParser(sparkSession: SparkSession, delegate: ParserInterface) extends ParserInterface with Logging {
-</span>19 <span style=''>
-</span>20 <span style=''>  override def parsePlan(sqlText: String): LogicalPlan = </span><span style='background: #F0ADAD'>delegate.parsePlan(sqlText)</span><span style=''>
-</span>21 <span style=''>
-</span>22 <span style=''>  override def parseExpression(sqlText: String): Expression = </span><span style='background: #F0ADAD'>delegate.parseExpression(sqlText)</span><span style=''>
-</span>23 <span style=''>
-</span>24 <span style=''>  override def parseTableIdentifier(sqlText: String): TableIdentifier = </span><span style='background: #F0ADAD'>delegate.parseTableIdentifier(sqlText)</span><span style=''>
-</span>25 <span style=''>
-</span>26 <span style=''>  override def parseFunctionIdentifier(sqlText: String): FunctionIdentifier = </span><span style='background: #F0ADAD'>delegate.parseFunctionIdentifier(sqlText)</span><span style=''>
-</span>27 <span style=''>
-</span>28 <span style=''>  override def parseMultipartIdentifier(sqlText: String): Seq[String] = </span><span style='background: #F0ADAD'>delegate.parseMultipartIdentifier(sqlText)</span><span style=''>
-</span>29 <span style=''>
-</span>30 <span style=''>  override def parseQuery(sqlText: String): LogicalPlan = </span><span style='background: #F0ADAD'>delegate.parseQuery(sqlText)</span><span style=''>
-</span>31 <span style=''>
-</span>32 <span style=''>  override def parseTableSchema(sqlText: String): StructType = </span><span style='background: #F0ADAD'>delegate.parseTableSchema(sqlText)</span><span style=''>
-</span>33 <span style=''>
-</span>34 <span style=''>  override def parseDataType(sqlText: String): DataType = </span><span style='background: #F0ADAD'>delegate.parseDataType(sqlText)</span><span style=''>
-</span>35 <span style=''>}
+</span>11 <span style=''>class AbstractInjectableParser(sparkSession: SparkSession, delegate: ParserInterface) extends ParserInterface with Logging {
+</span>12 <span style=''>
+</span>13 <span style=''>  override def parsePlan(sqlText: String): LogicalPlan = </span><span style='background: #F0ADAD'>delegate.parsePlan(sqlText)</span><span style=''>
+</span>14 <span style=''>
+</span>15 <span style=''>  override def parseExpression(sqlText: String): Expression = </span><span style='background: #F0ADAD'>delegate.parseExpression(sqlText)</span><span style=''>
+</span>16 <span style=''>
+</span>17 <span style=''>  override def parseTableIdentifier(sqlText: String): TableIdentifier = </span><span style='background: #F0ADAD'>delegate.parseTableIdentifier(sqlText)</span><span style=''>
+</span>18 <span style=''>
+</span>19 <span style=''>  override def parseFunctionIdentifier(sqlText: String): FunctionIdentifier = </span><span style='background: #F0ADAD'>delegate.parseFunctionIdentifier(sqlText)</span><span style=''>
+</span>20 <span style=''>
+</span>21 <span style=''>  override def parseMultipartIdentifier(sqlText: String): Seq[String] = </span><span style='background: #F0ADAD'>delegate.parseMultipartIdentifier(sqlText)</span><span style=''>
+</span>22 <span style=''>
+</span>23 <span style=''>  override def parseQuery(sqlText: String): LogicalPlan = </span><span style='background: #F0ADAD'>delegate.parseQuery(sqlText)</span><span style=''>
+</span>24 <span style=''>
+</span>25 <span style=''>  override def parseTableSchema(sqlText: String): StructType = </span><span style='background: #F0ADAD'>delegate.parseTableSchema(sqlText)</span><span style=''>
+</span>26 <span style=''>
+</span>27 <span style=''>  override def parseDataType(sqlText: String): DataType = </span><span style='background: #F0ADAD'>delegate.parseDataType(sqlText)</span><span style=''>
+</span>28 <span style=''>}
 </span></pre>
           </div>
           <div class="tab-pane" id="statementlist">
@@ -71,15 +64,15 @@
         <th>Code</th>
       </tr><tr>
         <td>
-          20
+          13
         </td>
         <td>
           345
         </td>
         <td>
-          808
+          625
           -
-          835
+          652
         </td>
         <td>
           Apply
@@ -95,15 +88,15 @@
         </td>
       </tr><tr>
         <td>
-          22
+          15
         </td>
         <td>
           141
         </td>
         <td>
-          899
+          716
           -
-          932
+          749
         </td>
         <td>
           Apply
@@ -119,15 +112,15 @@
         </td>
       </tr><tr>
         <td>
-          24
+          17
         </td>
         <td>
           491
         </td>
         <td>
-          1006
+          823
           -
-          1044
+          861
         </td>
         <td>
           Apply
@@ -143,15 +136,15 @@
         </td>
       </tr><tr>
         <td>
-          26
+          19
         </td>
         <td>
           279
         </td>
         <td>
-          1124
+          941
           -
-          1165
+          982
         </td>
         <td>
           Apply
@@ -167,15 +160,15 @@
         </td>
       </tr><tr>
         <td>
-          28
+          21
         </td>
         <td>
           150
         </td>
         <td>
-          1239
+          1056
           -
-          1281
+          1098
         </td>
         <td>
           Apply
@@ -191,15 +184,15 @@
         </td>
       </tr><tr>
         <td>
-          30
+          23
         </td>
         <td>
           528
         </td>
         <td>
-          1341
+          1158
           -
-          1369
+          1186
         </td>
         <td>
           Apply
@@ -215,15 +208,15 @@
         </td>
       </tr><tr>
         <td>
-          32
+          25
         </td>
         <td>
           305
         </td>
         <td>
-          1434
+          1251
           -
-          1468
+          1285
         </td>
         <td>
           Apply
@@ -239,15 +232,15 @@
         </td>
       </tr><tr>
         <td>
-          34
+          27
         </td>
         <td>
           89
         </td>
         <td>
-          1528
+          1345
           -
-          1559
+          1376
         </td>
         <td>
           Apply
