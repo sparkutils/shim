@@ -1,3 +1,3 @@
 package org.apache.spark.sql.catalyst.plans.logical
 
-case class NoopCommand(commandName: String, multipartIdentifier: Seq[String]) extends Command
+case class NoopCommand(commandName: String, multipartIdentifier: scala.Seq[String]) extends Command
