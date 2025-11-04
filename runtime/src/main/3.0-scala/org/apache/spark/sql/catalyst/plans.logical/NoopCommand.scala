@@ -1,5 +1,3 @@
-package org.apache.spark.sql.catalyst.plans.logical.Compat
-
-import org.apache.spark.sql.catalyst.plans.logical.Command
+package org.apache.spark.sql.catalyst.plans.logical
 
 case class NoopCommand(commandName: String, multipartIdentifier: Seq[String]) extends Command
