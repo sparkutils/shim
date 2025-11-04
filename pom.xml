@@ -395,7 +395,6 @@
         <deltaArtifact>core</deltaArtifact>
         <!-- for oss builds -->
         <snakeVersion>1.33</snakeVersion>
-
     </properties>
 <!--
     <repositories>
@@ -672,13 +671,6 @@
                                 </manifestSection>
                             </manifestSections>
                         </archive>
-                        <excludes>
-                            <!-- many dbr requires faking the source, we should not include the output -->
-                            <exclude>org/apache/spark/sql/catalyst/**</exclude>
-                            <exclude>org/apache/spark/sql/internal/**</exclude>
-                            <!-- shouldn't be there, really bad for multi-module projects -->
-                            <exclude>log4j2.xml</exclude>
-                        </excludes>
                     </configuration>
                     <executions>
                         <execution>

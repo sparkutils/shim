@@ -78,6 +78,21 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${mavenJarPluginVersion}</version>
+                <configuration>
+                    <includes>
+                        <include>org/apache/spark/sql/catalyst/expressions/EvalMode$.class</include>
+                        <include>org/apache/spark/sql/catalyst/expressions/EvalMode.class</include>
+                        <include>org/apache/spark/sql/catalyst/plans/logical/NoopCommand$.class</include>
+                        <include>org/apache/spark/sql/catalyst/plans/logical/NoopCommand.class</include>
+                        <include>org/apache/spark/sql/shim/**</include>
+                        <include>com/sparkutils/shim/**</include>
+                    </includes>
+                </configuration>
+            </plugin>
     </plugins>
 
     </build>
