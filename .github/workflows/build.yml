@@ -16,16 +16,6 @@ env:
 jobs:
 
   # all versions that can be built with tests - typically oss only.  Fail fast so we can see all compilation or test errors at once
-  testBuild_Spark2:
-    uses: sparkutils/building/.github/workflows/run_build.yml@main
-    with:
-      testString: test
-      theMatrix: |
-        {
-          "profile": ["Spark2"],
-          "scala": ["scala_2.11"]
-        }
-    secrets: inherit
 
   testBuilds_2_13_16:
     uses: sparkutils/building/.github/workflows/run_build.yml@main
@@ -154,17 +144,6 @@ jobs:
 
     outputs:
       version: ${{ steps.version.outputs.version }}
-
-  publish_Spark2:
-    needs: [testBuild_Spark2]
-    uses: sparkutils/building/.github/workflows/publish_build.yml@main
-    with:
-      theMatrix: |
-        {
-          "profile": ["Spark2"],
-          "scala": ["scala_2.11"]
-        }
-    secrets: inherit
 
   publish_2_12_10:
     needs: [ testBuilds_2_12_10 ]
