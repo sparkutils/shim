@@ -46,6 +46,7 @@
                             <sources>
                                 <source>src/main/scala</source>
                                 <source>src/main/${profileDir}-scala</source>
+                                <source>src/main/${classicOrAPI}</source>
                                 <source>../compilation/src/main/${profileDir}-scala</source>
                             </sources>
                         </configuration>
@@ -61,6 +62,7 @@
                                 <source>src/main/scala</source>
                                 <source>src/main/${profileDir}-scala</source>
                                 <source>src/main/${classicOrAPI}</source>
+                                <source>../compilation/src/main/${profileDir}-scala</source>
                             </sources>
                         </configuration>
                     </execution>
