@@ -252,6 +252,7 @@
                 <deltaCoreVersion>3.0.0</deltaCoreVersion>
                 <deltaArtifact>spark</deltaArtifact>
                 <snakeVersion>2.0</snakeVersion>
+                <classicOrAPI>sqlAPIBased</classicOrAPI>
 
                 <!--<scalatestVersion>3.2.15</scalatestVersion>  databricks runtime version -->
             </properties>
@@ -334,6 +335,7 @@
                 <elidebelow>2</elidebelow>
                 <refinedVersion>0.9.28</refinedVersion>
                 <snakeVersion>2.0</snakeVersion>
+                <classicOrAPI>sqlAPIBased</classicOrAPI>
             </properties>
         </profile>
         <profile>
@@ -350,6 +352,7 @@
                 <elidebelow>2</elidebelow>
                 <refinedVersion>0.9.28</refinedVersion>
                 <snakeVersion>2.0</snakeVersion>
+                <classicOrAPI>sqlAPIBased</classicOrAPI>
             </properties>
         </profile>
     </profiles>
@@ -395,6 +398,8 @@
         <deltaArtifact>core</deltaArtifact>
         <!-- for oss builds -->
         <snakeVersion>1.33</snakeVersion>
+
+        <classicOrAPI>classicOnly</classicOrAPI>
     </properties>
 <!--
     <repositories>
@@ -487,6 +492,7 @@
                                 <sources>
                                     <source>src/main/scala</source>
                                     <source>src/main/${profileDir}-scala</source>
+                                    <source>src/main/${classicOrAPI}</source>
                                 </sources>
                             </configuration>
                         </execution>
@@ -500,6 +506,7 @@
                                 <sources>
                                     <source>src/main/scala</source>
                                     <source>src/main/${profileDir}-scala</source>
+                                    <source>src/main/${classicOrAPI}</source>
                                 </sources>
                             </configuration>
                         </execution>

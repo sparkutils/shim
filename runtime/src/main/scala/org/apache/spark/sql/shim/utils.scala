@@ -1,6 +1,6 @@
 package org.apache.spark.sql.shim
 
-import com.sparkutils.shim.ShowParams
+import com.sparkutils.shim.{LambdaFunctions, ShowParams}
 import org.apache.spark.sql.ShimUtils.{column, expression}
 import org.apache.spark.sql.catalyst.expressions.{LambdaFunction, NamedExpression, UnresolvedNamedLambdaVariable}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
@@ -21,27 +21,11 @@ object utils {
   @deprecated(since = "0.0.1-RC5",message = "Use ShimUtils.toNamed directly")
   def named(col: Column): NamedExpression = ShimUtils.toNamed(col)
 
-  // taken from functions, where they are private
-  def createLambda(f: Column => Column) = {
-    val x = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("x")))
-    val function = expression(f(column(x)))
-    LambdaFunction(function, Seq(x))
-  }
+  def createLambda(f: Column => Column): Column = LambdaFunctions.createLambda(f)
 
-  def createLambda(f: (Column, Column) => Column) = {
-    val x = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("x")))
-    val y = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("y")))
-    val function = expression(f(column(x), column(y)))
-    LambdaFunction(function, Seq(x, y))
-  }
+  def createLambda(f: (Column, Column) => Column): Column = LambdaFunctions.createLambda(f)
 
-  def createLambda(f: (Column, Column, Column) => Column) = {
-    val x = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("x")))
-    val y = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("y")))
-    val z = UnresolvedNamedLambdaVariable(Seq(UnresolvedNamedLambdaVariableT.freshVarName("z")))
-    val function = expression(f(column(x), column(y), column(z)))
-    LambdaFunction(function, Seq(x, y, z))
-  }
+  def createLambda(f: (Column, Column, Column) => Column): Column = LambdaFunctions.createLambda(f)
 
   // below support moving FramelessInternals to frameless
   def logicalPlan(ds: Dataset[_]): LogicalPlan = ShimUtils.logicalPlan(ds)
