@@ -319,8 +319,10 @@
 <h3 id="020-11th-june-2025">0.2.0 <small>11th June, 2025</small><a class="headerlink" href="#020-11th-june-2025" title="Permanent link">¶</a></h3>
 <p><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/sparkutils/shim/issues/18" title="GitHub Issue: sparkutils/shim #18">#18</a> - Spark 4 AgnosticEncoder and Connect support:</p>
 <blockquote>
-<p>callFunction shim introduced - uses sql-api on 4 and DBR 17 runtimes 
-Breaking change on createLambdaFunction, now returns Column instead of Expression (uses sql-api on 4 and DBR 17 runtimes)</p>
+<p>callFunction shim introduced - uses sql-api on 4 and DBR 17 runtimes
+isClassic shim introduced - returns true on all pre 4/17 runtimes and on Spark 4 and above true when a classic SparkSession is provided
+Breaking change on createLambdaFunction, now returns Column instead of Expression (uses sql-api on 4 and DBR 17 runtimes)
+DBR 17.0, 14.0, 13.1 are deprecated and will be removed in the next minor version</p>
 </blockquote>
 <p><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/sparkutils/shim/issues/7" title="GitHub Issue: sparkutils/shim #7">#7</a> - ExpressionEncoder usage is removed for Spark 4 and compatible runtimes</p>
 <p><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/sparkutils/shim/issues/12" title="GitHub Issue: sparkutils/shim #12">#12</a> - EOL DBR and Spark runtimes are removed: 2.4, 9.1, 10.4, 11.3</p>
@@ -338,10 +340,10 @@ Breaking change on createLambdaFunction, now returns Column instead of Expressio
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">November 5, 2025 17:58:17</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">November 10, 2025 09:06:56</span>
 <br/>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">November 5, 2025 17:58:17</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">November 10, 2025 09:06:56</span>
 </small>
 </div>
 </article>
