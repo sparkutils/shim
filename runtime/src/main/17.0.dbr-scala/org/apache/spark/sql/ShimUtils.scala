@@ -365,4 +365,12 @@ object ShimUtils {
   def callFunction(funcName: String, cols: Column*): Column =
     Column(internal.UnresolvedFunction(funcName, cols.map(_.node), isUserDefinedFunction = true))
 
+  /**
+   * Returns true if the sparkSession is in classic mode, false for connect.  On pre 4.0.0 versions this
+   * always returns true.
+   * @param sparkSession
+   * @return
+   */
+  def isClassic(sparkSession: SparkSession): Boolean =
+    sparkSession.isInstanceOf[org.apache.spark.sql.classic.SparkSession]
 }

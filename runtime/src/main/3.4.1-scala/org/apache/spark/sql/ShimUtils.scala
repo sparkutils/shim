@@ -328,4 +328,12 @@ object ShimUtils {
   def callFunction(funcName: String, cols: Column*): Column =
     column(com.sparkutils.shim.expressions.UnresolvedFunction4(funcName, cols.map(_.expr), false))
 
+
+  /**
+   * Returns true if the sparkSession is in classic mode, false for connect.  On pre 4.0.0 versions this
+   * always returns true.
+   * @param sparkSession
+   * @return
+   */
+  def isClassic(sparkSession: SparkSession): Boolean = true
 }
