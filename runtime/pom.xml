@@ -13,6 +13,10 @@
     <description>Runtime Shims to ease developing multi version Spark libraries, these should only be used as compiled scope for your target platform or test for OSS when deploying to non-OSS</description>
     <packaging>jar</packaging>
 
+    <properties>
+        <ds>$</ds>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -88,16 +92,10 @@
                 <version>${mavenJarPluginVersion}</version>
                 <configuration>
                     <includes>
-                        <include>org/apache/spark/sql/catalyst/expressions/EvalMode$.class</include>
-                        <include>org/apache/spark/sql/catalyst/expressions/EvalMode.class</include>
-                        <include>org/apache/spark/sql/catalyst/plans/logical/NoopCommand$.class</include>
-                        <include>org/apache/spark/sql/catalyst/plans/logical/NoopCommand.class</include>
+                        <include>org/apache/spark/sql/catalyst/expressions/EvalMode*.class</include>
+                        <include>org/apache/spark/sql/catalyst/plans/logical/NoopCommand*.class</include>
                         <include>org/apache/spark/sql/shim/**</include>
-                        <include>org/apache/spark/sql/ShimUtils$$anonfun$1.class</include>
-                        <include>org/apache/spark/sql/ShimUtils$$anonfun$usePrettyExpression$1.class</include>
-                        <include>org/apache/spark/sql/ShimUtils$.class</include>
-                        <include>org/apache/spark/sql/ShimUtils$UnresolvedFunctionOps.class</include>
-                        <include>org/apache/spark/sql/ShimUtils.class</include>
+                        <include>org/apache/spark/sql/ShimUtils*.class</include>
                         <include>com/sparkutils/shim/**</include>
                     </includes>
                 </configuration>
