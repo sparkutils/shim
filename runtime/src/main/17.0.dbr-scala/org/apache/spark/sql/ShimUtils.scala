@@ -373,4 +373,9 @@ object ShimUtils {
    */
   def isClassic(sparkSession: SparkSession): Boolean =
     sparkSession.isInstanceOf[org.apache.spark.sql.classic.SparkSession]
+
+
+  def isUsable(sparkSession: SparkSession): Boolean =
+    sparkSession.isUsable
+
 }

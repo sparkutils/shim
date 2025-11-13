@@ -334,4 +334,14 @@ object ShimUtils {
    * @return
    */
   def isClassic(sparkSession: SparkSession): Boolean = true
+
+  /**
+   * Can this spark session be used.  On classic it's sparkSession.sqlContext.isStopped, on Spark 4 connect it's
+   * the private .isUsable function
+   *
+   * @param sparkSession
+   * @return
+   */
+  def isUsable(sparkSession: SparkSession): Boolean =
+    sparkSession.sparkContext.isStopped
 }
