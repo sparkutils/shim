@@ -718,6 +718,24 @@ always returns true.</p></div></div>
       </span>
       
       
+    </li><li name="org.apache.spark.sql.ShimUtils#isUsable" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isUsable(sparkSession:org.apache.spark.sql.SparkSession):Boolean"></a><a id="isUsable(SparkSession):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../../org/apache/spark/sql/ShimUtils$.html#isUsable(sparkSession:org.apache.spark.sql.SparkSession):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isUsable</span><span class="params">(<span name="sparkSession">sparkSession: <span class="extype" name="org.apache.spark.sql.SparkSession">SparkSession</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Can this spark session be used.</p><div class="fullcomment"><div class="comment cmt"><p>Can this spark session be used.  On classic it's sparkSession.sqlContext.isStopped, on Spark 4 connect it's
+the private .isUsable function
+</p></div></div>
     </li><li name="org.apache.spark.sql.ShimUtils#joinWith" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="joinWith[T,U](current:org.apache.spark.sql.Dataset[T],other:org.apache.spark.sql.Dataset[U],condition:org.apache.spark.sql.Column,joinType:String)(implicitenc:org.apache.spark.sql.Encoder[(T,U)]):org.apache.spark.sql.Dataset[(T,U)]"></a><a id="joinWith[T,U](Dataset[T],Dataset[U],Column,String)(Encoder[(T,U)]):Dataset[(T,U)]"></a>
       <span class="permalink">
