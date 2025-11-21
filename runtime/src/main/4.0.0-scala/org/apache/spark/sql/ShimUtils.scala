@@ -2,11 +2,11 @@ package org.apache.spark.sql
 
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
-import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
+import org.apache.spark.sql.catalyst.analysis.{FakeSystemCatalog, FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
-import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, Literal, NamedExpression, VariableReference}
 import org.apache.spark.sql.catalyst.parser.ParseException
 import org.apache.spark.sql.catalyst.plans.JoinType
 import org.apache.spark.sql.catalyst.plans.logical.{Join, JoinHint, JoinWith, LogicalPlan}
@@ -19,7 +19,12 @@ import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
 import org.apache.spark.sql.classic.ClassicConversions.castToImpl
 import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.catalyst.catalog.{TempVariableManager, VariableDefinition}
+import org.apache.spark.sql.catalyst.util.AttributeNameParser
+import org.apache.spark.sql.connector.catalog.Identifier
+import org.apache.spark.sql.internal.SQLConf
 
+import java.util.Locale
 import scala.reflect.ClassTag
 
 /**
@@ -337,4 +342,27 @@ object ShimUtils {
   def isUsable(sparkSession: SparkSession): Boolean =
     sparkSession.isUsable
 
+  /**
+   * Spark 4 / DBR 17.3 + only - creates a Spark SQL Variable, replacing by default
+   */
+  def createVariable(name: String, lit: Literal, replace: Boolean = true): VariableReference = {
+    // adjust for name sensitivity settings
+    val aname = {
+      val tn = name
+
+      val nc =
+        if (SQLConf.get.caseSensitiveAnalysis)
+          tn
+        else
+          tn.toLowerCase(Locale.ROOT)
+
+      nc
+    }
+    val varDef = VariableDefinition( Identifier.of(Array("session"), aname), "null", lit )
+
+    val tempVariableManager: TempVariableManager = SparkSession.active.sessionState.catalogManager.tempVariableManager
+    val nameParts = AttributeNameParser.parseAttributeName(aname)
+    tempVariableManager.create(nameParts, varDef, replace)
+    VariableReference(nameParts, FakeSystemCatalog, varDef.identifier, varDef)
+  }
 }

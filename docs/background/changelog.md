@@ -4,6 +4,7 @@
 
 > callFunction shim introduced - uses sql-api on 4 and DBR 17 runtimes
 > isClassic shim introduced - returns true on all pre 4/17 runtimes and on Spark 4 and above true when a classic SparkSession is provided
+> Spark 4 / DBR 17.3 classic only - createVariable shim introduced - returns a VariableReference, Databricks has different APIs
 > Breaking change on createLambdaFunction, now returns Column instead of Expression (uses sql-api on 4 and DBR 17 runtimes)
 > DBR 17.0, 14.0, 13.1 are deprecated and will be removed in the next minor version
 
