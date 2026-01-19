@@ -5,7 +5,7 @@ import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Add, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, If, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Add, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, If, NamedExpression, DecimalAddNoOverflowCheck}
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.util.TypeUtils
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
@@ -20,37 +20,6 @@ import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.internal.SQLConf
 
 import scala.reflect.ClassTag
-
-/**
- * 3.4 backport present on databricks 11.3 lts
- * An add expression for decimal values which is only used internally by Sum/Avg.
- *
- * Nota that, this expression does not check overflow which is different with `Add`. When
- * aggregating values, Spark writes the aggregation buffer values to `UnsafeRow` via
- * `UnsafeRowWriter`, which already checks decimal overflow, so we don't need to do it again in the
- * add expression used by Sum/Avg.
- */
-case class QDecimalAddNoOverflowCheck(
-                                       left: Expression,
-                                       right: Expression,
-                                       override val dataType: DataType) extends BinaryOperator {
-  require(dataType.isInstanceOf[DecimalType])
-
-  override def inputType: AbstractDataType = DecimalType
-  override def symbol: String = "+"
-  private def decimalMethod: String = "$plus"
-
-  private lazy val numeric = TypeUtils.getNumeric(dataType)
-
-  override protected def nullSafeEval(input1: Any, input2: Any): Any =
-    numeric.plus(input1, input2)
-
-  override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode =
-    defineCodeGen(ctx, ev, (eval1, eval2) => s"$eval1.$decimalMethod($eval2)")
-
-  override protected def withNewChildrenInternal(newLeft: Expression, newRight: Expression): QDecimalAddNoOverflowCheck =
-    copy(left = newLeft, right = newRight)
-}
 
 /**
  * Set of utilities to reach in to private functions
@@ -81,7 +50,7 @@ object ShimUtils {
    */
   def add(left: Expression, right: Expression, dataType: DataType): Expression =
     if ((dataType ne null) && dataType.isInstanceOf[DecimalType])
-      QDecimalAddNoOverflowCheck(left, right, dataType)
+      DecimalAddNoOverflowCheck(left, right, dataType)
     else
       new Add(left, right)
 

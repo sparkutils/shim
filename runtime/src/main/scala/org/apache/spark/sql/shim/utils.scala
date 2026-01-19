@@ -45,14 +45,3 @@ object mlUtils {
 
 }
 
-// TODO remove with 2.4, it's only here until 0.2.0 as 3 introduced freshVarName
-object UnresolvedNamedLambdaVariableT {
-
-  // Counter to ensure lambda variable names are unique
-  private val nextVarNameId = new AtomicInteger(0)
-
-  def freshVarName(name: String): String = {
-    s"${name}_${nextVarNameId.getAndIncrement()}"
-  }
-}
-
