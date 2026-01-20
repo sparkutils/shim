@@ -16,16 +16,6 @@ env:
 jobs:
 
   # all versions that can be built with tests - typically oss only.  Fail fast so we can see all compilation or test errors at once
-  testBuild_Spark2:
-    uses: sparkutils/building/.github/workflows/run_build.yml@main
-    with:
-      testString: test
-      theMatrix: |
-        {
-          "profile": ["Spark2"],
-          "scala": ["scala_2.11"]
-        }
-    secrets: inherit
 
   testBuilds_2_13_16:
     uses: sparkutils/building/.github/workflows/run_build.yml@main
@@ -36,6 +26,19 @@ jobs:
           "profile": ["Spark4"],
           "scala": ["scala_2.13.16"]
         }
+      jdk: 17
+    secrets: inherit
+
+  testBuilds_2_13_18:
+    uses: sparkutils/building/.github/workflows/run_build.yml@main
+    with:
+      testString: test
+      theMatrix: |
+        {
+          "profile": ["Spark41"],
+          "scala": ["scala_2.13.18"]
+        }
+      jdk: 17
     secrets: inherit
 
   testBuilds_2_12_10:
@@ -47,6 +50,7 @@ jobs:
           "profile": ["Spark3", "Spark313"],
           "scala": ["scala_2.12.10"]
         }  
+      jdk: 11
     secrets: inherit
 
   testBuilds_2_12_15_and_13_5:
@@ -58,17 +62,7 @@ jobs:
           "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350" ],
           "scala": [ "scala_2.12.15", "scala_2.13.5" ]
         }
-    secrets: inherit
-
-  noTestBuilds_2_12_10:
-    uses: sparkutils/building/.github/workflows/run_build.yml@main
-    with:
-      testString: -DskipTests
-      theMatrix: |
-        {
-          "profile": ["9.1.dbr"],
-          "scala": ["scala_2.12.10"]
-        }
+      jdk: 11
     secrets: inherit
 
   noTestBuilds_2_12_15:
@@ -77,9 +71,10 @@ jobs:
       testString: -DskipTests
       theMatrix: |
         {
-          "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr", "15.4.dbr" ],
+          "profile": [ "12.2.dbr", "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
+      jdk: 11
     secrets: inherit
 
   noTestBuilds_2_12_15_and_13_5:
@@ -91,6 +86,7 @@ jobs:
           "profile": [ "16.4.dbr"  ],
           "scala": [ "scala_2.12.15", "scala_2.13.5"  ]
         }
+      jdk: 11
     secrets: inherit
 
   noTestBuilds_2_13_16:
@@ -99,9 +95,10 @@ jobs:
       testString: test
       theMatrix: |
         {
-          "profile": ["17.0.dbr"],
+          "profile": ["17.3.dbr"],
           "scala": ["scala_2.13.16"]
         }
+      jdk: 17
     secrets: inherit
 
   # prove tests run with single thread, ensures compilation issues aren't hidden by being run on multiple threads instead of re-used in the same thread (e.g. state resetting etc.)
@@ -144,6 +141,7 @@ jobs:
             grep -A 3 'Statement coverage:' target/site/scoverage/overview.html | tail -1 | sed 's/[[:space:]]\+//g' > target/coverage.txt
             grep -A 3 'Branch coverage:' target/site/scoverage/overview.html | tail -1 | sed 's/[[:space:]]\+//g' >> target/coverage.txt
           gpgKey: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          jdk: 11
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
@@ -166,26 +164,16 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
 
-  publish_Spark2:
-    needs: [testBuild_Spark2]
-    uses: sparkutils/building/.github/workflows/publish_build.yml@main
-    with:
-      theMatrix: |
-        {
-          "profile": ["Spark2"],
-          "scala": ["scala_2.11"]
-        }
-    secrets: inherit
-
   publish_2_12_10:
-    needs: [ testBuilds_2_12_10, noTestBuilds_2_12_10 ]
+    needs: [ testBuilds_2_12_10 ]
     uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
-          "profile": ["Spark3", "Spark313", "9.1.dbr"],
+          "profile": ["Spark3", "Spark313"],
           "scala": ["scala_2.12.10"]
         }  
+      jdk: 11
     secrets: inherit
 
   publish_2_12_15_and_13_5:
@@ -197,6 +185,7 @@ jobs:
           "profile": [ "Spark32", "Spark321", "Spark332", "Spark341", "Spark350", "16.4.dbr" ],
           "scala": [ "scala_2.12.15", "scala_2.13.5" ]
         }
+      jdk: 11
     secrets: inherit
 
   publish_2_12_15:
@@ -205,9 +194,10 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "10.4.dbr", "11.3.dbr", "12.2.dbr", "13.1.dbr", "13.3.dbr", "14.0.dbr", "14.3.dbr", "15.4.dbr" ],
+          "profile": [ "12.2.dbr", "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
+      jdk: 11
     secrets: inherit
 
   publish_2_13_16:
@@ -216,9 +206,22 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "17.0.dbr", "Spark4" ],
+          "profile": [ "17.3.dbr", "Spark4" ],
           "scala": [ "scala_2.13.16" ]
         }
+      jdk: 17
+    secrets: inherit
+
+  publish_2_13_18:
+    needs: [ testBuilds_2_13_18 ]
+    uses: sparkutils/building/.github/workflows/publish_build.yml@main
+    with:
+      theMatrix: |
+        {
+          "profile": [ "Spark41" ],
+          "scala": [ "scala_2.13.18" ]
+        }
+      jdk: 17
     secrets: inherit
 
   site:

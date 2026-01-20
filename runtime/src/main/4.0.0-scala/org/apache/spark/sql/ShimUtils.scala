@@ -2,11 +2,11 @@ package org.apache.spark.sql
 
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
-import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, AgnosticExpressionPathEncoder, ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.analysis.{FakeSystemCatalog, FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
+import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
-import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, Literal, NamedExpression, VariableReference}
 import org.apache.spark.sql.catalyst.parser.ParseException
 import org.apache.spark.sql.catalyst.plans.JoinType
 import org.apache.spark.sql.catalyst.plans.logical.{Join, JoinHint, JoinWith, LogicalPlan}
@@ -19,7 +19,12 @@ import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
 import org.apache.spark.sql.classic.ClassicConversions.castToImpl
 import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.catalyst.catalog.{TempVariableManager, VariableDefinition}
+import org.apache.spark.sql.catalyst.util.AttributeNameParser
+import org.apache.spark.sql.connector.catalog.Identifier
+import org.apache.spark.sql.internal.SQLConf
 
+import java.util.Locale
 import scala.reflect.ClassTag
 
 /**
@@ -92,6 +97,21 @@ object ShimUtils {
   /**
    * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
    *
+   * Under 4.0.0 the session is evaluated to classic.Session, if it's connect the function does nothing
+   *
+   * @param funcReg
+   * @param name
+   * @param builder
+   */
+  def registerFunction(sparkSession: SparkSession)(name: String, builder: Seq[Expression] => Expression) = {
+    if (sparkSession.isInstanceOf[classic.SparkSession]) {
+      sparkSession.sessionState.functionRegistry.createOrReplaceTempFunction(name, builder, "built-in")
+    }
+  }
+
+  /**
+   * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
+   *
    * @param funcReg
    * @param name
    * @param builder
@@ -158,6 +178,13 @@ object ShimUtils {
             else
               Right(c.toSet)
         })
+      // for connect
+      case ae: AnalysisException if ae.errorClass.contains("TABLE_OR_VIEW_NOT_FOUND") =>
+        Some(ae.messageParameters.get("relationName").
+          fold[Either[Exception, Set[String]]](Left(ae))(r =>
+          // back ticks are present
+            Right(Set(r.drop(1).dropRight(1)))))
+
       case _ => None
     }
 
@@ -173,53 +200,9 @@ object ShimUtils {
       case dt => new StructType().add("value", dt, nullable = nullable)
     }
 
-  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = {
-    val isNullable = nullable
-    val iFromCatalyst = fromCatalyst
-    val iToCatalyst = toCatalyst
+  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] =
+    throw new NotImplementedError("Shim version 0.3.0 drops ExpressionEncoder support for Spark 4 and above")
 
-    val ag = new AgnosticExpressionPathEncoder[T] {
-      override def isPrimitive: Boolean = ShimUtils.isPrimitive(dataType)
-
-      override def nullable: Boolean = isNullable
-
-      override def dataType: DataType = catalystRepr
-
-      override def clsTag: ClassTag[T] = implicitly[ClassTag[T]]
-
-      override def isStruct: Boolean =
-        dataType match {
-          case t: StructType if t.fields.length > 0 => true
-          case _ => !classOf[Option[_]].isAssignableFrom(clsTag.runtimeClass)
-        }
-
-      override def toCatalyst(input: Expression): Expression = iToCatalyst(input)
-
-      override def fromCatalyst(inputPath: Expression): Expression = iFromCatalyst(inputPath)
-    }
-
-    val in = BoundReference(0, jvmRepr, nullable)
-
-    val (out, serializer) = toCatalyst(in) match {
-      case it @ If(_, _, _: CreateNamedStruct) => {
-        val out = GetColumnByOrdinal(0, catalystRepr)
-
-        out -> it
-      }
-
-      case other => {
-        val out = GetColumnByOrdinal(0, catalystRepr)
-
-        out -> other
-      }
-    }
-
-    new ExpressionEncoder[T](
-      ag,
-      objSerializer = serializer,
-      objDeserializer = fromCatalyst(out)
-    )
-  }
   def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
     new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""", messageParameters = Map.empty )
 
@@ -335,4 +318,51 @@ object ShimUtils {
       case t: StatefulLike => t.freshCopy()
     }) */
     expressions.map(e => e.freshCopyIfContainsStatefulExpression())
+
+  /**
+   * Wrapper around call_function introduced in 3.5.0.  Spark 4 shims and above use internal.UnresolvedFunction
+   * and below uses analysis.UnresolvedFunction
+   * @param funcName
+   * @param cols
+   * @return
+   */
+  @scala.annotation.varargs
+  def callFunction(funcName: String, cols: Column*): Column =
+    Column(internal.UnresolvedFunction(funcName, cols.map(_.node), isUserDefinedFunction = true))
+
+  /**
+   * Returns true if the sparkSession is in classic mode, false for connect.  On pre 4.0.0 versions this
+   * always returns true.
+   * @param sparkSession
+   * @return
+   */
+  def isClassic(sparkSession: SparkSession): Boolean =
+    sparkSession.isInstanceOf[org.apache.spark.sql.classic.SparkSession]
+
+  def isUsable(sparkSession: SparkSession): Boolean =
+    sparkSession.isUsable
+
+  /**
+   * Spark 4 / DBR 17.3 + only - creates a Spark SQL Variable, replacing by default
+   */
+  def createVariable(name: String, lit: Literal, replace: Boolean = true): VariableReference = {
+    // adjust for name sensitivity settings
+    val aname = {
+      val tn = name
+
+      val nc =
+        if (SQLConf.get.caseSensitiveAnalysis)
+          tn
+        else
+          tn.toLowerCase(Locale.ROOT)
+
+      nc
+    }
+    val varDef = VariableDefinition( Identifier.of(Array("session"), aname), "null", lit )
+
+    val tempVariableManager: TempVariableManager = SparkSession.active.sessionState.catalogManager.tempVariableManager
+    val nameParts = AttributeNameParser.parseAttributeName(aname)
+    tempVariableManager.create(nameParts, varDef, replace)
+    VariableReference(nameParts, FakeSystemCatalog, varDef.identifier, varDef)
+  }
 }
