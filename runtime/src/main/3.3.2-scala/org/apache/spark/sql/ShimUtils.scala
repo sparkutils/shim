@@ -342,4 +342,5 @@ object ShimUtils {
    */
   def isUsable(sparkSession: SparkSession): Boolean =
     !sparkSession.sparkContext.isStopped
+
 }

@@ -1,4 +1,4 @@
-### 0.2.0 <small>11th June, 2025</small>
+### 0.3.0 <small>29th Feb, 2026</small>
 
 #18 - Spark 4 AgnosticEncoder and Connect support:
 
@@ -10,7 +10,11 @@
 
 #7 - ExpressionEncoder usage is removed for Spark 4 and compatible runtimes
 
-#12 - EOL DBR and Spark runtimes are removed: 2.4, 9.1, 10.4, 11.3
+#12 - EOL DBR and Spark runtimes are removed: 2.4, 9.1, 10.4, 11.3, 13.0, 14.0, 17.0
+
+#19 - Cleanup of copied Decimal sum handling on DBR >= 14.3
+
+#21 - Add custom BeanEncoder handling, allowing odd field name mappings to Java Bean properties
 
 ### 0.2.0 <small>11th June, 2025</small>
 
