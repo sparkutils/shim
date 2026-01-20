@@ -18,7 +18,8 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "17.3.dbr" ],
+          "profile": [ "17.3.dbr", "Spark4" ],
           "scala": [ "scala_2.13.16" ]
         }
+      jdk: 17
     secrets: inherit

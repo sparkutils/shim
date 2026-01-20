@@ -26,7 +26,7 @@ jobs:
           "profile": ["Spark4"],
           "scala": ["scala_2.13.16"]
         }
-      jdk: 11
+      jdk: 17
     secrets: inherit
 
   testBuilds_2_13_18:
