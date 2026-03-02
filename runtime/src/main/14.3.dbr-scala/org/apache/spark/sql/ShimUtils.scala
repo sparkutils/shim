@@ -5,7 +5,7 @@ import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Add, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, If, NamedExpression, DecimalAddNoOverflowCheck}
+import org.apache.spark.sql.catalyst.expressions.{Add, BinaryOperator, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, EvalMode, Expression, ExpressionInfo, If, NamedExpression}
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.util.TypeUtils
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
@@ -61,6 +61,16 @@ object ShimUtils {
    */
   def cast(child: Expression, dataType: DataType): Expression =
     new Cast(child, dataType, None)
+
+  /**
+   * On Spark 4 defaults to try_cast and cast on lower versions - mimicing the ansi disabled function for all versions
+   * e.g. cast('test' as int) should be null for all versions of spark
+   * @param child
+   * @param dataType
+   * @return
+   */
+  def tryCastCompat(child: Expression, dataType: DataType): Expression =
+    Cast(child, dataType, None, evalMode = EvalMode.TRY)
 
   /**
    * Provides Spark 3 specific version of hashing CalendarInterval

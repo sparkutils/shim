@@ -3,7 +3,7 @@ package org.apache.spark.sql
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, PrettyAttribute, NamedExpression, Stateful}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, NamedExpression, PrettyAttribute, Stateful}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, FunctionIdentifier}
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
@@ -52,6 +52,16 @@ object ShimUtils {
    */
   def cast(child: Expression, dataType: DataType): Expression =
     Cast(child, dataType)
+
+  /**
+   * On Spark 4 defaults to try_cast and cast on lower versions - mimicing the ansi disabled function for all versions
+   * e.g. cast('test' as int) should be null for all versions of spark
+   * @param child
+   * @param dataType
+   * @return
+   */
+  def tryCastCompat(child: Expression, dataType: DataType): Expression =
+    Cast(child, dataType, ansiEnabled = false)
 
   /**
    * Provides Spark 3 specific version of hashing CalendarInterval

@@ -16,6 +16,8 @@
 
 #21 - Add custom BeanEncoder handling, allowing odd field name mappings to Java Bean properties
 
+#22 - tryCastCompat - ansi disabled shim, allowing consistent cast usage across versions (Spark 4 defaults to enabled)
+
 ### 0.2.0 <small>11th June, 2025</small>
 
 #5 - Spark 4 support, including DBR 17.0

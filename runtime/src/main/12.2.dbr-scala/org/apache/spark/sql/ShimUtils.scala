@@ -90,6 +90,17 @@ object ShimUtils {
   def cast(child: Expression, dataType: DataType): Expression =
     new Cast(child, dataType, None)
 
+
+  /**
+   * On Spark 4 defaults to try_cast and cast on lower versions - mimicing the ansi disabled function for all versions
+   * e.g. cast('test' as int) should be null for all versions of spark
+   * @param child
+   * @param dataType
+   * @return
+   */
+  def tryCastCompat(child: Expression, dataType: DataType): Expression =
+    Cast(child, dataType, None, ansiEnabled = false)
+
   /**
    * Provides Spark 3 specific version of hashing CalendarInterval
    *
