@@ -3,7 +3,7 @@ package org.apache.spark.sql
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
-import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, NamedExpression, PrettyAttribute}
+import org.apache.spark.sql.catalyst.expressions.{Add, Attribute, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, EvalMode, Expression, ExpressionInfo, GetArrayStructFields, GetStructField, If, Literal, NamedExpression, PrettyAttribute}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, FunctionIdentifier}
 import org.apache.spark.sql.execution.{QueryExecution, SparkSqlParser}
@@ -57,6 +57,16 @@ object ShimUtils {
     Cast(child, dataType)
 
   /**
+   * On Spark 4 defaults to try_cast and cast on lower versions - mimicing the ansi disabled function for all versions
+   * e.g. cast('test' as int) should be null for all versions of spark
+   * @param child
+   * @param dataType
+   * @return
+   */
+  def tryCastCompat(child: Expression, dataType: DataType): Expression =
+    Cast(child, dataType, evalMode = EvalMode.TRY)
+
+  /**
    * Provides Spark 3 specific version of hashing CalendarInterval
    *
    * @param c
@@ -76,6 +86,18 @@ object ShimUtils {
   def newParser() = {
     new SparkSqlParser()
   }
+
+  /**
+   * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
+   *
+   * Under 4.0.0 the session is evaluated to classic.Session
+   *
+   * @param funcReg
+   * @param name
+   * @param builder
+   */
+  def registerFunction(sparkSession: SparkSession)(name: String, builder: Seq[Expression] => Expression) =
+    sparkSession.sessionState.functionRegistry.createOrReplaceTempFunction(name, builder, "built-in")
 
   /**
    * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
@@ -304,4 +326,34 @@ object ShimUtils {
       case t: StatefulLike => t.freshCopy()
     }) */
     expressions.map(e => e.freshCopyIfContainsStatefulExpression())
+
+  /**
+   * Wrapper around call_function introduced in 3.5.0.  Spark 4 shims and above use internal.UnresolvedFunction
+   * and below uses analysis.UnresolvedFunction
+   * @param funcName
+   * @param cols
+   * @return
+   */
+  @scala.annotation.varargs
+  def callFunction(funcName: String, cols: Column*): Column =
+    column(com.sparkutils.shim.expressions.UnresolvedFunction4(funcName, cols.map(_.expr), false))
+
+
+  /**
+   * Returns true if the sparkSession is in classic mode, false for connect.  On pre 4.0.0 versions this
+   * always returns true.
+   * @param sparkSession
+   * @return
+   */
+  def isClassic(sparkSession: SparkSession): Boolean = true
+
+  /**
+   * Can this spark session be used.  On classic it's sparkSession.sqlContext.isStopped, on Spark 4 connect it's
+   * the private .isUsable function
+   *
+   * @param sparkSession
+   * @return
+   */
+  def isUsable(sparkSession: SparkSession): Boolean =
+    !sparkSession.sparkContext.isStopped
 }

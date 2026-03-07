@@ -5,7 +5,7 @@ import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Add, BinaryOperator, BoundReference, Cast, CreateNamedStruct, Expression, ExpressionInfo, If, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Add, BinaryOperator, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, EvalMode, Expression, ExpressionInfo, If, NamedExpression}
 import org.apache.spark.sql.catalyst.types.PhysicalDataType
 import org.apache.spark.sql.catalyst.util.TypeUtils
 import org.apache.spark.sql.catalyst.{CatalystTypeConverters, ExtendedAnalysisException, FunctionIdentifier}
@@ -19,37 +19,6 @@ import org.apache.spark.sql.catalyst.parser.ParseException
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 import scala.reflect.ClassTag
-
-/**
- * 3.4 backport present on databricks 11.3 lts
- * An add expression for decimal values which is only used internally by Sum/Avg.
- *
- * Nota that, this expression does not check overflow which is different with `Add`. When
- * aggregating values, Spark writes the aggregation buffer values to `UnsafeRow` via
- * `UnsafeRowWriter`, which already checks decimal overflow, so we don't need to do it again in the
- * add expression used by Sum/Avg.
- */
-case class QDecimalAddNoOverflowCheck(
-                                       left: Expression,
-                                       right: Expression,
-                                       override val dataType: DataType) extends BinaryOperator {
-  require(dataType.isInstanceOf[DecimalType])
-
-  override def inputType: AbstractDataType = DecimalType
-  override def symbol: String = "+"
-  private def decimalMethod: String = "$plus"
-
-  private lazy val numeric = TypeUtils.getNumeric(dataType)
-
-  override protected def nullSafeEval(input1: Any, input2: Any): Any =
-    numeric.plus(input1, input2)
-
-  override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode =
-    defineCodeGen(ctx, ev, (eval1, eval2) => s"$eval1.$decimalMethod($eval2)")
-
-  override protected def withNewChildrenInternal(newLeft: Expression, newRight: Expression): QDecimalAddNoOverflowCheck =
-    copy(left = newLeft, right = newRight)
-}
 
 /**
  * Set of utilities to reach in to private functions
@@ -80,7 +49,7 @@ object ShimUtils {
    */
   def add(left: Expression, right: Expression, dataType: DataType): Expression =
     if ((dataType ne null) && dataType.isInstanceOf[DecimalType])
-      QDecimalAddNoOverflowCheck(left, right, dataType)
+      DecimalAddNoOverflowCheck(left, right, dataType)
     else
       new Add(left, right)
 
@@ -92,6 +61,16 @@ object ShimUtils {
    */
   def cast(child: Expression, dataType: DataType): Expression =
     new Cast(child, dataType, None)
+
+  /**
+   * On Spark 4 defaults to try_cast and cast on lower versions - mimicing the ansi disabled function for all versions
+   * e.g. cast('test' as int) should be null for all versions of spark
+   * @param child
+   * @param dataType
+   * @return
+   */
+  def tryCastCompat(child: Expression, dataType: DataType): Expression =
+    Cast(child, dataType, None, evalMode = EvalMode.TRY)
 
   /**
    * Provides Spark 3 specific version of hashing CalendarInterval
@@ -115,6 +94,18 @@ object ShimUtils {
   def newParser() = {
     new SparkSqlParser()
   }
+
+  /**
+   * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
+   *
+   * Under 4.0.0 the session is evaluated to classic.Session
+   *
+   * @param funcReg
+   * @param name
+   * @param builder
+   */
+  def registerFunction(sparkSession: SparkSession)(name: String, builder: Seq[Expression] => Expression) =
+    sparkSession.sessionState.functionRegistry.createOrReplaceTempFunction(name, builder, "built-in")
 
   /**
    * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
@@ -306,4 +297,33 @@ object ShimUtils {
       case t: StatefulLike => t.freshCopy()
     }) */
     expressions.map(e => e.freshCopyIfContainsStatefulExpression())
+
+  /**
+   * Wrapper around call_function introduced in 3.5.0.  Spark 4 shims and above use internal.UnresolvedFunction
+   * and below uses analysis.UnresolvedFunction
+   * @param funcName
+   * @param cols
+   * @return
+   */
+  @scala.annotation.varargs
+  def callFunction(funcName: String, cols: Column*): Column =
+    column(com.sparkutils.shim.expressions.UnresolvedFunction4(funcName, cols.map(_.expr), false))
+
+  /**
+   * Returns true if the sparkSession is in classic mode, false for connect.  On pre 4.0.0 versions this
+   * always returns true.
+   * @param sparkSession
+   * @return
+   */
+  def isClassic(sparkSession: SparkSession): Boolean = true
+
+  /**
+   * Can this spark session be used.  On classic it's sparkSession.sqlContext.isStopped, on Spark 4 connect it's
+   * the private .isUsable function
+   *
+   * @param sparkSession
+   * @return
+   */
+  def isUsable(sparkSession: SparkSession): Boolean =
+    !sparkSession.sparkContext.isStopped
 }

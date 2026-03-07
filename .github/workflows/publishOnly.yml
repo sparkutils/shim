@@ -13,12 +13,13 @@ env:
 
 jobs:
 
-  publish_2_13_16:
+  publish_2_13_18:
     uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
-          "profile": [ "17.3.dbr" ],
-          "scala": [ "scala_2.13.16" ]
+          "profile": [ "18.1.dbr" ],
+          "scala": [ "scala_2.13.18" ]
         }
+      jdk: 17
     secrets: inherit
