@@ -101,6 +101,18 @@ jobs:
       jdk: 17
     secrets: inherit
 
+  noTestBuilds_2_13_18:
+    uses: sparkutils/building/.github/workflows/run_build.yml@main
+    with:
+      testString: test
+      theMatrix: |
+        {
+          "profile": ["18.1.dbr"],
+          "scala": ["scala_2.13.18"]
+        }
+      jdk: 17
+    secrets: inherit
+
   # prove tests run with single thread, ensures compilation issues aren't hidden by being run on multiple threads instead of re-used in the same thread (e.g. state resetting etc.)
   # build scoverage tests on 3.3.0 first with aggregate, the copy the data out, not doing a clean build fails on site.  Also needs single threading to work, have noticed multiple failures and inconsistent coverage.
   mvn_site:
@@ -213,13 +225,13 @@ jobs:
     secrets: inherit
 
   publish_2_13_18:
-    needs: [ testBuilds_2_13_18 ]
+    needs: [ noTestBuilds_2_13_18, testBuilds_2_13_18 ]
     uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
         {
-          "profile": [ "Spark41" ],
-          "scala": [ "scala_2.13.18" ]
+          "profile": [ "Spark41", "18.1.dbr" ],
+          "scala": [ "scala_2.13.18",  ]
         }
       jdk: 17
     secrets: inherit
