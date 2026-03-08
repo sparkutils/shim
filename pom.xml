@@ -336,7 +336,7 @@
         <profile>
             <id>18.1.dbr</id>
             <properties>
-                <dbrCompatVersion>17.3.dbr_</dbrCompatVersion>
+                <dbrCompatVersion>18.1.dbr_</dbrCompatVersion>
                 <framelessVersion>0.16.0</framelessVersion>
                 <sparkVersion>4.1.0</sparkVersion>
                 <sparkCompatVersion>4.1</sparkCompatVersion>
