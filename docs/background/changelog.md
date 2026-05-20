@@ -18,6 +18,8 @@
 
 #22 - tryCastCompat - ansi disabled shim, allowing consistent cast usage across versions (Spark 4 defaults to enabled)
 
+#23 - Workaround for inappropriate Databricks WholeStageCodegen approach, DBR 18 UnresolvedFunction changes (SPARK-55256 backport) and EquivalentExpressions OSS differences for all DBRs
+
 ### 0.2.0 <small>11th June, 2025</small>
 
 #5 - Spark 4 support, including DBR 17.0

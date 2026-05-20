@@ -188,7 +188,7 @@ class EquivalentExpressions(
     val skip = useCount == 0 || expr.isInstanceOf[LeafExpression]
 
     if (!skip && !updateExprInMap(expr, map, useCount)) {
-      val uc = useCount.sign
+      val uc = useCount.signum
       childrenToRecurse(expr).foreach(updateExprTree(_, map, uc))
       commonChildrenToRecurse(expr).filter(_.nonEmpty).foreach(updateCommonExprs(_, map, uc))
     }
@@ -236,9 +236,13 @@ class EquivalentExpressions(
  * Wrapper around an Expression that provides semantic equality.
  */
 case class ExpressionEquals(e: Expression) {
+  private def getHeight(tree: Expression): Int = {
+    tree.children.map(getHeight).reduceOption(_ max _).getOrElse(0) + 1
+  }
+
   // This is used to do a fast pre-check for child-parent relationship. For example, expr1 can
   // only be a parent of expr2 if expr1.height is larger than expr2.height.
-  def height: Int = e.height
+  lazy val height = getHeight(e)
 
   override def equals(o: Any): Boolean = o match {
     case other: ExpressionEquals => e.semanticEquals(other.e) && height == other.height
