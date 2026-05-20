@@ -71,7 +71,7 @@ jobs:
       testString: -DskipTests
       theMatrix: |
         {
-          "profile": [ "12.2.dbr", "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
+          "profile": [ "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
       jdk: 11
@@ -206,7 +206,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "12.2.dbr", "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
+          "profile": [ "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
       jdk: 11
