@@ -14,7 +14,6 @@ env:
 jobs:
 
   publish_2_12_15:
-    needs: [ noTestBuilds_2_12_15 ]
     uses: sparkutils/building/.github/workflows/publish_build.yml@main
     with:
       theMatrix: |
