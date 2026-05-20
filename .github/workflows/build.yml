@@ -71,7 +71,7 @@ jobs:
       testString: -DskipTests
       theMatrix: |
         {
-          "profile": [ "12.2.dbr", "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
+          "profile": [ "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
       jdk: 11
@@ -107,7 +107,7 @@ jobs:
       testString: test
       theMatrix: |
         {
-          "profile": ["18.1.dbr"],
+          "profile": ["18.3.dbr"],
           "scala": ["scala_2.13.18"]
         }
       jdk: 17
@@ -206,7 +206,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "12.2.dbr", "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
+          "profile": [ "13.3.dbr", "14.3.dbr", "15.4.dbr" ],
           "scala": [ "scala_2.12.15" ]
         }
       jdk: 11
@@ -230,7 +230,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "Spark41", "18.1.dbr" ],
+          "profile": [ "Spark41", "18.3.dbr" ],
           "scala": [ "scala_2.13.18",  ]
         }
       jdk: 17

@@ -52,6 +52,8 @@
                                 <source>src/main/scala</source>
                                 <source>src/main/${profileDir}-scala</source>
                                 <source>src/main/${classicOrAPI}</source>
+                                <source>src/main/${runtimeFamily}</source>
+                                <source>src/main/${exprUtilsDir}</source>
                                 <source>../compilation/src/main/${profileDir}-scala</source>
                             </sources>
                         </configuration>
@@ -67,6 +69,8 @@
                                 <source>src/main/scala</source>
                                 <source>src/main/${profileDir}-scala</source>
                                 <source>src/main/${classicOrAPI}</source>
+                                <source>src/main/${runtimeFamily}</source>
+                                <source>src/main/${exprUtilsDir}</source>
                                 <source>../compilation/src/main/${profileDir}-scala</source>
                             </sources>
                         </configuration>
@@ -94,6 +98,7 @@
                 <configuration>
                     <includes>
                         <include>org/apache/spark/sql/catalyst/expressions/EvalMode*.class</include>
+                        <include>org/apache/spark/sql/catalyst/expressions/codegen/ShimExprUtils*.class</include>
                         <include>org/apache/spark/sql/catalyst/plans/logical/NoopCommand*.class</include>
                         <include>org/apache/spark/sql/shim/**</include>
                         <include>org/apache/spark/sql/ShimUtils*.class</include>
