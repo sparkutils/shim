@@ -21,10 +21,8 @@ import java.util.Objects
 
 import scala.collection.mutable
 
-import org.apache.spark.SparkException
 import org.apache.spark.sql.catalyst.expressions.codegen.CodegenFallback
-import org.apache.spark.sql.catalyst.trees.TreePattern.{LAMBDA_VARIABLE, PLAN_EXPRESSION}
-import org.apache.spark.sql.internal.SQLConf
+import org.apache.spark.sql.catalyst.expressions.objects.LambdaVariable
 import org.apache.spark.util.Utils
 
 /**
@@ -32,9 +30,7 @@ import org.apache.spark.util.Utils
  * to this class and they subsequently query for expression equality. Expression trees are
  * considered equal if for the same input(s), the same result is produced.
  */
-class EquivalentExpressions(
-    skipForShortcutEnable: Boolean = SQLConf.get.subexpressionEliminationSkipForShotcutExpr) {
-
+class EquivalentExpressions {
   // For each expression, the set of equivalent expressions.
   private val equivalenceMap = mutable.HashMap.empty[ExpressionEquals, ExpressionStats]
 
@@ -44,11 +40,7 @@ class EquivalentExpressions(
    * Returns true if there was already a matching expression.
    */
   def addExpr(expr: Expression): Boolean = {
-    if (supportedExpression(expr)) {
-      updateExprInMap(expr, equivalenceMap)
-    } else {
-      false
-    }
+    updateExprInMap(expr, equivalenceMap)
   }
 
   /**
@@ -59,9 +51,9 @@ class EquivalentExpressions(
    * to indicate there is no need to recurse in `updateExprTree`.
    */
   private def updateExprInMap(
-      expr: Expression,
-      map: mutable.HashMap[ExpressionEquals, ExpressionStats],
-      useCount: Int = 1): Boolean = {
+                               expr: Expression,
+                               map: mutable.HashMap[ExpressionEquals, ExpressionStats],
+                               useCount: Int = 1): Boolean = {
     if (expr.deterministic) {
       val wrapper = ExpressionEquals(expr)
       map.get(wrapper) match {
@@ -74,12 +66,16 @@ class EquivalentExpressions(
             false
           } else {
             // Should not happen
-            throw SparkException.internalError(
+            throw new IllegalStateException(
               s"Cannot update expression: $expr in map: $map with use count: $useCount")
           }
         case _ =>
           if (useCount > 0) {
             map.put(wrapper, ExpressionStats(expr)(useCount))
+          } else {
+            // Should not happen
+            throw new IllegalStateException(
+              s"Cannot update expression: $expr in map: $map with use count: $useCount")
           }
           false
       }
@@ -101,9 +97,9 @@ class EquivalentExpressions(
    * expressions.
    */
   private def updateCommonExprs(
-      exprs: Seq[Expression],
-      map: mutable.HashMap[ExpressionEquals, ExpressionStats],
-      useCount: Int): Unit = {
+                                 exprs: Seq[Expression],
+                                 map: mutable.HashMap[ExpressionEquals, ExpressionStats],
+                                 useCount: Int): Unit = {
     assert(exprs.length > 1)
     var localEquivalenceMap = mutable.HashMap.empty[ExpressionEquals, ExpressionStats]
     updateExprTree(exprs.head, localEquivalenceMap)
@@ -129,44 +125,55 @@ class EquivalentExpressions(
     }
   }
 
-  private def skipForShortcut(expr: Expression): Expression = {
-    if (skipForShortcutEnable) {
-      // The subexpression may not need to eval even if it appears more than once.
-      // e.g., `if(or(a, and(b, b)))`, the expression `b` would be skipped if `a` is true.
-      expr match {
-        case and: And => and.left
-        case or: Or => or.left
-        case other => other
-      }
-    } else {
-      expr
-    }
-  }
-
   // There are some special expressions that we should not recurse into all of its children.
   //   1. CodegenFallback: it's children will not be used to generate code (call eval() instead)
-  //   2. ConditionalExpression: use its children that will always be evaluated.
+  //   2. If: common subexpressions will always be evaluated at the beginning, but the true and
+  //          false expressions in `If` may not get accessed, according to the predicate
+  //          expression. We should only recurse into the predicate expression.
+  //   3. CaseWhen: like `If`, the children of `CaseWhen` only get accessed in a certain
+  //                condition. We should only recurse into the first condition expression as it
+  //                will always get accessed.
+  //   4. Coalesce: it's also a conditional expression, we should only recurse into the first
+  //                children, because others may not get accessed.
   private def childrenToRecurse(expr: Expression): Seq[Expression] = expr match {
     case _: CodegenFallback => Nil
-    case c: ConditionalExpression => c.alwaysEvaluatedInputs.map(skipForShortcut)
-    case other => skipForShortcut(other).children
+    case i: If => i.predicate :: Nil
+    case c: CaseWhen => c.children.head :: Nil
+    case c: Coalesce => c.children.head :: Nil
+    case other => other.children
   }
 
   // For some special expressions we cannot just recurse into all of its children, but we can
   // recursively add the common expressions shared between all of its children.
   private def commonChildrenToRecurse(expr: Expression): Seq[Seq[Expression]] = expr match {
     case _: CodegenFallback => Nil
-    case c: ConditionalExpression => c.branchGroups
-    case _ => Nil
-  }
+    case i: If => Seq(Seq(i.trueValue, i.falseValue))
+    case c: CaseWhen =>
+      // We look at subexpressions in conditions and values of `CaseWhen` separately. It is
+      // because a subexpression in conditions will be run no matter which condition is matched
+      // if it is shared among conditions, but it doesn't need to be shared in values. Similarly,
+      // a subexpression among values doesn't need to be in conditions because no matter which
+      // condition is true, it will be evaluated.
+      val conditions = if (c.branches.length > 1) {
+        c.branches.map(_._1)
+      } else {
+        // If there is only one branch, the first condition is already covered by
+        // `childrenToRecurse` and we should exclude it here.
+        Nil
+      }
+      // For an expression to be in all branch values of a CaseWhen statement, it must also be in
+      // the elseValue.
+      val values = if (c.elseValue.nonEmpty) {
+        c.branches.map(_._2) ++ c.elseValue
+      } else {
+        Nil
+      }
 
-  private def supportedExpression(e: Expression): Boolean = {
-    // `LambdaVariable` is usually used as a loop variable, which can't be evaluated ahead of the
-    // loop. So we can't evaluate sub-expressions containing `LambdaVariable` at the beginning.
-    !(e.containsPattern(LAMBDA_VARIABLE) ||
-      // `PlanExpression` wraps query plan. To compare query plans of `PlanExpression` on executor,
-      // can cause error like NPE.
-      (e.containsPattern(PLAN_EXPRESSION) && Utils.isInRunningSparkTask))
+      Seq(conditions, values)
+    // If there is only one child, the first child is already covered by
+    // `childrenToRecurse` and we should exclude it here.
+    case c: Coalesce if c.children.length > 1 => Seq(c.children)
+    case _ => Nil
   }
 
   /**
@@ -174,18 +181,23 @@ class EquivalentExpressions(
    * is found. That is, if `expr` has already been added, its children are not added.
    */
   def addExprTree(
-      expr: Expression, // Shim #23 - compilation issues
-      map: mutable.HashMap[ExpressionEquals, ExpressionStats] = equivalenceMap, someOption: Option[EquivalentExpressions] = None): Unit = {
-    if (supportedExpression(expr)) {
-      updateExprTree(expr, map)
-    }
+                   expr: Expression,// Shim #23 - compilation issues
+                   map: mutable.HashMap[ExpressionEquals, ExpressionStats] = equivalenceMap, someOption: Option[EquivalentExpressions] = None): Unit = {
+    updateExprTree(expr, map)
   }
 
   private def updateExprTree(
-      expr: Expression,
-      map: mutable.HashMap[ExpressionEquals, ExpressionStats] = equivalenceMap,
-      useCount: Int = 1): Unit = {
-    val skip = useCount == 0 || expr.isInstanceOf[LeafExpression]
+                              expr: Expression,
+                              map: mutable.HashMap[ExpressionEquals, ExpressionStats] = equivalenceMap,
+                              useCount: Int = 1): Unit = {
+    val skip = useCount == 0 ||
+      expr.isInstanceOf[LeafExpression] ||
+      // `LambdaVariable` is usually used as a loop variable, which can't be evaluated ahead of the
+      // loop. So we can't evaluate sub-expressions containing `LambdaVariable` at the beginning.
+      expr.exists(_.isInstanceOf[LambdaVariable]) ||
+      // `PlanExpression` wraps query plan. To compare query plans of `PlanExpression` on executor,
+      // can cause error like NPE.
+      (expr.isInstanceOf[PlanExpression[_]] && Utils.isInRunningSparkTask)
 
     if (!skip && !updateExprInMap(expr, map, useCount)) {
       val uc = useCount.signum
@@ -199,11 +211,7 @@ class EquivalentExpressions(
    * equivalent expressions.
    */
   def getExprState(e: Expression): Option[ExpressionStats] = {
-    if (supportedExpression(e)) {
-      equivalenceMap.get(ExpressionEquals(e))
-    } else {
-      None
-    }
+    equivalenceMap.get(ExpressionEquals(e))
   }
 
   // Exposed for testing.
