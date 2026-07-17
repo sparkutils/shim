@@ -35,7 +35,7 @@ jobs:
       testString: test
       theMatrix: |
         {
-          "profile": ["Spark41"],
+          "profile": ["Spark41", "Spark42"],
           "scala": ["scala_2.13.18"]
         }
       jdk: 17
@@ -230,7 +230,7 @@ jobs:
     with:
       theMatrix: |
         {
-          "profile": [ "Spark41", "18.3.dbr" ],
+          "profile": [ "Spark41", "Spark42", "18.3.dbr" ],
           "scala": [ "scala_2.13.18",  ]
         }
       jdk: 17

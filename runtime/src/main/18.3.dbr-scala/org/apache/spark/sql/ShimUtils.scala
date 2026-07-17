@@ -3,7 +3,7 @@ package org.apache.spark.sql
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
 import org.apache.spark.sql.catalyst.analysis.{FakeSystemCatalog, FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, AgnosticExpressionPathEncoder, ExpressionEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
 import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, EvalMode, Expression, ExpressionInfo, If, Literal, NamedExpression, VariableReference}
@@ -130,7 +130,7 @@ object ShimUtils {
     funcReg.createOrReplaceTempFunction(name, builder, "built-in")
 
   /**
-   * Used by the SparkSessionExtensions mechanism
+   * Used by the SparkSessionExtensions mechanism registered via injection - functions are classed as temporary functions only, not fully integrated
    * @param extensions
    * @param name
    * @param builder
@@ -210,55 +210,9 @@ object ShimUtils {
       case dt => new StructType().add("value", dt, nullable = nullable)
     }
 
-  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] = {
-    val isNullable = nullable
-    val iFromCatalyst = fromCatalyst
-    val iToCatalyst = toCatalyst
+  def expressionEncoder[T: ClassTag](jvmRepr: DataType, nullable: Boolean, toCatalyst: Expression => Expression, catalystRepr: DataType, fromCatalyst: Expression => Expression): Encoder[T] =
+    throw new NotImplementedError("Shim version 0.3.0 drops ExpressionEncoder support for Spark 4 and above")
 
-    val ag = new AgnosticExpressionPathEncoder[T] {
-      override def isPrimitive: Boolean = ShimUtils.isPrimitive(dataType)
-
-      override def nullable: Boolean = isNullable
-
-      override def dataType: DataType = catalystRepr
-
-      override def clsTag: ClassTag[T] = implicitly[ClassTag[T]]
-
-      override def isStruct: Boolean =
-        dataType match {
-          case t: StructType if t.fields.length > 0 => true
-          case _ => !classOf[Option[_]].isAssignableFrom(clsTag.runtimeClass)
-        }
-
-      override def toCatalyst(input: Expression): Expression = iToCatalyst(input)
-
-      override def fromCatalyst(inputPath: Expression): Expression = iFromCatalyst(inputPath)
-    }
-
-    val in = BoundReference(0, jvmRepr, nullable)
-
-    val (out, serializer) = toCatalyst(in) match {
-      case it @ If(_, _, _: CreateNamedStruct) => {
-        val out = GetColumnByOrdinal(0, catalystRepr)
-
-        out -> it
-      }
-
-      case other => {
-        val out = GetColumnByOrdinal(0, catalystRepr)
-
-        out -> other
-      }
-    }
-
-    new ExpressionEncoder[T](
-      ag,
-      objSerializer = serializer,
-      objDeserializer = fromCatalyst(out)
-    )
-  }
-
-  // currently not Spark 4 as of 1.3.24
   def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
     new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""", messageParameters = Map.empty )
 
@@ -274,14 +228,14 @@ object ShimUtils {
 
   /**
    * 4 preview2 moves named to ExpressionUtils
-   * @param expression
+   * @param col
    * @return
    */
   def toNamed(col: Column): NamedExpression = ExpressionUtils.toNamed(ExpressionUtils.expression(col))
 
   /**
    * 4 preview2 introduces ColumnNode and hides Expression - ExpressionUtils provides unwrapping function
-   * @param expression
+   * @param column
    * @return
    */
   def expression(column: Column): Expression = ColumnNodeToExpressionConverter(column.node)

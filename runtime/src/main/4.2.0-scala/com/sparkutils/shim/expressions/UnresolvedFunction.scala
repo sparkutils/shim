@@ -1,6 +1,5 @@
 package com.sparkutils.shim.expressions
 
-import org.apache.spark.sql.catalyst.FunctionIdentifier
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
 import org.apache.spark.sql.catalyst.expressions.Expression
 
