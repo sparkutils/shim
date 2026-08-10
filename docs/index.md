@@ -17,7 +17,7 @@ Using the private Spark APIs can allow for improved functionality (e.g. Frameles
 
 Shim aims to bring those workarounds in a separate runtime library shim and let the library authors focus on useful functionality.
 
-* :new:{.pulseABit} Support for Spark 4 and DBR 17.0
+* :new:{.pulseABit} Support for Spark 4, 4.1, 4.2 and DBR 17.3, 18.3 (has been tested on 19)
 * :new:{.pulseABit} Shims enabling Connect handling and AgnosticEncoder handling by default on Spark 4
 * :new:{.pulseABit} beanEncoder shim allowing correction of field name usage in encoding 
 * :new:{.pulseABit} tryCastCompat ansi disabled version of cast leaving consistent casts for all versions
