@@ -1,4 +1,4 @@
-### 0.3.0 <small>XXth August, 2026</small>
+### 0.3.0 <small>13th August, 2026</small>
 
 #18 - Spark 4 AgnosticEncoder and Connect support:
 
