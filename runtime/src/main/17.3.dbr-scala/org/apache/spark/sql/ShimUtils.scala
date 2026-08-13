@@ -2,11 +2,11 @@ package org.apache.spark.sql
 
 import com.sparkutils.shim.ShowParams
 import org.apache.spark.sql.catalyst.analysis.TypeCheckResult.DataTypeMismatch
-import org.apache.spark.sql.catalyst.analysis.{FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
+import org.apache.spark.sql.catalyst.analysis.{FakeSystemCatalog, FunctionRegistry, GetColumnByOrdinal, TypeCheckResult, UnresolvedFunction, UnresolvedRelation}
 import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, AgnosticExpressionPathEncoder, ExpressionEncoder, RowEncoder}
 import org.apache.spark.sql.catalyst.expressions.Cast.{toSQLValue => stoSQLValue}
 import org.apache.spark.sql.catalyst.expressions.ExpectsInputTypes.{toSQLExpr => stoSQLExpr, toSQLType => stoSQLType}
-import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, Expression, ExpressionInfo, If, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Add, BoundReference, Cast, CreateNamedStruct, DecimalAddNoOverflowCheck, EvalMode, Expression, ExpressionInfo, If, Literal, NamedExpression, VariableReference}
 import org.apache.spark.sql.catalyst.parser.ParseException
 import org.apache.spark.sql.catalyst.plans.JoinType
 import org.apache.spark.sql.catalyst.plans.logical.{Join, JoinHint, JoinWith, LogicalPlan}
@@ -19,8 +19,12 @@ import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.CalendarInterval
 import org.apache.spark.sql.classic.ClassicConversions.castToImpl
 import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.catalyst.catalog.{TempVariableManager, VariableDefinition, VariableDefinitionBase}
+import org.apache.spark.sql.catalyst.util.AttributeNameParser
+import org.apache.spark.sql.connector.catalog.Identifier
 import org.apache.spark.sql.internal.SQLConf
 
+import java.util.Locale
 import scala.reflect.ClassTag
 
 /**
@@ -67,6 +71,16 @@ object ShimUtils {
     new Cast(child, dataType, None)
 
   /**
+   * On Spark 4 defaults to try_cast and cast on lower versions - mimicing the ansi disabled function for all versions
+   * e.g. cast('test' as int) should be null for all versions of spark
+   * @param child
+   * @param dataType
+   * @return
+   */
+  def tryCastCompat(child: Expression, dataType: DataType): Expression =
+    Cast(child, dataType, None, evalMode = EvalMode.TRY)
+
+  /**
    * Provides Spark 3 specific version of hashing CalendarInterval
    *
    * @param c
@@ -88,6 +102,21 @@ object ShimUtils {
   def newParser() = {
     // regression? no args was removed, public org.apache.spark.sql.execution.SparkSqlParser(org.apache.spark.sql.internal.SQLConf)
     new SparkSqlParser(new SQLConf)
+  }
+
+  /**
+   * Registers functions with spark, Introduced in 0.4 - 3.2.0 support due to extra source parameter - "built-in" is used as no other option is remotely close
+   *
+   * Under 4.0.0 the session is evaluated to classic.Session, if it's connect the function does nothing
+   *
+   * @param funcReg
+   * @param name
+   * @param builder
+   */
+  def registerFunction(sparkSession: SparkSession)(name: String, builder: Seq[Expression] => Expression) = {
+    if (sparkSession.isInstanceOf[classic.SparkSession]) {
+      sparkSession.sessionState.functionRegistry.createOrReplaceTempFunction(name, builder, "built-in")
+    }
   }
 
   /**
@@ -159,6 +188,13 @@ object ShimUtils {
             else
               Right(c.toSet)
         })
+      // for connect
+      case ae: AnalysisException if ae.errorClass.contains("TABLE_OR_VIEW_NOT_FOUND") =>
+        Some(ae.messageParameters.get("relationName").
+          fold[Either[Exception, Set[String]]](Left(ae))(r =>
+            // back ticks are present
+            Right(Set(r.drop(1).dropRight(1)))))
+
       case _ => None
     }
 
@@ -338,4 +374,51 @@ object ShimUtils {
       case t: StatefulLike => t.freshCopy()
     }) */
     expressions.map(e => e.freshCopyIfContainsStatefulExpression())
+
+  /**
+   * Wrapper around call_function introduced in 3.5.0.  Spark 4 shims and above use internal.UnresolvedFunction
+   * and below uses analysis.UnresolvedFunction
+   * @param funcName
+   * @param cols
+   * @return
+   */
+  @scala.annotation.varargs
+  def callFunction(funcName: String, cols: Column*): Column =
+    Column(internal.UnresolvedFunction(funcName, cols.map(_.node), isUserDefinedFunction = true))
+
+  /**
+   * Returns true if the sparkSession is in classic mode, false for connect.  On pre 4.0.0 versions this
+   * always returns true.
+   * @param sparkSession
+   * @return
+   */
+  def isClassic(sparkSession: SparkSession): Boolean =
+    sparkSession.isInstanceOf[org.apache.spark.sql.classic.SparkSession]
+
+  def isUsable(sparkSession: SparkSession): Boolean =
+    sparkSession.isUsable
+
+  /**
+   * Spark 4 / DBR 17.3 + only - creates a Spark SQL Variable, replacing by default
+   */
+  def createVariable(name: String, lit: Literal, replace: Boolean = true): VariableReference = {
+    // adjust for name sensitivity settings
+    val aname = {
+      val tn = name
+
+      val nc =
+        if (SQLConf.get.caseSensitiveAnalysis)
+          tn
+        else
+          tn.toLowerCase(Locale.ROOT)
+
+      nc
+    }
+    val varDef = VariableDefinition( Identifier.of(Array("session"), aname), "null", lit )
+
+    val tempVariableManager: TempVariableManager = SparkSession.active.sessionState.catalogManager.tempVariableManager
+    val nameParts = AttributeNameParser.parseAttributeName(aname)
+    tempVariableManager.create(nameParts, varDef: VariableDefinitionBase, replace)
+    VariableReference(nameParts, FakeSystemCatalog, varDef.identifier, varDef)
+  }
 }
