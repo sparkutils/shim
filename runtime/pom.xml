@@ -102,6 +102,7 @@
                         <include>org/apache/spark/sql/catalyst/plans/logical/NoopCommand*.class</include>
                         <include>org/apache/spark/sql/shim/**</include>
                         <include>org/apache/spark/sql/ShimUtils*.class</include>
+                        <include>org/apache/spark/sql/ShimAgnosticUtils*.class</include>
                         <include>com/sparkutils/shim/**</include>
                     </includes>
                 </configuration>
