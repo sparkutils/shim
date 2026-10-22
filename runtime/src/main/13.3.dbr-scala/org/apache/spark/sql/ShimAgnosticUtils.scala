@@ -1,6 +1,6 @@
 package org.apache.spark.sql
 
-import org.apache.spark.sql.catalyst.encoders.{AgnosticEncoder, RowEncoder}
+import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder
 import org.apache.spark.sql.types._
 
 /**
@@ -12,7 +12,7 @@ object ShimAgnosticUtils {
 
   def tableOrViewNotFound(e: Exception): Option[Either[Exception, Set[String]]] = ShimUtils.tableOrViewNotFound(e)
 
-  def rowEncoder(structType: StructType): AgnosticEncoder[Row] = RowEncoder.encoderFor(structType)
+  def rowEncoder(structType: StructType): ExpressionEncoder[Row] = ShimUtils.rowEncoder(structType)
 
   // Below are added for Frameless RowEncoder, TypedEncoder and TypedExpressionEncoder support
   def targetStructType(dataType: DataType, nullable: Boolean): StructType =
@@ -24,8 +24,7 @@ object ShimAgnosticUtils {
       case dt => new StructType().add("value", dt, nullable = nullable)
     }
 
-  def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException =
-    new AnalysisException( s"""Cannot resolve column name "$colNames" among (${ds.schema.fieldNames.mkString(", ")})""", messageParameters = Map.empty )
+  def analysisException(ds: Dataset[_], colNames: Seq[String]): AnalysisException = ShimUtils.analysisException(ds, colNames)
 
   /**
    * Wrapper around call_function introduced in 3.5.0.  Spark 4 shims and above use internal.UnresolvedFunction
