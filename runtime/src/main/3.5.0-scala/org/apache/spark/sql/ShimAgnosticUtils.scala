@@ -1,6 +1,6 @@
 package org.apache.spark.sql
 
-import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder
+import org.apache.spark.sql.catalyst.encoders.AgnosticEncoder
 import org.apache.spark.sql.types._
 
 /**
@@ -12,7 +12,7 @@ object ShimAgnosticUtils {
 
   def tableOrViewNotFound(e: Exception): Option[Either[Exception, Set[String]]] = ShimUtils.tableOrViewNotFound(e)
 
-  def rowEncoder(structType: StructType): ExpressionEncoder[Row] = ShimUtils.rowEncoder(structType)
+  def rowEncoder(structType: StructType): AgnosticEncoder[Row] = ShimUtils.rowEncoder(structType)
 
   // Below are added for Frameless RowEncoder, TypedEncoder and TypedExpressionEncoder support
   def targetStructType(dataType: DataType, nullable: Boolean): StructType =
